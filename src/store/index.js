@@ -1,7 +1,8 @@
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import { combineEpics, createEpicMiddleware } from "redux-observable";
-import { counterReducer } from "./reducer/gitReducer"; //reducers
-import { gitEpic } from "./epic/gitEpic"; //epics
+import thunk from 'redux-thunk'
+import { counterReducer } from "./reducer/gitReducer";
+import { gitEpic } from "./epic/gitEpic";
 
 const rootEpic = combineEpics(
   gitEpic.User_Login,
@@ -33,7 +34,13 @@ const rootEpic = combineEpics(
   gitEpic.User_DeleteUserProfile,
 );
 
+const epicMiddleware = createEpicMiddleware();
 const rootReducer = combineReducers({ counterReducer });
-const epicMiddleware = createEpicMiddleware(rootEpic);
-const createStoreWithMiddleware = applyMiddleware(epicMiddleware)(createStore);
-export default createStoreWithMiddleware(rootReducer);
+const middleware = [
+  thunk,
+  epicMiddleware
+]
+const initialState = {};
+const store = createStore(rootReducer, initialState, applyMiddleware(...middleware))
+epicMiddleware.run(rootEpic);
+export default store
