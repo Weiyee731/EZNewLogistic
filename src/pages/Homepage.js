@@ -20,8 +20,12 @@ export default function Homepage() {
     const [trackingNumber, setTrackingNumber] = useState("");
 
     useEffect(() => {
-        dispatch(GitAction.CallGetNotification)
+        dispatch(GitAction.CallGetNotification())
     }, [])
+
+    const fetchNotfication = () => {
+
+    }
 
     console.log(viewNotification)
 

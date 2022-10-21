@@ -8,7 +8,6 @@ const { filter, map } = require('rxjs/operators');
 
 const url = ServerConfiguration.LiveServerUrl;
 
-console.log(url)
 export class GitEpic {
   User_ViewUserRole = action$ =>
     action$.pipe(filter(action => action.type === GitAction.GET_USER_VIEWUSERROLE), map(action => {
@@ -1756,6 +1755,8 @@ export class GitEpic {
 
   Notification_ViewNotification = action$ =>
     action$.pipe(filter(action => action.type === GitAction.GetNotification), map(action => {
+      console.log('something')
+
       return dispatch => {
         console.log(url + "Notification_ViewNotification")
         try {
