@@ -17,6 +17,8 @@ const MenuLabel = styled.label`
   z-index: 1000;
   box-shadow: 0 1rem 3rem rgba(182, 237, 200, 0.3);
   text-align: center;
+  top: 10px; 
+  left: 15px;
 `;
 
 const NavBackground = styled.div`
@@ -77,8 +79,8 @@ const Icon = styled.span`
 const Navigation = styled.nav`
   height: 100vh;
   position: fixed;
-  top: 0;
-  right: 0;
+  top: 10px; 
+  left: 15px;
   z-index: 600;
   width: ${(props) => (props.clicked ? "100%" : "0")};
   opacity: ${(props) => (props.clicked ? "1" : "0")};

@@ -19,7 +19,6 @@ export default function Homepage() {
 
     return (
         <div>
-            <TopbarNav />
             {/* swipeable images */}
             <Carousel
                 showThumbs={false}

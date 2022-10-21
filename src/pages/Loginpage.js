@@ -10,13 +10,13 @@ export const Loginpage = () => {
     const from = location.state?.from?.pathname || "/"; // capture the page where user came from, then it will navigate back to the page after login
 
     const handleLogin = () => {
-
+        // setAuth({user, pwd, roles, accessToken})
+        // navigate(from, {replace: true});
     }
-    
+
     return (
         <div>
-            <TopbarNav />
-            Login
+            
         </div>
     )
 }
