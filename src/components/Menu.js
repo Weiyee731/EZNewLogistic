@@ -3,8 +3,8 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 const COLORS = {
-    primaryDark: "#115b4c",
-    primaryLight: "#B6EDC8",
+  primaryDark: "#115b4c",
+  primaryLight: "#B6EDC8",
 };
 
 const MenuLabel = styled.label`
@@ -121,42 +121,42 @@ const ItemLink = styled(NavLink)`
 `;
 
 function HamburgerMenu() {
-    const [click, setClick] = useState(false);
-    const handleClick = () => setClick(!click);
-    return (
-        <>
-            <MenuLabel htmlFor="navi-toggle" onClick={handleClick} style={{ margin: '10px' }}>
-                <Icon clicked={click}>&nbsp;</Icon>
-            </MenuLabel>
-            <NavBackground clicked={click}>&nbsp;</NavBackground>
+  const [click, setClick] = useState(false);
+  const handleClick = () => setClick(!click);
+  return (
+    <>
+      <MenuLabel htmlFor="navi-toggle" onClick={handleClick} style={{ margin: '10px' }}>
+        <Icon clicked={click}>&nbsp;</Icon>
+      </MenuLabel>
+      <NavBackground clicked={click}>&nbsp;</NavBackground>
 
-            <Navigation clicked={click}>
-                <List>
-                    <li>
-                        <ItemLink onClick={handleClick} to="/">
-                            Home
-                        </ItemLink>
-                    </li>
-                    <li>
-                        <ItemLink onClick={handleClick} to="/pricing">
-                            Pricing
-                        </ItemLink>
-                    </li>
-                    {console.log(localStorage.getItem('user'))}
-                    <li>
-                        <ItemLink onClick={handleClick} to={localStorage.getItem("user") !== null ? "/portfolio" : "/login"}>
-                            Profile
-                        </ItemLink>
-                    </li>
-                    <li>
-                        <ItemLink onClick={handleClick} to="/faq">
-                            FAQ
-                        </ItemLink>
-                    </li>
-                </List>
-            </Navigation>
-        </>
-    );
+      <Navigation clicked={click}>
+        <List>
+          <li>
+            <ItemLink onClick={handleClick} to="/">
+              Home
+            </ItemLink>
+          </li>
+          <li>
+            <ItemLink onClick={handleClick} to="/pricing">
+              Pricing
+            </ItemLink>
+          </li>
+          {console.log(localStorage.getItem('user'))}
+          <li>
+            <ItemLink onClick={handleClick} to={localStorage.getItem("user") !== null ? "/portfolio" : "/login"}>
+              Profile
+            </ItemLink>
+          </li>
+          <li>
+            <ItemLink onClick={handleClick} to="/faq">
+              FAQ
+            </ItemLink>
+          </li>
+        </List>
+      </Navigation>
+    </>
+  );
 }
 
 export default HamburgerMenu;
