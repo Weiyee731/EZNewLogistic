@@ -6,16 +6,24 @@ import { NotificationView } from "../components/NotificationView";
 import { TextField } from "@mui/material";
 import Footer from "../components/Footer/Footer";
 import { TopbarNav } from "../components/TopbarNav";
+import { GitAction } from "../store/action/gitAction";
 
 export default function Homepage() {
-    const { loading, state } = useSelector(state => ({
+    const { loading, state, viewNotification } = useSelector(state => ({
         loading: state.counterReducer.loading,
         state: state.counterReducer,
+        viewNotification: state.counterReducer.viewNotification,
     }));
 
     const dispatch = useDispatch()
 
     const [trackingNumber, setTrackingNumber] = useState("");
+
+    useEffect(() => {
+        dispatch(GitAction.CallGetNotification)
+    }, [])
+
+    console.log(viewNotification)
 
     return (
         <div>

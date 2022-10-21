@@ -61,7 +61,9 @@ const INITIAL_STATE = {
   viewAuthBranch: [],
   viewAuthSubBranch: [],
   updateUserListing: [],
-  updateUserrole: []
+  updateUserrole: [],
+
+  viewNotification: [],
 };
 
 export function counterReducer(state = INITIAL_STATE, action) {
@@ -572,6 +574,14 @@ export function counterReducer(state = INITIAL_STATE, action) {
       return Object.assign({}, state, {
         loading: false,
         memberPrevBranch: action.payload
+      });
+
+    case GitAction.GetNotification:
+      return Object.assign({}, state, { loading: true });
+    case GitAction.GotNotification:
+      return Object.assign({}, state, {
+        loading: false,
+        viewNotification: action.payload
       });
 
     /////////////////////////////////////////////////// Default ///////////////////////////////////////////////////

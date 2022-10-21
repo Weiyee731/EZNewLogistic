@@ -229,8 +229,8 @@ export class GitAction {
       payload: propsData
     };
   }
-  
-  
+
+
 
   static UpdateTransactionDetailHandling = "UPDATE_TRANSACTION_DETAIL_HANDLING";
   static UpdatedTransactionDetailHandling = "TRANSACTION_DETAIL_HANDLING_UPDATEED";
@@ -352,6 +352,15 @@ export class GitAction {
   static CallResetUserApprovalReturn() {
     return {
       type: GitAction.ResetUserApprovalReturn,
+    };
+  }
+
+  static GetNotification = "GetNotification";
+  static GotNotification = "GotNotification";
+  static CallGetNotification() {
+    console.log('hello, world')
+    return {
+      type: GitAction.GetNotification,
     };
   }
 
