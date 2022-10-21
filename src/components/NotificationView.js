@@ -1,6 +1,6 @@
 import React from "react";
 
-export const NotificationView = ({ message }) => {
+export const NotificationView = ({ message, type }) => {
     return (
         <div
             style={{
@@ -8,10 +8,12 @@ export const NotificationView = ({ message }) => {
                 flexDirection: "row",
                 height: "80px",
                 backgroundColor: "white",
-                borderWidth: "2px 2px 2px 22px",
-                borderColor: "green",
+                borderWidth: "3px 3px 3px 22px",
+                borderColor: type === "success" ? "green" : "red",
                 borderStyle: "solid",
                 borderRadius: "10px",
+                alignItems: "center",
+                padding: "0px 20px 0px 20px",
             }}
         >
             {message}
