@@ -5,7 +5,7 @@ import store from './store';
 import Homepage from './pages/Homepage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Registrationpage } from './pages/Registrationpage';
-import { Loginpage } from './pages/Loginpage';
+import { Loginpage } from './pages/Login/Loginpage';
 import { Pricingpage } from './pages/Pricingpage';
 import { FAQpage } from './pages/FAQpage';
 import { Profilepage } from './pages/Profilepage';

@@ -1,0 +1,26 @@
+.login-wallpaper {
+    width: 100%;
+    height: 92.5vh;
+    background-repeat: 'no-repeat';
+    background-position: center;
+    background-size: auto;
+}
+
+.login-wallpaper img {
+    object-fit: cover;
+}
+
+.login-panel {
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+}
+
+.login-panel .logo-container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 120px;
+    height: 80px;
+    border: 1px solid rgba(23, 23, 23, .6);
+    margin-bottom: 30px;
+}
