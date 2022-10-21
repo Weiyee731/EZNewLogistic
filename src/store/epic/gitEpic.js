@@ -8,6 +8,7 @@ const { filter, map } = require('rxjs/operators');
 
 const url = ServerConfiguration.LiveServerUrl;
 
+console.log(url)
 export class GitEpic {
   User_ViewUserRole = action$ =>
     action$.pipe(filter(action => action.type === GitAction.GET_USER_VIEWUSERROLE), map(action => {
@@ -1749,6 +1750,31 @@ export class GitEpic {
         } catch (error) {
           toast.error("Error Code: Member_GetMemberPreviousBranches")
           return dispatch({ type: GitAction.GOT_MEMBER_PREV_BRANCH, payload: [] });
+        }
+      }
+    }));
+
+  Notification_ViewNotification = action$ =>
+    action$.pipe(filter(action => action.type === GitAction.GetNotification), map(action => {
+      return dispatch => {
+        console.log(url + "Notification_ViewNotification")
+        try {
+          return fetch(
+            url + "Notification_ViewNotification"
+          )
+            .then(response => response.json())
+            .then(json => {
+              json = JSON.parse(json)
+              console.log(json)
+              if (json[0].ReturnVal === 1) {
+                return dispatch({ type: GitAction.GotNotification, payload: JSON.parse(json[0].ReturnData) });
+              } else {
+                return dispatch({ type: GitAction.GotNotification, payload: [] });
+              }
+            });
+        } catch (error) {
+          toast.error("Error Code: Member_GetMemberPreviousBranches")
+          return dispatch({ type: GitAction.GotNotification, payload: [] });
         }
       }
     }));
