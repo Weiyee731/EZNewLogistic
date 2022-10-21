@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch, Provider } from 'react-redux'
-import { TopbarNav } from "../../components/TopbarNav";
 import useAuth from "../../hooks/useAuth";
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { GitAction } from "../../store/action/gitAction";
@@ -15,6 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
+import { isStringNullOrEmpty, isArrayNotEmpty } from "../../Repository/Helper"
 import LoginWallpaper from "../../assets/login-wallpaper.jpg"
 import './Loginpage.css';
 
@@ -32,27 +32,34 @@ export const Loginpage = () => {
         REMEMBER: false,
     })
     const [showPassword, setShowPassword] = useState(false)
+    const [isInvalidInput, setIsInvalidInput] = useState(null)
     const isFormSubmitting = useSelector(state => state.counterReducer.loading)
-
-    useEffect(() => {
-        console.log(isFormSubmitting)
-    })
 
     const handleLogin = () => {
         console.log(loginAccount)
-        dispatch(GitAction.CallLoading())
+
+        const isValidate = (!isStringNullOrEmpty(loginAccount.USERNAME) && !isStringNullOrEmpty(loginAccount.PASSWORD) && loginAccount.PASSWORD >= 8)
+
+        if (isValidate) {
+            setIsInvalidInput(false)
+            console.log(isValidate)
+        }
+        else {
+            setIsInvalidInput(true)
+        }
+
+
         // setAuth({user, pwd, roles, accessToken})
         // navigate(from, {replace: true});
     }
 
     const setPasswordVisibility = () => {
         setShowPassword(!showPassword)
+
     }
 
     const handleInputChange = (inputProps, event) => {
         let LoginUserState = loginAccount
-        console.log(LoginUserState)
-
         switch (inputProps) {
             case 'USERNAME':
                 LoginUserState.USERNAME = event.target.value
