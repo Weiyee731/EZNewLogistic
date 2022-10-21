@@ -58,21 +58,21 @@ const Icon = styled.span`
   }
 
   &::before {
-    top: ${(props) => (props.clicked ? "0" : "-0.8rem")};
+    top: ${(props) => (props.clicked ? "0" : "-0.5rem")};
     transform: ${(props) => (props.clicked ? "rotate(135deg)" : "rotate(0)")};
   }
 
   &::after {
-    top: ${(props) => (props.clicked ? "0" : "0.8rem")};
+    top: ${(props) => (props.clicked ? "0" : "0.5rem")};
 
     transform: ${(props) => (props.clicked ? "rotate(-135deg)" : "rotate(0)")};
   }
 
   ${MenuLabel}:hover &::before {
-    top: ${(props) => (props.clicked ? "0" : "-1rem")};
+    top: ${(props) => (props.clicked ? "0" : "-0.75rem")};
   }
   ${MenuLabel}:hover &::after {
-    top: ${(props) => (props.clicked ? "0" : "1rem")};
+    top: ${(props) => (props.clicked ? "0" : "0.75rem")};
   }
 `;
 
