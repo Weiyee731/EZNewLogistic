@@ -144,7 +144,7 @@ function HamburgerMenu() {
               Pricing
             </ItemLink>
           </li>
-          {console.log(localStorage.getItem('user'))}
+
           <li>
             <ItemLink onClick={handleClick} to={localStorage.getItem("user") !== null ? "/portfolio" : "/login"}>
               Profile

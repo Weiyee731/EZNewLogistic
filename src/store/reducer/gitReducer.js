@@ -67,7 +67,6 @@ const INITIAL_STATE = {
 };
 
 export function counterReducer(state = INITIAL_STATE, action) {
-  console.log(action)
   ///////////////////////////////////////////////////  General ///////////////////////////////////////////////////
   switch (action.type) {
     // /////////////////////////////////////////////////// User ///////////////////////////////////////////////////
@@ -578,7 +577,6 @@ export function counterReducer(state = INITIAL_STATE, action) {
       });
 
     case GitAction.GetNotification:
-      console.log('tet')
       return Object.assign({}, state, { loading: true });
     case GitAction.GotNotification:
       return Object.assign({}, state, {

@@ -358,7 +358,7 @@ export class GitAction {
   static GetNotification = "GetNotification";
   static GotNotification = "GotNotification";
   static CallGetNotification() {
-    console.log('hello, world')
+
     return {
       type: GitAction.GetNotification,
     };

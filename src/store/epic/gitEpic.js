@@ -1755,10 +1755,7 @@ export class GitEpic {
 
   Notification_ViewNotification = action$ =>
     action$.pipe(filter(action => action.type === GitAction.GetNotification), map(action => {
-      console.log('something')
-
       return dispatch => {
-        console.log(url + "Notification_ViewNotification")
         try {
           return fetch(
             url + "Notification_ViewNotification"

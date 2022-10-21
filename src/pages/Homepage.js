@@ -27,8 +27,6 @@ export default function Homepage() {
 
     }
 
-    console.log(viewNotification)
-
     return (
         <div>
             {/* swipeable images */}
