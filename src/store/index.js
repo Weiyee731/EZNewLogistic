@@ -8,6 +8,7 @@ import { gitEpic } from "./epic/gitEpic";
 const rootEpic = combineEpics(
   gitEpic.User_Login,
   gitEpic.User_Register,
+  gitEpic.User_ViewAreaCode,
   gitEpic.Notification_ViewNotification,
 );
 

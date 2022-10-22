@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   logonUser: [],
   userUpdateReturnValue: [],
   viewNotification: [],
+  areaCodes: [],
 };
 
 export function counterReducer(state = INITIAL_STATE, action) {
@@ -57,6 +58,14 @@ export function counterReducer(state = INITIAL_STATE, action) {
       });
 
     ////////////////////////////////////////////////////// User ///////////////////////////////////////////////////
+    case GitAction.FetchUserAreaCode:
+      return Object.assign({}, state, { loading: true });
+    case GitAction.UserAreaCodeFetched:
+      return Object.assign({}, state, {
+        loading: false,
+        areaCodes: action.payload
+      });
+
     case GitAction.GetNotification:
       return Object.assign({}, state, { loading: true });
     case GitAction.GotNotification:

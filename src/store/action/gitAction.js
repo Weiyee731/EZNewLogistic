@@ -42,9 +42,18 @@ export class GitAction {
 
   static RegisterUser = "REGISTER_USER";
   static UserRegistered = "USER_REGISTERED";
-  static CallRegisterUser() {
+  static CallRegisterUser(propsData) {
     return {
-      type: GitAction.RegisterUser
+      type: GitAction.RegisterUser,
+      payload: propsData
+    };
+  }
+
+  static FetchUserAreaCode = "FETCH_USER_AREA_CODE";
+  static UserAreaCodeFetched = "USER_AREA_CODE_FETCHED";
+  static CallFetchUserAreaCode() {
+    return {
+      type: GitAction.FetchUserAreaCode
     };
   }
 

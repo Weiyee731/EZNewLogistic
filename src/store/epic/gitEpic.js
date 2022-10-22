@@ -13,19 +13,18 @@ export class GitEpic {
     action$.pipe(filter(action => action.type === GitAction.Login), map(action => {
       return dispatch => {
         try {
+          console.log(url + "User_Login?" +
+            "USERNAME=" + action.payload.USERNAME +
+            "&PASSWORD=" + action.payload.PASSWORD
+          )
+
           return fetch(url + "User_Login?" +
             "USERNAME=" + action.payload.USERNAME +
             "&PASSWORD=" + action.payload.PASSWORD
           )
             .then(response => response.json())
             .then(json => {
-              json = JSON.parse(json)
-              if (json[0].ReturnVal === 1) {
-                return dispatch({ type: GitAction.LoginSuccess, payload: JSON.parse(json[0].ReturnData) });
-              } else {
-                // toast.error(json[0].ReturnMsg)
-                return dispatch({ type: GitAction.LoginSuccess, payload: [] });
-              }
+              return dispatch({ type: GitAction.LoginSuccess, payload: JSON.parse(json) });
             });
         } catch (error) {
           toast.error("Error Code: User_Login")
@@ -38,25 +37,31 @@ export class GitEpic {
     action$.pipe(filter(action => action.type === GitAction.RegisterUser), map(action => {
       return dispatch => {
         try {
+          console.log(url + "User_Register?" +
+            "USERAREAID=" + action.payload.USERAREAID +
+            "&USERNAME=" + action.payload.USERNAME +
+            "&FULLNAME=" + action.payload.FULLNAME +
+            "&PASSWORD=" + action.payload.PASSWORD +
+            "&CONTACTNO=" + action.payload.CONTACTNO +
+            "&USEREMAIL=" + action.payload.USEREMAIL +
+            "&USERNICKNAME=" + action.payload.USERNICKNAME +
+            "&USERWECHATID=" + action.payload.USERWECHATID
+          )
           return fetch(url + "User_Register?" +
             "USERAREAID=" + action.payload.USERAREAID +
-            "&USERNAME=" + action.payload.USERNAME + 
-            "&FULLNAME=" + action.payload.FULLNAME + 
-            "&PASSWORD=" + action.payload.PASSWORD + 
-            "&CONTACTNO=" + action.payload.CONTACTNO + 
-            "&USEREMAIL=" + action.payload.USEREMAIL + 
-            "&USERNICKNAME=" + action.payload.USERNICKNAME + 
-            "&USERWECHATID=" + action.payload.USERWECHATID 
+            "&USERNAME=" + action.payload.USERNAME +
+            "&FULLNAME=" + action.payload.FULLNAME +
+            "&PASSWORD=" + action.payload.PASSWORD +
+            "&CONTACTNO=" + action.payload.CONTACTNO +
+            "&USEREMAIL=" + action.payload.USEREMAIL +
+            "&USERNICKNAME=" + action.payload.USERNICKNAME +
+            "&USERWECHATID=" + action.payload.USERWECHATID
           )
             .then(response => response.json())
             .then(json => {
               json = JSON.parse(json)
-              if (json[0].ReturnVal === 1) {
-                return dispatch({ type: GitAction.UserRegistered, payload: JSON.parse(json[0].ReturnData) });
-              } else {
-                // toast.error(json[0].ReturnMsg)
-                return dispatch({ type: GitAction.UserRegistered, payload: [] });
-              }
+              return dispatch({ type: GitAction.UserRegistered, payload: json });
+
             });
         } catch (error) {
           toast.error("Error Code: User_Register")
@@ -65,8 +70,24 @@ export class GitEpic {
       }
     }));
 
-
-
+  User_ViewAreaCode = action$ =>
+    action$.pipe(filter(action => action.type === GitAction.FetchUserAreaCode), map(action => {
+      return dispatch => {
+        try {
+          return fetch(
+            url + "User_ViewAreaCode"
+          )
+            .then(response => response.json())
+            .then(json => {
+              json = JSON.parse(json)
+              return dispatch({ type: GitAction.UserAreaCodeFetched, payload: json });
+            });
+        } catch (error) {
+          toast.error("Error Code: Member_GetMemberPreviousBranches")
+          return dispatch({ type: GitAction.UserAreaCodeFetched, payload: [] });
+        }
+      }
+    }));
 
   Notification_ViewNotification = action$ =>
     action$.pipe(filter(action => action.type === GitAction.GetNotification), map(action => {
@@ -91,6 +112,7 @@ export class GitEpic {
         }
       }
     }));
+
 }
 
 

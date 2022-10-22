@@ -10,75 +10,299 @@ import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import FilledInput from '@mui/material/FilledInput';
 import InputLabel from '@mui/material/InputLabel';
+import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContentText from '@mui/material/DialogContentText';
+import FormHelperText from '@mui/material/FormHelperText';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
+import CircularProgress from '@mui/material/CircularProgress';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
+import CloseIcon from '@mui/icons-material/Close';
+import { toast } from 'react-toastify';
 import { isStringNullOrEmpty, isArrayNotEmpty } from "../../Repository/Helper"
 import LoginWallpaper from "../../assets/login-wallpaper.jpg"
 import './Loginpage.css';
 
 export const Loginpage = () => {
+    const REGISTRATION = 'registration'
+    const PASSWORD_RECOVERY = 'password-recovery'
+
     const { setAuth } = useAuth();
     const navigate = useNavigate()
     const location = useLocation();
     const from = location.state?.from?.pathname || "/"; // capture the page where user came from, then it will navigate back to the page after login
 
+    // mapStateToProps 
     const dispatch = useDispatch();
 
+    const isFormSubmitting = useSelector(state => state.counterReducer.loading)
+    const logonUser = useSelector(state => state.counterReducer.logonUser)
+    const AreaCodes = useSelector(state => state.counterReducer.areaCodes)
+    const registration_returnValue = useSelector(state => state.counterReducer.userUpdateReturnValue)
+
+    /* PLACE YOUR HOOKS HERE */
     const [loginAccount, setLoginAccount] = useState({
         USERNAME: '',
         PASSWORD: '',
         REMEMBER: false,
     })
-    const [showPassword, setShowPassword] = useState(false)
-    const [isInvalidInput, setIsInvalidInput] = useState(null)
-    const isFormSubmitting = useSelector(state => state.counterReducer.loading)
+
+    const [signupAccount, setSignupAccount] = useState({
+        USERAREAID: 0,
+        USERNAME: '',
+        PASSWORD: '',
+        FULLNAME: '',
+        CONTACTNO: '',
+        USEREMAIL: '',
+        USERNICKNAME: '',
+        USERWECHATID: '',
+        AGREEMENTCHECKED: '',
+    })
+
+    const [showLoginPassword, setShowLoginPassword] = useState(false)
+    const [showRegistrationPassword, setShowRegistrationPassword] = useState(false)
+    const [isLoginInvalidInput, setIsLoginInvalidInput] = useState(null)
+    const [openRegistrationModal, setOpenRegistrationModal] = useState(false)
+    const [openPasswordRecoveryModal, setOpenPasswordRecoveryModal] = useState(false)
+    /* PLACE YOUR HOOKS HERE */
+
+
+
+
+    useEffect(() => {
+        dispatch(GitAction.CallFetchUserAreaCode())
+    }, [])
+
+    useEffect(() => {
+        console.log(AreaCodes)
+    }, [AreaCodes])
+
+    useEffect(() => {
+        console.log(registration_returnValue)
+
+        if (isArrayNotEmpty(registration_returnValue)) {
+            try {
+                if (!isStringNullOrEmpty(registration_returnValue[0].ReturnVal) && registration_returnValue[0].ReturnVal === 1) {
+                    setSignupAccount({
+                        USERAREAID: 0,
+                        USERNAME: '',
+                        PASSWORD: '',
+                        FULLNAME: '',
+                        CONTACTNO: '',
+                        USEREMAIL: '',
+                        USERNICKNAME: '',
+                        USERWECHATID: '',
+                        AGREEMENTCHECKED: '',
+                    })
+                    setOpenRegistrationModal(false)
+                    toast.success('Your account is registered! Please login with your registered account.', {
+                        position: "top-center",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        draggable: false,
+                        theme: "colored",
+                    });
+                    dispatch(GitAction.CallResetUserUpdateReturnValue())
+                }
+                else {
+                    if (registration_returnValue[0].ReturnVal === 0 || registration_returnValue[0].ReturnVal === "0") {
+                        setIsLoginInvalidInput(true)
+                        dispatch(GitAction.CallResetUserUpdateReturnValue())
+                    }
+                }
+            }
+            catch (Exceptions) {
+                console.log(Exceptions)
+            }
+        }
+    }, [registration_returnValue])
+
+    // when user login successfully
+    useEffect(() => {
+        if (isArrayNotEmpty(logonUser)) {
+            try {
+                if (isStringNullOrEmpty(logonUser[0].ReturnVal)) {
+                    setIsLoginInvalidInput(false)
+                    setLoginAccount({
+                        USERNAME: '',
+                        PASSWORD: '',
+                        REMEMBER: false,
+                    })
+                    console.log(logonUser[0])
+
+                    // setAuth(logonUser[0])
+                    localStorage.setItem("user", JSON.stringify(logonUser[0]))
+                    console.log(localStorage.getItem("user"))
+                    navigate('/', { replace: true });
+                    dispatch(GitAction.CallClearLogonUserCache())
+                }
+                else {
+                    if (logonUser[0].ReturnVal === 0 || logonUser[0].ReturnVal === "0") {
+                        setIsLoginInvalidInput(true)
+                        dispatch(GitAction.CallClearLogonUserCache())
+                    }
+                }
+            }
+            catch (Exceptions) {
+                console.log(Exceptions)
+            }
+        }
+
+    }, [logonUser])
+    // when user login successfully
 
     const handleLogin = () => {
-        console.log(loginAccount)
-
-        const isValidate = (!isStringNullOrEmpty(loginAccount.USERNAME) && !isStringNullOrEmpty(loginAccount.PASSWORD) && loginAccount.PASSWORD >= 8)
+        const isValidate = (!isStringNullOrEmpty(loginAccount.USERNAME) && !isStringNullOrEmpty(loginAccount.PASSWORD))
 
         if (isValidate) {
-            setIsInvalidInput(false)
-            console.log(isValidate)
+            setIsLoginInvalidInput(false)
+            setShowLoginPassword(false)
+
+            dispatch(GitAction.CallUserLogin(loginAccount))
         }
         else {
-            setIsInvalidInput(true)
+            setIsLoginInvalidInput(true)
         }
 
-
-        // setAuth({user, pwd, roles, accessToken})
-        // navigate(from, {replace: true});
     }
 
-    const setPasswordVisibility = () => {
-        setShowPassword(!showPassword)
+    const handleRegistration = () => {
+        const isValidate = (
+            (!isStringNullOrEmpty(signupAccount.USERAREAID) && signupAccount.USERAREAID > 0) &&
+            !isStringNullOrEmpty(signupAccount.USERNAME) &&
+            (!isStringNullOrEmpty(signupAccount.PASSWORD) && signupAccount.PASSWORD.length >= 8) &&
+            !isStringNullOrEmpty(signupAccount.FULLNAME) &&
+            !isStringNullOrEmpty(signupAccount.CONTACTNO) &&
+            !isStringNullOrEmpty(signupAccount.USEREMAIL)
+        )
 
+        if (isValidate) {
+            signupAccount.USERNICKNAME = isStringNullOrEmpty(signupAccount.USERNICKNAME) ? "-" : signupAccount.USERNICKNAME
+            signupAccount.USERWECHATID = isStringNullOrEmpty(signupAccount.USERWECHATID) ? "-" : signupAccount.USERWECHATID
+
+            dispatch(GitAction.CallRegisterUser(signupAccount))
+        }
+        else {
+            toast.error('Your inputs are invalid. Please check with require (*) fields', {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                draggable: false,
+                theme: "colored",
+            });
+        }
+
+    }
+
+    const setLoginPasswordVisibility = () => {
+        setShowLoginPassword(!showLoginPassword)
+    }
+
+    const setRegistrationPasswordVisibility = () => {
+        setShowRegistrationPassword(!showRegistrationPassword)
     }
 
     const handleInputChange = (inputProps, event) => {
         let LoginUserState = loginAccount
+        let ReistrationUserState = signupAccount
+
         switch (inputProps) {
             case 'USERNAME':
                 LoginUserState.USERNAME = event.target.value
                 setLoginAccount({ ...LoginUserState })
                 break;
-
             case 'PASSWORD':
                 LoginUserState.PASSWORD = event.target.value
                 setLoginAccount({ ...LoginUserState })
                 break;
-
             case 'SET-REMEMBER':
                 LoginUserState.REMEMBER = event.target.value
                 setLoginAccount({ ...LoginUserState })
                 break;
 
+            // Registration Form
+            case 'REGISTRATION-FULLNAME':
+                ReistrationUserState.FULLNAME = isStringNullOrEmpty(event.target.value) ? "" : event.target.value.toUpperCase()
+                setSignupAccount({ ...ReistrationUserState })
+                break;
+            case 'REGISTRATION-NICKNAME':
+                ReistrationUserState.USERNICKNAME = event.target.value
+                setSignupAccount({ ...ReistrationUserState })
+                break;
+            case 'REGISTRATION-USERNAME':
+                ReistrationUserState.USERNAME = isStringNullOrEmpty(event.target.value) ? "" : event.target.value.toUpperCase()
+                setSignupAccount({ ...ReistrationUserState })
+                break;
+            case 'REGISTRATION-PASSWORD':
+                ReistrationUserState.PASSWORD = event.target.value
+                setSignupAccount({ ...ReistrationUserState })
+                break;
+            case 'REGISTRATION-AREACODE':
+                ReistrationUserState.USERAREAID = event.target.value
+                setSignupAccount({ ...ReistrationUserState })
+                break;
+            case 'REGISTRATION-CONTACTNO':
+                ReistrationUserState.CONTACTNO = event.target.value
+                setSignupAccount({ ...ReistrationUserState })
+                break;
+            case 'REGISTRATION-EMAIL':
+                ReistrationUserState.USEREMAIL = event.target.value
+                setSignupAccount({ ...ReistrationUserState })
+                break;
+            case 'REGISTRATION-WECHATID':
+                ReistrationUserState.USERWECHATID = event.target.value
+                setSignupAccount({ ...ReistrationUserState })
+                break;
+
             default:
                 break;
         }
+    }
+
+    const handleModal = (modalName, openModal) => {
+
+        switch (modalName) {
+            case REGISTRATION:
+                setOpenRegistrationModal(openModal)
+
+                if (openModal) {
+
+                }
+                else {
+
+                }
+
+                break;
+
+            case PASSWORD_RECOVERY:
+                setOpenPasswordRecoveryModal(openModal)
+
+                if (openModal) {
+                }
+                else {
+
+                }
+
+                break;
+
+            default:
+                break;
+
+        }
+    }
+
+    const resetForm = () => {
+
     }
 
     return (
@@ -89,29 +313,36 @@ export const Loginpage = () => {
                         {/* <img src={LoginWallpaper} alt='loginpage--wallpaper' width={'100%'} height={'100%'} /> */}
                     </div>
                 </Grid>
-                <Grid item md={6} sx={{ display: 'flex' }}>
+                <Grid item md={6} sx={{ display: 'flex', p: 1, }}>
                     <div className="login-panel">
                         <div className="logo-container">
 
                         </div>
 
-                        <TextField id="login-user--username" label="Username" value={loginAccount.USERNAME} variant="filled" sx={{ width: '100%', m: 1 }} onChange={(event) => handleInputChange('USERNAME', event)} />
+                        {
+                            isLoginInvalidInput &&
+                            <Typography sx={{ color: '#FF5733' }} variant="body" component="p" gutterBottom>
+                                The username or password is invalid
+                            </Typography>
+                        }
 
-                        <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+                        <TextField id="login-user--username" label="Username" value={loginAccount.USERNAME} variant="filled" sx={{ width: '100%', mb: 2 }} onChange={(event) => handleInputChange('USERNAME', event)} />
+
+                        <FormControl sx={{ width: '100%', mb: 2 }} variant="outlined">
                             <InputLabel htmlFor="login-user--password">Password</InputLabel>
                             <FilledInput
                                 id="login-user--password"
-                                type={showPassword ? 'text' : 'password'}
+                                type={showLoginPassword ? 'text' : 'password'}
                                 value={loginAccount.PASSWORD}
                                 onChange={(event) => handleInputChange('PASSWORD', event)}
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
                                             aria-label="toggle password visibility"
-                                            onClick={setPasswordVisibility}
+                                            onClick={setLoginPasswordVisibility}
                                             edge="end"
                                         >
-                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            {showLoginPassword ? <Visibility /> : <VisibilityOff />}
                                         </IconButton>
                                     </InputAdornment>
                                 }
@@ -119,10 +350,114 @@ export const Loginpage = () => {
                             />
                         </FormControl>
 
-                        <Button onClick={handleLogin} variant="contained" sx={{ width: '100%', m: 1 }}>Login</Button>
+                        {
+                            !isFormSubmitting ?
+                                <Button onClick={handleLogin} variant="contained" sx={{ width: '100%', mb: 2 }}>Login</Button>
+                                :
+                                <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mb: 2 }}>
+                                    A Moment ...
+                                </Button>
+                        }
+
+                        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                            <Link href="#" underline="always" style={{ color: "#0074D9" }} onClick={() => handleModal(REGISTRATION, true)}>
+                                New User? Register Here!
+                            </Link>
+                            <Link href="#" underline="hover" style={{ color: "#323232" }} onClick={() => handleModal(PASSWORD_RECOVERY, true)}>
+                                Forgot Password?
+                            </Link>
+                        </Stack>
                     </div>
                 </Grid>
             </Grid>
+
+
+
+            {/* Registration Form | Modal */}
+            <Dialog scroll="paper" open={openRegistrationModal} onClose={() => handleModal(REGISTRATION, false)} aria-labelledby="registration-title" aria-describedby="registration-description" >
+                <DialogTitle id="registration-title">
+                    {"Register New Account"}
+                    <IconButton
+                        aria-label="close"
+                        onClick={() => handleModal(REGISTRATION, false)}
+                        sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500], }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        To register a new account into our system, we may require your basic personal information.
+                    </DialogContentText>
+                    <TextField id="registration--fullname"
+                        value={signupAccount.FULLNAME}
+                        onChange={(event) => { handleInputChange("REGISTRATION-FULLNAME", event) }}
+                        label="Full Name"
+                        fullWidth
+                        variant="filled"
+                        required
+                        size="small"
+                        sx={{ my: 1 }}
+                    // helperText={(isStringNullOrEmpty(signupAccount.FULLNAME) ? <Typography sx={{ color: '#FF5733' }} variant="body" component="span" gutterBottom >Require Your Full Name</Typography> : "")}
+                    />
+                    <TextField id="registration--nickname" value={signupAccount.USERNICKNAME} onChange={(event) => { handleInputChange("REGISTRATION-NICKNAME", event) }} label="Nick Name (Optional)" fullWidth variant="filled" size="small" sx={{ my: 1 }} />
+
+                    <TextField id="registration--username" value={signupAccount.USERNAME} onChange={(event) => { handleInputChange("REGISTRATION-USERNAME", event) }} label="Username" fullWidth variant="filled" required size="small" sx={{ my: 1 }} />
+                    <FormControl sx={{ width: '100%', my: 1 }} variant="outlined" required size="small" >
+                        <InputLabel htmlFor="registration--password">Password</InputLabel>
+                        <FilledInput
+                            id="registration--password"
+                            type={showRegistrationPassword ? 'text' : 'password'}
+                            value={signupAccount.PASSWORD}
+                            onChange={(event) => handleInputChange('REGISTRATION-PASSWORD', event)}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton aria-label="toggle password visibility" onClick={setRegistrationPasswordVisibility} edge="end">
+                                        {showRegistrationPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                            label="Password"
+                        />
+                    </FormControl>
+
+                    <FormControl sx={{ width: '100%', my: 1 }} variant="filled" size="small" >
+                        <InputLabel id="area-code--select">Area Code</InputLabel>
+                        <Select
+                            labelId="area-code--select"
+                            id="area-code--select--dropdown"
+                            value={signupAccount.USERAREAID}
+                            label="Area Code"
+                            onChange={(event) => { handleInputChange("REGISTRATION-AREACODE", event) }}
+                        >
+                            {
+                                isArrayNotEmpty(AreaCodes) ?
+                                    AreaCodes.map((el, idx) =>
+                                        <MenuItem key={idx + "__" + el.AreaCode} value={el.UserAreaID}>{el.AreaCode + " - " + el.AreaName}</MenuItem>
+                                    )
+                                    :
+                                    <MenuItem disabled><i>There is no Area Code to Select</i></MenuItem>
+                            }
+                        </Select>
+                        <FormHelperText>The area code is represent your residental area</FormHelperText>
+                    </FormControl>
+                    <TextField id="registration--contact" value={signupAccount.CONTACTNO} onChange={(event) => { handleInputChange("REGISTRATION-CONTACTNO", event) }} label="Contact Number" fullWidth variant="filled" required size="small" sx={{ width: '100%', my: 1 }} />
+                    <TextField id="registration--email" value={signupAccount.USEREMAIL} onChange={(event) => { handleInputChange("REGISTRATION-EMAIL", event) }} label="Email Address" fullWidth variant="filled" required size="small" sx={{ my: 1 }} />
+                    <TextField id="registration--wechatid" value={signupAccount.USERWECHATID} onChange={(event) => { handleInputChange("REGISTRATION-WECHATID", event) }} label="WeChat ID" fullWidth variant="filled" size="small" sx={{ my: 1 }} />
+                </DialogContent>
+                <DialogActions>
+                    {
+                        !isFormSubmitting ?
+                            <Button sx={{ mx: 2, my: 1 }} onClick={handleRegistration} variant="contained" fullWidth> Submit </Button>
+                            :
+                            <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mx: 2, my: 1 }}>
+                                A Moment ...
+                            </Button>
+                    }
+                </DialogActions>
+            </Dialog>
+            {/* Registration Form | Modal */}
+
         </div>
     )
 }
