@@ -1,5 +1,4 @@
 import React from "react";
-import { TopbarNav } from "../components/TopbarNav";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
@@ -44,7 +43,6 @@ export const Pricingpage = () => {
 
     return (
         <div>
-            <TopbarNav />
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'darkgrey' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
