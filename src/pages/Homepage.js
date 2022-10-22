@@ -3,16 +3,15 @@ import { useSelector, useDispatch, Provider } from 'react-redux'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import { NotificationView } from "../components/NotificationView";
-import { TextField } from "@mui/material";
-import Footer from "../components/Footer/Footer";
-import { TopbarNav } from "../components/TopbarNav";
+import { Button, TextField } from "@mui/material";
 import { GitAction } from "../store/action/gitAction";
 
 export default function Homepage() {
-    const { loading, state, viewNotification } = useSelector(state => ({
+    const { loading, state, viewNotification, parcelStatus } = useSelector(state => ({
         loading: state.counterReducer.loading,
         state: state.counterReducer,
         viewNotification: state.counterReducer.viewNotification,
+        parcelStatus: state.counterReducer.parcelStatus,
     }));
 
     const dispatch = useDispatch()
@@ -20,12 +19,8 @@ export default function Homepage() {
     const [trackingNumber, setTrackingNumber] = useState("");
 
     useEffect(() => {
-        dispatch(GitAction.CallGetNotification())
+        dispatch(GitAction.CallGetNotification({ status: 1 }))
     }, [])
-
-    const fetchNotfication = () => {
-
-    }
 
     return (
         <div>
@@ -52,29 +47,66 @@ export default function Homepage() {
                 style={{ margin: "10px 20px 0px 20px" }}
             >
                 {/* notification area */}
-                <NotificationView type={"success"} message="This is a notification" />
+                Notifications
+                {viewNotification && viewNotification.length > 0 ? viewNotification.map((item, index) => {
+                    return (
+                        <NotificationView
+                            message={item.NotificationDesc}
+                            title={item.NotificationTitle}
+                            date={item.Column1}
+                        />
+                    )
+                })
+                    :
+                    <div
+                        style={{
+                            textAlign: 'center',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        No notification for the moment / 目前没有任何通告
+                    </div>
+                }
 
                 {/* notification area */}
                 <div
                     style={{
-                        marginTop: "10px",
+                        marginTop: "20px",
                     }}
                 >
                     Check status
-                    <br />
-                    <TextField
-                        sx={{
-                            width: "100%",
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            marginTop: '20px',
+                            justifyContent: 'space-between'
                         }}
-                        id="trackingNumber"
-                        type="text"
-                        label="Tracking Number"
-                        onChange={(e) => setTrackingNumber(e.target.value)}
-                        value={trackingNumber}
-                    />
+                    >
+                        <TextField
+                            sx={{
+                                width: "80%",
+                            }}
+                            id="trackingNumber"
+                            type="text"
+                            label="Tracking Number"
+                            onChange={(e) => setTrackingNumber(e.target.value)}
+                            value={trackingNumber}
+                        />
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            sx={{
+                                width: "15%",
+                            }}
+                            onClick={() => dispatch(GitAction.CallGetParcelStatus({ trackingNumber: `and TrackingNumber='${trackingNumber}'` }))}
+                        >
+                            Search
+                        </Button>
+                    </div>
+
                 </div>
             </div>
-            <Footer />
         </div>
     );
 }

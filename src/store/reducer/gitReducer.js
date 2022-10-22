@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   logonUser: [],
   userUpdateReturnValue: [],
   viewNotification: [],
+  parcelStatus: [],
 };
 
 export function counterReducer(state = INITIAL_STATE, action) {
@@ -63,6 +64,14 @@ export function counterReducer(state = INITIAL_STATE, action) {
       return Object.assign({}, state, {
         loading: false,
         viewNotification: action.payload
+      });
+
+    case GitAction.GetParcelStatus:
+      return Object.assign({}, state, { loading: true });
+    case GitAction.GotParcelStatus:
+      return Object.assign({}, state, {
+        loading: false,
+        parcelStatus: action.payload
       });
 
     /////////////////////////////////////////////////// Default ///////////////////////////////////////////////////
