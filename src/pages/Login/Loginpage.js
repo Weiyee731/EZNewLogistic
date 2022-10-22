@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch, Provider } from 'react-redux'
 import useAuth from "../../hooks/useAuth";
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { GitAction } from "../../store/action/gitAction";
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField';
@@ -74,20 +74,49 @@ export const Loginpage = () => {
     const [openPasswordRecoveryModal, setOpenPasswordRecoveryModal] = useState(false)
     /* PLACE YOUR HOOKS HERE */
 
-
-
-
+    // init()
     useEffect(() => {
         dispatch(GitAction.CallFetchUserAreaCode())
     }, [])
 
-    useEffect(() => {
-        console.log(AreaCodes)
-    }, [AreaCodes])
 
-    useEffect(() => {
-        console.log(registration_returnValue)
 
+
+    // when user login successfully
+    useEffect(() => {
+        if (isArrayNotEmpty(logonUser)) {
+            try {
+                if (isStringNullOrEmpty(logonUser[0].ReturnVal)) {
+                    setIsLoginInvalidInput(false)
+                    setLoginAccount({
+                        USERNAME: '',
+                        PASSWORD: '',
+                        REMEMBER: false,
+                    })
+                    console.log(logonUser[0])
+
+                    setAuth(logonUser[0])
+                    localStorage.setItem("user", JSON.stringify(logonUser[0]))
+                    navigate('/profile', { replace: true });
+                    dispatch(GitAction.CallClearLogonUserCache())
+                }
+                else {
+                    if (logonUser[0].ReturnVal === 0 || logonUser[0].ReturnVal === "0") {
+                        setIsLoginInvalidInput(true)
+                        dispatch(GitAction.CallClearLogonUserCache())
+                    }
+                }
+            }
+            catch (Exceptions) {
+                console.log(Exceptions)
+            }
+        }
+
+    }, [logonUser])
+    // when user login successfully
+
+    // user registration 
+    useEffect(() => {
         if (isArrayNotEmpty(registration_returnValue)) {
             try {
                 if (!isStringNullOrEmpty(registration_returnValue[0].ReturnVal) && registration_returnValue[0].ReturnVal === 1) {
@@ -125,40 +154,7 @@ export const Loginpage = () => {
             }
         }
     }, [registration_returnValue])
-
-    // when user login successfully
-    useEffect(() => {
-        if (isArrayNotEmpty(logonUser)) {
-            try {
-                if (isStringNullOrEmpty(logonUser[0].ReturnVal)) {
-                    setIsLoginInvalidInput(false)
-                    setLoginAccount({
-                        USERNAME: '',
-                        PASSWORD: '',
-                        REMEMBER: false,
-                    })
-                    console.log(logonUser[0])
-
-                    // setAuth(logonUser[0])
-                    localStorage.setItem("user", JSON.stringify(logonUser[0]))
-                    console.log(localStorage.getItem("user"))
-                    navigate('/', { replace: true });
-                    dispatch(GitAction.CallClearLogonUserCache())
-                }
-                else {
-                    if (logonUser[0].ReturnVal === 0 || logonUser[0].ReturnVal === "0") {
-                        setIsLoginInvalidInput(true)
-                        dispatch(GitAction.CallClearLogonUserCache())
-                    }
-                }
-            }
-            catch (Exceptions) {
-                console.log(Exceptions)
-            }
-        }
-
-    }, [logonUser])
-    // when user login successfully
+    // user registration 
 
     const handleLogin = () => {
         const isValidate = (!isStringNullOrEmpty(loginAccount.USERNAME) && !isStringNullOrEmpty(loginAccount.PASSWORD))
@@ -210,6 +206,20 @@ export const Loginpage = () => {
 
     const setRegistrationPasswordVisibility = () => {
         setShowRegistrationPassword(!showRegistrationPassword)
+    }
+
+    const handleInputKeydown = (name, e) => {
+        switch (name) {
+            case "LOGIN":
+                if (e.key === 'Enter' || e.keyCode === 13) {
+                    handleLogin()
+                }
+                break;
+
+            default:
+                break;
+        }
+
     }
 
     const handleInputChange = (inputProps, event) => {
@@ -326,7 +336,15 @@ export const Loginpage = () => {
                             </Typography>
                         }
 
-                        <TextField id="login-user--username" label="Username" value={loginAccount.USERNAME} variant="filled" sx={{ width: '100%', mb: 2 }} onChange={(event) => handleInputChange('USERNAME', event)} />
+                        <TextField
+                            id="login-user--username"
+                            label="Username"
+                            value={loginAccount.USERNAME}
+                            variant="filled"
+                            sx={{ width: '100%', mb: 2 }}
+                            onChange={(event) => handleInputChange('USERNAME', event)}
+                            onKeyDown={event => handleInputKeydown("LOGIN", event)}
+                        />
 
                         <FormControl sx={{ width: '100%', mb: 2 }} variant="outlined">
                             <InputLabel htmlFor="login-user--password">Password</InputLabel>
@@ -335,6 +353,7 @@ export const Loginpage = () => {
                                 type={showLoginPassword ? 'text' : 'password'}
                                 value={loginAccount.PASSWORD}
                                 onChange={(event) => handleInputChange('PASSWORD', event)}
+                                onKeyDown={(event) => handleInputKeydown("LOGIN", event)}
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
