@@ -84,7 +84,7 @@ const Navigation = styled.nav`
   z-index: 600;
   width: ${(props) => (props.clicked ? "100%" : "0")};
   opacity: ${(props) => (props.clicked ? "1" : "0")};
-
+  display: ${(props) => (props.clicked ? "inline" : "none")};
   transition: width 0.8s, opacity 0.8s;
 `;
 
