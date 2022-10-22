@@ -61,10 +61,19 @@ export class GitAction {
 
   static GetNotification = "GetNotification";
   static GotNotification = "GotNotification";
-  static CallGetNotification() {
-
+  static CallGetNotification(propsData) {
     return {
       type: GitAction.GetNotification,
+      payload: propsData
+    };
+  }
+
+  static GetParcelStatus = "GetParcelStatus";
+  static GotParcelStatus = "GotParcelStatus";
+  static CallGetParcelStatus(propsData) {
+    return {
+      type: GitAction.GetParcelStatus,
+      payload: propsData
     };
   }
 
