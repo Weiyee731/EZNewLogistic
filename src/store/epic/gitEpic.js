@@ -13,11 +13,6 @@ export class GitEpic {
     action$.pipe(filter(action => action.type === GitAction.Login), map(action => {
       return dispatch => {
         try {
-          console.log(url + "User_Login?" +
-            "USERNAME=" + action.payload.USERNAME +
-            "&PASSWORD=" + action.payload.PASSWORD
-          )
-
           return fetch(url + "User_Login?" +
             "USERNAME=" + action.payload.USERNAME +
             "&PASSWORD=" + action.payload.PASSWORD
@@ -37,16 +32,6 @@ export class GitEpic {
     action$.pipe(filter(action => action.type === GitAction.RegisterUser), map(action => {
       return dispatch => {
         try {
-          console.log(url + "User_Register?" +
-            "USERAREAID=" + action.payload.USERAREAID +
-            "&USERNAME=" + action.payload.USERNAME +
-            "&FULLNAME=" + action.payload.FULLNAME +
-            "&PASSWORD=" + action.payload.PASSWORD +
-            "&CONTACTNO=" + action.payload.CONTACTNO +
-            "&USEREMAIL=" + action.payload.USEREMAIL +
-            "&USERNICKNAME=" + action.payload.USERNICKNAME +
-            "&USERWECHATID=" + action.payload.USERWECHATID
-          )
           return fetch(url + "User_Register?" +
             "USERAREAID=" + action.payload.USERAREAID +
             "&USERNAME=" + action.payload.USERNAME +
@@ -112,16 +97,13 @@ export class GitEpic {
     action$.pipe(filter(action => action.type === GitAction.GetParcelStatus), map(action => {
       return dispatch => {
         try {
-          console.log(
-            url + "Inventory_ViewStockByFilter?FILTERCOLUMN=" + action.payload.trackingNumber
-          )
           return fetch(
             url + "Inventory_ViewStockByFilter?FILTERCOLUMN=" + action.payload.trackingNumber
           )
             .then(response => response.json())
             .then(json => {
               json = JSON.parse(json)
-              console.log(json[0].ReturnVal)
+
               if (json[0].ReturnVal === 0) {
                 toast.error("Invalid tracking number")
               }

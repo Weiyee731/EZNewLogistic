@@ -14,7 +14,8 @@ const Footer = () => {
             <h1 style={{
                 color: "green",
                 textAlign: "center",
-                paddingTop: "20px"
+                paddingTop: "20px",
+                marginTop: 0
             }}>
                 GeeksforGeeks: A Computer Science Portal for Geeks
             </h1>

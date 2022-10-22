@@ -131,8 +131,10 @@ function HamburgerMenu() {
 
   const handleLogout = () => {
     setAuth({})
+    localStorage.setItem("user", "")
     handleClick() 
   }
+
   return (
     <>
       <MenuLabel htmlFor="navi-toggle" onClick={handleClick} style={{ margin: '10px' }}>

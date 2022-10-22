@@ -93,7 +93,6 @@ export const Loginpage = () => {
                         PASSWORD: '',
                         REMEMBER: false,
                     })
-                    console.log(logonUser[0])
 
                     setAuth(logonUser[0])
                     localStorage.setItem("user", JSON.stringify(logonUser[0]))
