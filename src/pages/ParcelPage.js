@@ -190,7 +190,7 @@ export const ParcelPage = () => {
                                 <>
                                     <div className="row">
                                         <Typography style={{ fontSize: "14pt", color: "#253949", letterSpacing: 1 }}>如有属于您的快递单号包裹可截图快递物流信息联系我们的客服</Typography>
-                                        <Typography style={{ fontWeight: "600", fontSize: "10pt", color: "#253949", letterSpacing: 1, paddingBottom: "10pt" }}>注意： 如包裹超过60天无人认领，公司会自行处理包裹</Typography>
+                                        <Typography style={{ fontWeight: "600", fontSize: "10pt", color: "#253949", letterSpacing: 1, paddingBottom: "10pt" }}>注意： 如包裹超过3个月无人认领，公司会自行处理包裹，不做另行通知</Typography>
                                     </div>
                                     <Grid container spacing={2}>
                                         {
