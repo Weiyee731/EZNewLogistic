@@ -9,6 +9,7 @@ import { Loginpage } from './pages/Login/Loginpage';
 import { Pricingpage } from './pages/Pricingpage';
 import { FAQpage } from './pages/FAQpage';
 import { Profilepage } from './pages/Profilepage';
+import { ParcelPage } from './pages/ParcelPage';
 import Layout from './Layout';
 import Error404 from './pages/Error404';
 import RequireAuth from './pages/RequireAuth';
@@ -26,6 +27,8 @@ function App() {
             <Route path="/" element={<Homepage />} />
             <Route path="/faq" element={<FAQpage />} />
             <Route path="/pricing" element={<Pricingpage />} />
+
+            <Route path="/parcelpage" element={<ParcelPage />} />
 
             {/* Protected Routes for Login */}
             <Route element={<RequireAuth />}>
