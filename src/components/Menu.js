@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-
+import useAuth from "../hooks/useAuth";
+import { isStringNullOrEmpty } from "../Repository/Helper";
+import LogoutIcon from '@mui/icons-material/Logout';
 const COLORS = {
   primaryDark: "#115b4c",
   primaryLight: "#B6EDC8",
@@ -124,7 +126,15 @@ const ItemLink = styled(NavLink)`
 
 function HamburgerMenu() {
   const [click, setClick] = useState(false);
+  const { auth, setAuth } = useAuth()
   const handleClick = () => setClick(!click);
+
+  const handleLogout = () => {
+    setAuth({})
+    localStorage.setItem("user", "")
+    handleClick() 
+  }
+
   return (
     <>
       <MenuLabel htmlFor="navi-toggle" onClick={handleClick} style={{ margin: '10px' }}>
@@ -146,7 +156,7 @@ function HamburgerMenu() {
           </li>
 
           <li>
-            <ItemLink onClick={handleClick} to={localStorage.getItem("user") !== null ? "/portfolio" : "/login"}>
+            <ItemLink onClick={handleClick} to={auth?.UserID !== null ? "/profile" : "/login"}>
               Profile
             </ItemLink>
           </li>
@@ -155,6 +165,14 @@ function HamburgerMenu() {
               FAQ
             </ItemLink>
           </li>
+          {
+            !isStringNullOrEmpty(auth?.UserID) && !isStringNullOrEmpty(auth?.Username) &&
+            <li>
+              <ItemLink onClick={handleLogout} to="/">
+                Logout <LogoutIcon size="large" sx={{fontSize: 30}} />
+              </ItemLink>
+            </li>
+          }
         </List>
       </Navigation>
     </>

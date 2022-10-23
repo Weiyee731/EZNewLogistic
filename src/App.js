@@ -4,7 +4,6 @@ import { useSelector, useDispatch, Provider } from 'react-redux'
 import store from './store';
 import Homepage from './pages/Homepage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Registrationpage } from './pages/Registrationpage';
 import { Loginpage } from './pages/Login/Loginpage';
 import { Pricingpage } from './pages/Pricingpage';
 import { FAQpage } from './pages/FAQpage';
@@ -23,7 +22,6 @@ function App() {
           <Route path="/" element={<Layout />} >
             {/* Public Routes */}
             <Route path="/login" element={<Loginpage />} />
-            <Route path="/register" element={<Registrationpage />} />
             <Route path="/" element={<Homepage />} />
             <Route path="/faq" element={<FAQpage />} />
             <Route path="/pricing" element={<Pricingpage />} />
