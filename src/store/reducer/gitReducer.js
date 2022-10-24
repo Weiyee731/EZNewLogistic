@@ -82,6 +82,14 @@ export function counterReducer(state = INITIAL_STATE, action) {
         loading: false,
         parcelStatus: action.payload
       });
+      
+    case GitAction.FetchUserProfileByID:
+      return Object.assign({}, state, { loading: true });
+    case GitAction.UserProfileByIDFetched:
+      return Object.assign({}, state, {
+        loading: false,
+        logonUser: action.payload
+      });
 
     /////////////////////////////////////////////////// Default ///////////////////////////////////////////////////
     default:

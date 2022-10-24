@@ -57,6 +57,15 @@ export class GitAction {
     };
   }
 
+  static FetchUserProfileByID = "FETCH_USER_PROFILE_BY_ID";
+  static UserProfileByIDFetched = "USER_PROFILE_BY_ID_FETCHED";
+  static CallFetchUserProfileByID(propsData) {
+    return {
+      type: GitAction.UpdateUserAccountPassword,
+      payload: propsData
+    };
+  }
+
   ///////////////////////////////////////////////////  sidebar configuration  ///////////////////////////////////////////////////
 
   static GetNotification = "GetNotification";

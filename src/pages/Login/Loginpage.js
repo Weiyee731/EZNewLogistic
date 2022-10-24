@@ -79,8 +79,20 @@ export const Loginpage = () => {
         dispatch(GitAction.CallFetchUserAreaCode())
     }, [])
 
+    useEffect(() => {
+        let logonUser = localStorage.getItem("user")
+        try {
+            logonUser = JSON.parse(logonUser)
 
-
+            if (!isStringNullOrEmpty(logonUser.UserID) && !isStringNullOrEmpty(logonUser.Username)) {
+                setAuth(logonUser)
+                navigate('/profile', { replace: true })
+            }
+        }
+        catch (Exceptions) {
+            localStorage.setItem("user", '')
+        }
+    }, [])
 
     // when user login successfully
     useEffect(() => {

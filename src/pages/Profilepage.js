@@ -57,6 +57,8 @@ export const Profilepage = () => {
     const [newPassword, setNewPassword] = useState("")
     const [showNewPassword, setShowNewPassword] = useState(false)
     const [confirmPassword, setConfirmPassword] = useState("")
+    const sidebarItems = ['User Profile', 'All Orders', 'Claim Cargo'];
+    const [currentPage, setCurrentPage] = useState('User Profile')
 
     const handleLogout = () => {
         setAuth({})
@@ -89,56 +91,79 @@ export const Profilepage = () => {
         console.log(confirmPassword)
     }
 
+    const renderSideMenu = () => {
+        return (
+            <Paper sx={{ maxWidth: '90%', width: '300px', mx: 3, my: 2, py: 2 }}>
+                <Typography variant="h5" component="p" sx={{ fontWeight: 600, textAlign: 'center' }}>目录</Typography>
+                <MenuList>
+                    <Divider />
+                    <MenuItem onClick={() => handleSetCurrentPage(sidebarItems[0])} sx={(currentPage === sidebarItems[0]) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
+                        <ListItemIcon>
+                            <PersonIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>您的资料</ListItemText>
+                    </MenuItem>
+                    <MenuItem onClick={openPasswordManagerModal}>
+                        <ListItemIcon>
+                            <KeyIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>更改密码</ListItemText>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem onClick={() => handleSetCurrentPage(sidebarItems[1])} sx={(currentPage === sidebarItems[1]) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
+                        <ListItemIcon>
+                            <FactCheckIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>您的订单</ListItemText>
+                    </MenuItem>
+                    <MenuItem onClick={() => handleSetCurrentPage(sidebarItems[2])} sx={(currentPage === sidebarItems[2]) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
+                        <ListItemIcon>
+                            <InventoryIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>货物认领</ListItemText>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem onClick={() => { navigate("/", { replace: true }) }}>
+                        <ListItemIcon>
+                            <HomeIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>返回页面</ListItemText>
+                    </MenuItem>
+                    <MenuItem onClick={handleLogout}>
+                        <ListItemIcon>
+                            <LogoutIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>退出</ListItemText>
+                    </MenuItem>
+                </MenuList>
+            </Paper>
+        )
+    }
+
+    const handleSetCurrentPage = (pageType) => {
+        switch (pageType) {
+            case sidebarItems[0]:
+                setCurrentPage(sidebarItems[0])
+                break;
+
+            case sidebarItems[1]:
+                setCurrentPage(sidebarItems[1])
+                break;
+
+            case sidebarItems[2]:
+                setCurrentPage(sidebarItems[2])
+                break;
+
+            default: break;
+
+        }
+    }
+
     return (
         <div style={{ minHeight: '70vh', padding: '1rem 0rem', maxWidth: '1196px', display: 'flex', marginLeft: 'auto', marginRight: 'auto' }}>
             <Grid container spacing={1}>
                 <Grid item xs={12} md={3} >
-                    <Paper sx={{ maxWidth: '90%', width: '300px', mx: 3, my: 2, py: 2 }}>
-                        <div>
-                            <Typography variant="h5" component="p" sx={{ fontWeight: 600, textAlign: 'center' }}>目录</Typography>
-                        </div>
-                        <MenuList>
-                            <Divider />
-                            <MenuItem>
-                                <ListItemIcon>
-                                    <PersonIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText>您的资料</ListItemText>
-                            </MenuItem>
-                            <MenuItem onClick={openPasswordManagerModal}>
-                                <ListItemIcon>
-                                    <KeyIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText>更改密码</ListItemText>
-                            </MenuItem>
-                            <Divider />
-                            <MenuItem>
-                                <ListItemIcon>
-                                    <FactCheckIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText>您的订单</ListItemText>
-                            </MenuItem>
-                            <MenuItem>
-                                <ListItemIcon>
-                                    <InventoryIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText>货物认领</ListItemText>
-                            </MenuItem>
-                            <Divider />
-                            <MenuItem onClick={() => { navigate("/", { replace: true }) }}>
-                                <ListItemIcon>
-                                    <HomeIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText>返回页面</ListItemText>
-                            </MenuItem>
-                            <MenuItem onClick={handleLogout}>
-                                <ListItemIcon>
-                                    <LogoutIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText>退出</ListItemText>
-                            </MenuItem>
-                        </MenuList>
-                    </Paper>
+                    {renderSideMenu()}
                 </Grid>
 
                 <Grid item xs={12} md={9}>
@@ -164,7 +189,7 @@ export const Profilepage = () => {
                         <CardContent sx={{ width: '100%', padding: 0 }}>
                             <Grid container rowSpacing={1} columnSpacing={3} >
                                 <Grid item xs={12}>
-                                    <Typography variant="h6" component="body" sx={{ fontWeight: 600 }}>
+                                    <Typography variant="h6" component="p" sx={{ fontWeight: 600 }}>
                                         您的个人资料
                                     </Typography>
                                 </Grid>
@@ -201,7 +226,7 @@ export const Profilepage = () => {
 
             {/* Password Manager Form | Modal */}
             <Dialog scroll="paper" open={openPasswordModal} onClose={() => setOpenPasswordModal(false)} aria-labelledby="password-manager" aria-describedby="password-manager-description" >
-                <DialogTitle id="registration-title" sx={{fontWeight: 600}}>
+                <DialogTitle id="registration-title" sx={{ fontWeight: 600 }}>
                     {"Password Manager"}
                     <IconButton
                         aria-label="close"
@@ -254,7 +279,7 @@ export const Profilepage = () => {
                         <InputLabel htmlFor="confirmation-password">Confirmation Password</InputLabel>
                         <FilledInput
                             id="confirmation-password"
-                            type={ 'password'}
+                            type={'password'}
                             value={confirmPassword}
                             onChange={(event) => handleInputChange('CONFIRM-PASSWORD', event)}
                             label="Password"
