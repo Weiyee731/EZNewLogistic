@@ -4,15 +4,29 @@ import HamburgerMenu from './components/Menu';
 import { TopbarNav } from "./components/TopbarNav";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const Layout = () => {
+    const theme = createTheme({
+        palette: {
+            primary: {
+                main: "#6082B6"
+            },
+            secondary: {
+                main: "#494c7d"
+            }
+        }
+    });
+
     return (
-        <main className="App" >
-            <ToastContainer />
-            <TopbarNav />
-            <Outlet />
-            <Footer />
-        </main>
+        <ThemeProvider theme={theme}>
+            <main className="App" >
+                <ToastContainer />
+                <TopbarNav />
+                <Outlet />
+                <Footer />
+            </main>
+        </ThemeProvider>
     )
 
 }
