@@ -26,9 +26,9 @@ export const TopbarNav = () => {
             <div>
                 <HamburgerMenu></HamburgerMenu>
             </div>
-            <div style={{textAlign: 'center', width: '100%'}}>
+            <div style={{ textAlign: 'center', width: '100%' }}>
                 <h2>
-                    New-Logistics
+                    雅威国际物流
                 </h2>
             </div>
         </div>

@@ -9,8 +9,6 @@ import { Card, CardContent, Typography, Grid, Tabs, Tab, Box } from '@mui/materi
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 
 export const FAQpage = () => {
-
-
     const FAQItem = [
         {
             FAQID: 1, FAQTitle: "包裹咨询", FAQDetails: [
@@ -107,23 +105,23 @@ export const FAQpage = () => {
         return (
             <div className="row" style={{ color: "#686868" }}>
                 <div className="row">
-                    <Typography >1) 海运费 (古晋自提) 是以单件立方计算</Typography>
-                    <Typography ><label style={{ fontWeight: "600" }}>计算法：</label>长(m) X 高(m) X 宽(m)</Typography>
-                    <Typography ><label style={{ fontWeight: "600" }}>例子：</label>0.56m X 0.35m X 1.08m = 1.222m3</Typography>
-                    <Typography ><label style={{ fontWeight: "600" }}>注意：</label>若货物体积小过 0.01m3 为小包裹，RM4/件</Typography>
+                    <Typography>1) 海运费 (古晋自提) 是以单件立方计算</Typography>
+                    <Typography><label style={{ fontWeight: "600" }}>计算法：</label>长(m) X 高(m) X 宽(m)</Typography>
+                    <Typography><label style={{ fontWeight: "600" }}>例子：</label>0.56m X 0.35m X 1.08m = 1.222m3</Typography>
+                    <Typography><label style={{ fontWeight: "600" }}>注意：</label>若货物体积小过 0.01m3 为小包裹，RM4/件</Typography>
                 </div>
                 <div className="row" style={{ paddingTop: "10pt" }}>
-                    <Typography >2) 若 1 立方 (m3) 单个货物重量是 500公斤或以上将会用以下计算方式</Typography>
-                    <Typography ><label style={{ fontWeight: "600" }}>计算法：</label>实重/500 = m3</Typography>
-                    <Typography ><label style={{ fontWeight: "600" }}>例子：</label>600kg / 500kg = 1.2m3</Typography>
+                    <Typography>2) 若 1 立方 (m3) 单个货物重量是 500公斤或以上将会用以下计算方式</Typography>
+                    <Typography><label style={{ fontWeight: "600" }}>计算法：</label>实重/500 = m3</Typography>
+                    <Typography><label style={{ fontWeight: "600" }}>例子：</label>600kg / 500kg = 1.2m3</Typography>
                 </div>
             </div>
         )
     }
     return (
-        <div style={{ margin: "20px 16px" }}   >
+        <div style={{ margin: "20px 16px" }}  >
             <div style={{ padding: "10pt 20pt 0pt" }}>
-                <Typography style={{ fontWeight: "bold", fontSize: "20pt" }} >   常见问题  </Typography>
+                <Typography style={{ fontWeight: "bold", fontSize: "20pt" }}>   常见问题  </Typography>
                 <hr />
             </div>
             {
@@ -135,27 +133,27 @@ export const FAQpage = () => {
                                 data.FAQDetails.length > 0 && data.FAQDetails.map((details, detailIndex) => {
                                     return (
                                         <div className="row" style={{ paddingTop: "10pt" }}>
-                                            <Accordion >
+                                            <Accordion>
                                                 <AccordionSummary
                                                     expandIcon={<ExpandMoreIcon />}
                                                     aria-controls="panel1a-content"
                                                     id="panel1a-header"
                                                 >
                                                     <Grid container spacing={2}>
-                                                        <Grid item sx={2} ><InfoIcon /></Grid>
-                                                        <Grid item sx={10} ><Typography >{details.DetailTitle}</Typography></Grid>
+                                                        <Grid item sx={2}><InfoIcon /></Grid>
+                                                        <Grid item sx={10}><Typography>{details.DetailTitle}</Typography></Grid>
                                                     </Grid>
                                                 </AccordionSummary>
                                                 <AccordionDetails style={{ color: "#686868" }}>
                                                     {
                                                         details.DetailsDesc.type === undefined ?
-                                                            <Typography >  {details.DetailsDesc}  </Typography>
+                                                            <Typography>  {details.DetailsDesc}  </Typography>
                                                             :
                                                             details.DetailsDesc.type === "list" ?
                                                                 details.DetailsDesc.data.map((x, index) => {
                                                                     return (
                                                                         <Grid container spacing={2}>
-                                                                            <Grid item sx={2} >
+                                                                            <Grid item sx={2}>
                                                                                 {details.DetailsDesc.typeList === "num" ?
                                                                                     index + 1 + ". "
                                                                                     :
@@ -164,7 +162,7 @@ export const FAQpage = () => {
                                                                                         <ArrowCircleRightIcon />
                                                                                 }
                                                                             </Grid>
-                                                                            <Grid item sx={10} ><Typography >{x.item} 1111</Typography></Grid>
+                                                                            <Grid item sx={10}><Typography>{x.item}</Typography></Grid>
                                                                         </Grid>
                                                                     )
                                                                 })
@@ -173,10 +171,10 @@ export const FAQpage = () => {
                                                                     details.DetailsDesc.data.map((x) => {
                                                                         return (
                                                                             <Grid container spacing={2}>
-                                                                                <Grid item sx={2} >
+                                                                                <Grid item sx={2}>
                                                                                     <ArrowCircleRightIcon />
                                                                                 </Grid>
-                                                                                <Grid item sx={10} ><Typography ><label style={{ paddingRight: "10pt", fontWeight: "600" }}>{x.title} :</label> <label>{x.item}</label> </Typography></Grid>
+                                                                                <Grid item sx={10}><Typography><label style={{ paddingRight: "10pt", fontWeight: "600" }}>{x.title} :</label> <label>{x.item}</label> </Typography></Grid>
                                                                             </Grid>
                                                                         )
                                                                     })

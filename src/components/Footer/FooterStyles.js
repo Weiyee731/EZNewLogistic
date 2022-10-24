@@ -18,6 +18,8 @@ export const Column = styled.div`
 display: flex;
 flex-direction: column;
 text-align: center;
+margin: 0 40px;
+
 `;
 
 export const Row = styled.div`
@@ -32,6 +34,13 @@ grid-gap: 20px;
 }
 `;
 
+export const FooterText = styled.div`
+color: #fff;
+margin-bottom: 20px;
+font-size: 18px;
+text-decoration: none;
+`;
+
 export const FooterLink = styled.a`
 color: #fff;
 margin-bottom: 20px;
@@ -39,7 +48,7 @@ font-size: 18px;
 text-decoration: none;
 
 &:hover {
-	color: #ffb703;
+	color: #8ECAE6;
 	transition: 200ms ease-in;
 }
 `;

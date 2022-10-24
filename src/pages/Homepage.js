@@ -92,10 +92,11 @@ export default function Homepage() {
                     </div>
                 }
 
-                {/* notification area */}
+                {/* parcel area */}
                 <div
                     style={{
                         marginTop: "80px",
+                        marginBottom: "80px",
                     }}
                 >
                     <Typography
