@@ -7,18 +7,12 @@ import {
     FooterLink,
     Heading,
 } from "./FooterStyles";
+import { useTheme } from "@mui/material";
 
 const Footer = () => {
+    const theme = useTheme()
     return (
-        <Box>
-            <h1 style={{
-                color: "green",
-                textAlign: "center",
-                paddingTop: "20px",
-                marginTop: "20px"
-            }}>
-                GeeksforGeeks: A Computer Science Portal for Geeks
-            </h1>
+        <Box style={{ marginTop: "80px" }}>
             <Container>
                 <Row>
                     <Column>

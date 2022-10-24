@@ -5,8 +5,10 @@ import useAuth from "../hooks/useAuth";
 import { isStringNullOrEmpty } from "../Repository/Helper";
 import LogoutIcon from '@mui/icons-material/Logout';
 const COLORS = {
-  primaryDark: "#115b4c",
-  primaryLight: "#B6EDC8",
+  primaryDark: "#023047",
+  primaryLight: "#8ECAE6",
+  white: "#FFFFFF",
+  secondary: '#fb8500',
 };
 
 const MenuLabel = styled.label`
@@ -17,7 +19,7 @@ const MenuLabel = styled.label`
   width: 60px;
   cursor: pointer;
   z-index: 1000;
-  box-shadow: 0 1rem 3rem rgba(182, 237, 200, 0.3);
+  // box-shadow: 0 1rem 3rem rgba(182, 237, 200, 0.3);
   text-align: center;
   top: 10px; 
   left: 15px;
@@ -34,12 +36,14 @@ const NavBackground = styled.div`
   border-radius: 50%;
   z-index: 600;
   transform: ${(props) => (props.clicked ? "scale(80)" : "scale(0)")};
-  transition: transform 0.8s;
+  transition: transform 0.3s;
+  top: 10px; 
+  left: 10px;
 `;
 
 const Icon = styled.span`
   position: relative;
-  background-color: ${(props) => (props.clicked ? "transparent" : "black")};
+  background-color: ${(props) => (props.clicked ? "transparent" : COLORS.primaryDark)};
   width: 25px;
   height: 2px;
   display: inline-block;
@@ -49,7 +53,7 @@ const Icon = styled.span`
   &::before,
   &::after {
     content: "";
-    background-color: black;
+    background-color: ${COLORS.primaryDark};
     width: 25px;
     height: 2px;
     display: inline-block;
@@ -132,7 +136,7 @@ function HamburgerMenu() {
   const handleLogout = () => {
     setAuth({})
     localStorage.setItem("user", "")
-    handleClick() 
+    handleClick()
   }
 
   return (
@@ -169,7 +173,7 @@ function HamburgerMenu() {
             !isStringNullOrEmpty(auth?.UserID) && !isStringNullOrEmpty(auth?.Username) &&
             <li>
               <ItemLink onClick={handleLogout} to="/">
-                Logout <LogoutIcon size="large" sx={{fontSize: 30}} />
+                Logout <LogoutIcon size="large" sx={{ fontSize: 30 }} />
               </ItemLink>
             </li>
           }

@@ -9,6 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -20,12 +21,13 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 function BootstrapDialogTitle(props) {
+    const theme = useTheme();
     const { children, onClose, ...other } = props;
 
     return (
-        <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+        <DialogTitle sx={{ m: 0, p: 2, backgroundColor: theme.palette.secondary.main, color: 'white' }} {...other}>
             {children}
-            {onClose ? (
+            {/* {onClose ? (
                 <IconButton
                     aria-label="close"
                     onClick={onClose}
@@ -38,7 +40,7 @@ function BootstrapDialogTitle(props) {
                 >
                     <CloseIcon />
                 </IconButton>
-            ) : null}
+            ) : null} */}
         </DialogTitle>
     );
 }
@@ -74,7 +76,7 @@ export const BasicAlertDialog = ({ open, handleOpenClose, data }) => {
                 </Typography>
             </DialogContent>
             <DialogActions>
-                <Button autoFocus onClick={handleOpenClose}>
+                <Button color='secondary' autoFocus onClick={handleOpenClose}>
                     OK
                 </Button>
             </DialogActions>

@@ -45,7 +45,7 @@ export const Pricingpage = () => {
         <div>
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'darkgrey' }}>
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                    <Tabs textColor="secondary" value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label="自取收費" {...a11yProps(0)} />
                         <Tab label="派送收费(海运小包派送)" {...a11yProps(1)} />
                         <Tab label="派送收费(海运大貨派送)" {...a11yProps(2)} />

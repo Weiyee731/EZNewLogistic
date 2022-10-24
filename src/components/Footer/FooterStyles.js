@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Box = styled.div`
-background: black;
+background: #023047;;
 width: 100%;
 `;
 
@@ -11,14 +11,13 @@ export const Container = styled.div`
 	justify-content: center;
 	max-width: 1000px;
 	margin: 0 auto;
-	/* background: red; */
+	background: #023047;
 `
 
 export const Column = styled.div`
 display: flex;
 flex-direction: column;
-text-align: left;
-margin-left: 60px;
+text-align: center;
 `;
 
 export const Row = styled.div`
@@ -40,7 +39,7 @@ font-size: 18px;
 text-decoration: none;
 
 &:hover {
-	color: green;
+	color: #ffb703;
 	transition: 200ms ease-in;
 }
 `;
@@ -50,4 +49,5 @@ font-size: 24px;
 color: #fff;
 margin-bottom: 40px;
 font-weight: bold;
+color: #8ECAE6;
 `;

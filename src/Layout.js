@@ -10,10 +10,10 @@ const Layout = () => {
     const theme = createTheme({
         palette: {
             primary: {
-                main: "#6082B6"
+                main: "#8ECAE6"
             },
             secondary: {
-                main: "#494c7d"
+                main: "#023047"
             }
         }
     });

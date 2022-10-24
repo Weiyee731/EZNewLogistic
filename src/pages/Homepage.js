@@ -3,9 +3,10 @@ import { useSelector, useDispatch, Provider } from 'react-redux'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import { NotificationView } from "../components/NotificationView";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { GitAction } from "../store/action/gitAction";
 import { BasicAlertDialog } from "../components/BasicAlertDialog";
+import { useTheme } from '@mui/material/styles';
 
 export default function Homepage() {
     const { loading, state, viewNotification, parcelStatus } = useSelector(state => ({
@@ -19,6 +20,7 @@ export default function Homepage() {
 
     const [trackingNumber, setTrackingNumber] = useState("");
     const [open, setOpen] = useState(false);
+    const theme = useTheme();
 
     const handleOpenClose = () => {
         setOpen(!open);
@@ -32,6 +34,9 @@ export default function Homepage() {
     useEffect(() => {
         if (parcelStatus && parcelStatus.length > 0) {
             handleOpenClose();
+        }
+        return () => {
+            setTrackingNumber("");
         }
     }, [parcelStatus])
 
@@ -57,17 +62,22 @@ export default function Homepage() {
             </Carousel>
 
             <div
-                style={{ margin: "10px 20px 0px 20px" }}
+                style={{ margin: "40px 40px 0px 40px" }}
             >
                 {/* notification area */}
-                Notifications
+                <Typography
+                    variant="h4"
+                    style={{ fontWeight: "bold", color: 'black' }}
+                >
+                    Notifications
+                </Typography>
                 {viewNotification && viewNotification.length > 0 ? viewNotification.map((item, index) => {
                     return (
                         <NotificationView
                             key={index}
                             message={item.NotificationDesc}
                             title={item.NotificationTitle}
-                            date={item.Column1}
+                            date={item.CreatedDate}
                         />
                     )
                 })
@@ -85,10 +95,15 @@ export default function Homepage() {
                 {/* notification area */}
                 <div
                     style={{
-                        marginTop: "20px",
+                        marginTop: "80px",
                     }}
                 >
-                    Check status
+                    <Typography
+                        variant="h4"
+                        style={{ fontWeight: "bold", color: 'black', textAlign: 'center' }}
+                    >
+                        Check your parcel status
+                    </Typography>
                     <div
                         style={{
                             display: 'flex',
@@ -103,6 +118,7 @@ export default function Homepage() {
                             }}
                             id="trackingNumber"
                             type="text"
+                            color="secondary"
                             label="Tracking Number"
                             onChange={(e) => setTrackingNumber(e.target.value)}
                             value={trackingNumber}
@@ -112,6 +128,7 @@ export default function Homepage() {
                             color="primary"
                             sx={{
                                 width: "15%",
+                                color: 'secondary',
                             }}
                             onClick={() => dispatch(GitAction.CallGetParcelStatus2({ trackingNumber: `and TrackingNumber='${trackingNumber}'` }))}
                         >
