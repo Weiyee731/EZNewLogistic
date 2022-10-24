@@ -84,8 +84,7 @@ export class GitEpic {
             .then(response => response.json())
             .then(json => {
               json = JSON.parse(json)
-              console.log(json)
-              return dispatch({ type: GitAction.GotNotification, payload: json });
+              return dispatch({ type: GitAction.GotNotification, payload: json[0].ReturnVal === 1 ? JSON.parse(json[0].ReturnData) : [] });
             });
         } catch (error) {
           toast.error("Unable to get notification")
@@ -104,7 +103,6 @@ export class GitEpic {
             .then(response => response.json())
             .then(json => {
               json = JSON.parse(json)
-
               if (json[0].ReturnVal === 0) {
                 toast.error("Invalid tracking number")
               }
@@ -130,7 +128,7 @@ export class GitEpic {
               if (json[0].ReturnVal === 0) {
                 toast.error("Invalid tracking number")
               }
-              return dispatch({ type: GitAction.GotParcelStatus2, payload: json[0].ReturnVal === 1 ? json : [] });
+              return dispatch({ type: GitAction.GotParcelStatus2, payload: json[0].ReturnVal === 1 ? JSON.parse(json[0].ReturnData) : [] });
             });
         } catch (error) {
           toast.error("Unable to get the status of your parcel")
