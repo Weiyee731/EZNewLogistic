@@ -1,4 +1,4 @@
 export const ServerConfiguration = {    
-    LiveServerUrl:"https://triviix.com/EzLogisticApi/api/EzLogistic/",
-    uploadUrl: "https://triviix.com/SUPPImages_dev/uploadbase64.php"
+    LiveServerUrl:"https://yawei.com.my/YaweiLogisticApi/api/YaweiLogistic/",
+    uploadUrl: "https://yawei.com.my/YaweiLogisticImage/upload.php"
 }
