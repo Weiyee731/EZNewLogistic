@@ -86,5 +86,14 @@ export class GitAction {
     };
   }
 
+  static GetParcelStatus2 = "GetParcelStatus2";
+  static GotParcelStatus2 = "GotParcelStatus2";
+  static CallGetParcelStatus2(propsData) {
+    return {
+      type: GitAction.GetParcelStatus2,
+      payload: propsData
+    };
+  }
+
 }
 

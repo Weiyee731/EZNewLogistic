@@ -5,6 +5,7 @@ import { Carousel } from "react-responsive-carousel";
 import { NotificationView } from "../components/NotificationView";
 import { Button, TextField } from "@mui/material";
 import { GitAction } from "../store/action/gitAction";
+import { BasicAlertDialog } from "../components/BasicAlertDialog";
 
 export default function Homepage() {
     const { loading, state, viewNotification, parcelStatus } = useSelector(state => ({
@@ -17,10 +18,22 @@ export default function Homepage() {
     const dispatch = useDispatch()
 
     const [trackingNumber, setTrackingNumber] = useState("");
+    const [open, setOpen] = useState(false);
+
+    const handleOpenClose = () => {
+        setOpen(!open);
+
+    };
 
     useEffect(() => {
         dispatch(GitAction.CallGetNotification({ status: 1 }))
     }, [])
+
+    useEffect(() => {
+        if (parcelStatus && parcelStatus.length > 0) {
+            handleOpenClose();
+        }
+    }, [parcelStatus])
 
     return (
         <div>
@@ -32,14 +45,14 @@ export default function Homepage() {
                 showStatus={false}
                 infiniteLoop={true}
                 autoPlay={true}
+                labels={false}
+                showArrows={false}
             >
                 <div>
                     <img src="https://img.freepik.com/premium-photo/transportation-logistics-container-cargo-ship-cargo-plane-3d-rendering-illustration_37416-487.jpg?w=2000" />
-                    <p className="legend">Legend 1</p>
                 </div>
                 <div>
                     <img src="https://blog.solistica.com/hubfs/Fotos%20e%20infograf%C3%ADa%20Blogs%20Q4/Fotos%20Q4%20Noviembre%202020/Fotos%20Diciembre%20Q4%2020202/SOL-S13-B1-Blog%20Image%2002-1.jpg" />
-                    <p className="legend">Legend 2</p>
                 </div>
             </Carousel>
 
@@ -100,12 +113,14 @@ export default function Homepage() {
                             sx={{
                                 width: "15%",
                             }}
-                            onClick={() => dispatch(GitAction.CallGetParcelStatus({ trackingNumber: `and TrackingNumber='${trackingNumber}'` }))}
+                            onClick={() => dispatch(GitAction.CallGetParcelStatus2({ trackingNumber: `and TrackingNumber='${trackingNumber}'` }))}
                         >
                             Search
                         </Button>
                     </div>
-
+                    {parcelStatus && parcelStatus.length > 0 &&
+                        <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} data={parcelStatus[0]} />
+                    }
                 </div>
             </div>
         </div>

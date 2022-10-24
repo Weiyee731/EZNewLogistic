@@ -84,6 +84,7 @@ export class GitEpic {
             .then(response => response.json())
             .then(json => {
               json = JSON.parse(json)
+              console.log(json)
               return dispatch({ type: GitAction.GotNotification, payload: json });
             });
         } catch (error) {
@@ -107,12 +108,33 @@ export class GitEpic {
               if (json[0].ReturnVal === 0) {
                 toast.error("Invalid tracking number")
               }
-              // return dispatch({ type: GitAction.GotParcelStatus, payload: json[0].ReturnVal === 1 ? json : [] });
-              return dispatch({ type: GitAction.GotParcelStatus, payload: json});
+              return dispatch({ type: GitAction.GotParcelStatus, payload: json[0].ReturnVal === 1 ? [] : json });
             });
         } catch (error) {
           toast.error("Unable to get the status of your parcel")
           return dispatch({ type: GitAction.GotParcelStatus, payload: [] });
+        }
+      }
+    }));
+
+  Inventory_ViewStockByFilter2 = action$ =>
+    action$.pipe(filter(action => action.type === GitAction.GetParcelStatus2), map(action => {
+      return dispatch => {
+        try {
+          return fetch(
+            url + "Inventory_ViewStockByFilter2?FILTERCOLUMN=" + action.payload.trackingNumber
+          )
+            .then(response => response.json())
+            .then(json => {
+              json = JSON.parse(json)
+              if (json[0].ReturnVal === 0) {
+                toast.error("Invalid tracking number")
+              }
+              return dispatch({ type: GitAction.GotParcelStatus2, payload: json[0].ReturnVal === 1 ? json : [] });
+            });
+        } catch (error) {
+          toast.error("Unable to get the status of your parcel")
+          return dispatch({ type: GitAction.GotParcelStatus2, payload: [] });
         }
       }
     }));

@@ -91,6 +91,15 @@ export function counterReducer(state = INITIAL_STATE, action) {
         logonUser: action.payload
       });
 
+    case GitAction.GetParcelStatus2:
+      return Object.assign({}, state, { loading: true });
+    case GitAction.GotParcelStatus2:
+      return Object.assign({}, state, {
+        loading: false,
+        parcelStatus: action.payload
+      });
+
+
     /////////////////////////////////////////////////// Default ///////////////////////////////////////////////////
     default:
       return state;
