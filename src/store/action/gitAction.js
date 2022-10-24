@@ -95,5 +95,14 @@ export class GitAction {
     };
   }
 
+  static GetGeneralSetting = "GetGeneralSetting";
+  static GotGeneralSetting = "GotGeneralSetting";
+  static CallGetGeneralSetting(propsData) {
+    return {
+      type: GitAction.GetGeneralSetting,
+      payload: propsData
+    };
+  }
+
 }
 

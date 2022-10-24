@@ -103,9 +103,9 @@ export class GitEpic {
             .then(response => response.json())
             .then(json => {
               json = JSON.parse(json)
-              if (json[0].ReturnVal === 0) {
-                toast.error("Invalid tracking number")
-              }
+              // if (json[0].ReturnVal === 0) {
+              //   toast.error("Invalid tracking number")
+              // }
               return dispatch({ type: GitAction.GotParcelStatus, payload: json[0].ReturnVal === 1 ? [] : json });
             });
         } catch (error) {
@@ -152,6 +152,25 @@ export class GitEpic {
         } catch (error) {
           toast.error("Unable to get the status of your parcel")
           return dispatch({ type: GitAction.GotParcelStatus, payload: [] });
+        }
+      }
+    }));
+
+    User_ViewGeneralSetting = action$ =>
+    action$.pipe(filter(action => action.type === GitAction.GetGeneralSetting), map(action => {
+      return dispatch => {
+        try {
+          return fetch(
+            url + "User_ViewGeneralSetting?USERID=" + action.payload.UserID
+          )
+            .then(response => response.json())
+            .then(json => {
+              json = JSON.parse(json)
+              return dispatch({ type: GitAction.GotGeneralSetting, payload: json });
+            });
+        } catch (error) {
+          toast.error("User_ViewGeneralSetting")
+          return dispatch({ type: GitAction.GotGeneralSetting, payload: [] });
         }
       }
     }));

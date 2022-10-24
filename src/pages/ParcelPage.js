@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch, Provider } from 'react-redux'
 import { GitAction } from "../store/action/gitAction";
-import { Card, CardContent, Typography, Grid,Tabs, Tab,Box } from '@mui/material';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import { Card, CardContent, Typography, Grid } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import SearchBar from "../components/SearchBar/SearchBar";
 import LoadingPanel from "../components/LoadingPanel/LoadingPanel";
 import EmptyBox from "../assets/empty-box.png"
 
 export const ParcelPage = () => {
-    const { userParcel } = useSelector(state => ({
+
+    const { userParcel, setting } = useSelector(state => ({
         userParcel: state.counterReducer.parcelStatus,
+        setting: state.counterReducer.setting,
     }));
     const dispatch = useDispatch()
 
@@ -21,21 +26,22 @@ export const ParcelPage = () => {
     }
 
     useEffect(() => {
-        dispatch(GitAction.CallGetParcelStatus({ trackingNumber:  localStorage.getItem("user") !== undefined ? "and UserID=" + JSON.parse(localStorage.getItem("user")).UserID : "and UserID=" + 1 }))
-        setUserID(localStorage.getItem("user") !== undefined ? JSON.parse(localStorage.getItem("user")).UserID : 1)
+        dispatch(GitAction.CallGetParcelStatus({ trackingNumber: localStorage.getItem("user") !== undefined ? "and UserID=" + JSON.parse(localStorage.getItem("user")).UserID : "and UserID=" + 1 }))
+        dispatch(GitAction.CallGetGeneralSetting({ UserID: localStorage.getItem("user") !== undefined ? JSON.parse(localStorage.getItem("user")).UserID : 1 }))
+        setUserCode(localStorage.getItem("user") !== undefined && JSON.parse(localStorage.getItem("user")).UserCode )
     }, [])
 
     const layoutStyle = { fontWeight: "600", fontSize: "10pt", color: "#253949", letterSpacing: 1 }
     const [value, setValue] = React.useState(0);
     const [parcelValue, setParcelValue] = React.useState(0);
-    const [UserID, setUserID] = React.useState("");
+    const [UserCode, setUserCode] = React.useState("");
     const [searchKeywords, setSearchKeywords] = React.useState("");
     const [isFiltered, setIsFiltered] = React.useState(false);
     const [filteredParcel, setFilteredParcel] = React.useState([]);
     const [page, setPage] = React.useState(1);
     const pageSize = 10;
-
-    const [unKnownUserID, setUnknownUserID] = React.useState(3);
+    const [isSetUnknown, setUnknown] = React.useState(false);
+    const [unKnownUserCode, setUnknownUserCode] = React.useState(3);
     const parcelStatus = [
         { ContainerStatusID: 0, ContainerStatus: "All", ContainerStatusCN: "全部包裹" },
         { ContainerStatusID: 1, ContainerStatus: "Pending", ContainerStatusCN: "已入库系统" },
@@ -50,12 +56,14 @@ export const ParcelPage = () => {
 
     const handleChange = (event, newValue) => {
         if (newValue === 0) {
-            dispatch(GitAction.CallGetParcelStatus({ trackingNumber:  localStorage.getItem("user") !== undefined ? "and UserID=" + JSON.parse(localStorage.getItem("user")).UserID : "and UserID=" + 1 }))
-            setUserID(localStorage.getItem("user") !== undefined ? JSON.parse(localStorage.getItem("user")).UserID : 1)
+            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: localStorage.getItem("user") !== undefined ? "and UserID=" + JSON.parse(localStorage.getItem("user")).UserID : "and UserID=" + 1 }))
+
+            // dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + localStorage.getItem("user") !== undefined ? JSON.parse(localStorage.getItem("user")).UserID : 1 }))
+            setUserCode(localStorage.getItem("user") !== undefined && JSON.parse(localStorage.getItem("user")).UserCode )
         }
         else {
-            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserCode=(SELECT [SettingValue] FROM.[dbo].[T_General_Setting] WHERE  [SettingID] = 1)" }))
-            setUserID(unKnownUserID)
+            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserCode=(SELECT [SettingValue] FROM.[dbo].[T_General_Setting] WHERE  [SettingID] = 1)"  }))
+            setUserCode(unKnownUserCode)
         }
         setValue(newValue);
     };
@@ -83,17 +91,17 @@ export const ParcelPage = () => {
         );
     }
 
-    const CheckUser = (ID) => {
+    const CheckUser = (Code) => {
         let listing = []
         if (userParcel.length > 0) {
-            if (userParcel.filter((x) => parseInt(x.UserID) === parseInt(ID)).length > 0)
+            if (userParcel.filter((x) => parseInt(x.UserCode) === parseInt(Code)).length > 0)
                 listing = userParcel
         }
         return listing
     }
 
     const handleSearchInput = (value) => {
-        let DataSet = CheckUser(UserID)
+        let DataSet = CheckUser(UserCode)
         let filteredListing = []
         DataSet.length > 0 && DataSet.filter((searchedItem) =>
             searchedItem.TrackingNumber !== null && searchedItem.TrackingNumber.toLowerCase().includes(
@@ -115,7 +123,7 @@ export const ParcelPage = () => {
         if (isFiltered === true)
             listing = filteredParcel
         else
-            listing = CheckUser(UserID)
+            listing = CheckUser(UserCode)
 
         let dataListing = []
         if (listing.length > 0) {
@@ -131,9 +139,14 @@ export const ParcelPage = () => {
         setPage(page)
     }
 
+    if (setting.length > 0 && isSetUnknown === false) {
+        setUnknownUserCode(setting[2].Column1)
+        setUnknown(true)
+    }
+
     const userParcelLayout = (statusID) => {
         return (
-            <div className="row" style={{paddingRight:"5pt"}}>
+            <div className="row" style={{ paddingRight: "5pt" }}>
                 <Grid container style={{ paddingBottom: "10pt", textAlign: "right", flexFlow: "row-reverse" }}>
                     <Pagination count={Math.ceil(checkUserParcel(statusID).length / pageSize)} page={page} onChange={handlePageChange} />
                 </Grid>
@@ -179,9 +192,9 @@ export const ParcelPage = () => {
         return (
             <div className="row">
                 {
-                    UserID === unKnownUserID ?
+                    UserCode === unKnownUserCode ?
                         userParcel.length > 0 ?
-                            CheckUser(UserID).length > 0 ?
+                            CheckUser(UserCode).length > 0 ?
                                 <>
                                     <div className="row">
                                         <Typography style={{ fontSize: "14pt", color: "#253949", letterSpacing: 1 }}>如有属于您的快递单号包裹可截图快递物流信息联系我们的客服</Typography>
@@ -189,7 +202,7 @@ export const ParcelPage = () => {
                                     </div>
                                     <Grid container spacing={2}>
                                         {
-                                            CheckUser(UserID).map((data, index) => {
+                                            CheckUser(UserCode).map((data, index) => {
                                                 return (
                                                     <Grid item md={6} xs={12} sm={6}>
                                                         <Card>
@@ -241,7 +254,7 @@ export const ParcelPage = () => {
     return (
         <div className="container">
             {
-                UserID !== unKnownUserID &&
+                UserCode !== unKnownUserCode &&
                 <SearchBar
                     id=""
                     placeholder="快递单号"

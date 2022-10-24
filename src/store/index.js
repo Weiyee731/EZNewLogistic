@@ -13,6 +13,7 @@ const rootEpic = combineEpics(
   gitEpic.Inventory_ViewStockByFilter,
   gitEpic.User_ViewProfileByID,
   gitEpic.Inventory_ViewStockByFilter2,
+  gitEpic.User_ViewGeneralSetting,
 );
 
 const epicMiddleware = createEpicMiddleware();
