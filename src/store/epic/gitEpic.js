@@ -169,12 +169,31 @@ export class GitEpic {
               return dispatch({ type: GitAction.GotGeneralSetting, payload: json });
             });
         } catch (error) {
-          toast.error("User_ViewGeneralSetting")
           return dispatch({ type: GitAction.GotGeneralSetting, payload: [] });
+        }
+      }
+    }));
+
+    User_UpdateUserPassword = action$ =>
+    action$.pipe(filter(action => action.type === GitAction.UpdatePassword), map(action => {
+      return dispatch => {
+        try {
+          return fetch(url + "User_UpdateUserPassword"
+          + "?USERID=" + action.payload.USERID
+          + '&USERPASSWORD=' + action.payload.USERPASSWORD
+        )
+            .then(response => response.json())
+            .then(json => {
+              json = JSON.parse(json)
+              return dispatch({ type: GitAction.PasswordUpdated, payload: json });
+            });
+        } catch (error) {
+          return dispatch({ type: GitAction.PasswordUpdated, payload: [] });
         }
       }
     }));
 }
 
-
 export let gitEpic = new GitEpic();
+
+// 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch, Provider } from 'react-redux'
+import { GitAction } from "../store/action/gitAction";
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -9,11 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
+
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import FilledInput from '@mui/material/FilledInput';
@@ -28,7 +25,6 @@ import { styled } from '@mui/material/styles';
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import PersonIcon from '@mui/icons-material/Person';
 import InventoryIcon from '@mui/icons-material/Inventory';
@@ -37,6 +33,10 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import useAuth from "../hooks/useAuth";
+import { toast } from 'react-toastify'
+import { isArrayNotEmpty, isStringNullOrEmpty } from '../tools/Helpers'
+import { ParcelPage } from "./ParcelPage";
+
 export const Profilepage = () => {
     const { auth, setAuth } = useAuth()
     const navigate = useNavigate()
@@ -49,47 +49,23 @@ export const Profilepage = () => {
     }));
 
     // dispatch and global props here
+    const dispatch = useDispatch();
     const isFormSubmitting = useSelector(state => state.counterReducer.loading)
+    const isUserProfileUpdate = useSelector(state => state.counterReducer.userUpdateReturnValue)
     // HOOKS HERE
-    const [openPasswordModal, setOpenPasswordModal] = useState(false)
-    const [oldPassword, setOldPassword] = useState("")
-    const [showOldPassword, setShowOldPassword] = useState(false)
-    const [newPassword, setNewPassword] = useState("")
-    const [showNewPassword, setShowNewPassword] = useState(false)
-    const [confirmPassword, setConfirmPassword] = useState("")
-    const sidebarItems = ['User Profile', 'All Orders', 'Claim Cargo'];
-    const [currentPage, setCurrentPage] = useState('User Profile')
+    const USER_PROFILE_PAGE = 'User Profile'
+    const ALL_ORDERS_PAGE = 'All Orders'
+    const CLAIM_CARGO_PAGE = 'Claim Cargo'
+    const PASSWORD_MANAGER_PAGE = 'Password Manager'
+
+    const [currentPage, setCurrentPage] = useState(USER_PROFILE_PAGE)
 
     const handleLogout = () => {
         setAuth({})
         localStorage.setItem("user", "")
     }
 
-    const openPasswordManagerModal = () => {
-        setOpenPasswordModal(!openPasswordModal)
-    }
 
-    const handleInputChange = (name, event) => {
-        switch (name) {
-            case 'OLD-PASSWORD':
-                setOldPassword(event.target.value)
-                break;
-            case 'NEW-PASSWORD':
-                setNewPassword(event.target.value)
-                break;
-            case 'CONFIRM-PASSWORD':
-                setConfirmPassword(event.target.value)
-                break;
-
-            default: break;
-        }
-    }
-
-    const handleChangePassword = () => {
-        console.log(oldPassword)
-        console.log(newPassword)
-        console.log(confirmPassword)
-    }
 
     const renderSideMenu = () => {
         return (
@@ -97,26 +73,26 @@ export const Profilepage = () => {
                 <Typography variant="h5" component="p" sx={{ fontWeight: 600, textAlign: 'center' }}>目录</Typography>
                 <MenuList>
                     <Divider />
-                    <MenuItem onClick={() => handleSetCurrentPage(sidebarItems[0])} sx={(currentPage === sidebarItems[0]) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
+                    <MenuItem onClick={() => handleSetCurrentPage(USER_PROFILE_PAGE)} sx={(currentPage === USER_PROFILE_PAGE) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
                         <ListItemIcon>
                             <PersonIcon fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>您的资料</ListItemText>
                     </MenuItem>
-                    <MenuItem onClick={openPasswordManagerModal}>
+                    <MenuItem onClick={() => handleSetCurrentPage(PASSWORD_MANAGER_PAGE)} sx={(currentPage === PASSWORD_MANAGER_PAGE) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
                         <ListItemIcon>
                             <KeyIcon fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>更改密码</ListItemText>
                     </MenuItem>
                     <Divider />
-                    <MenuItem onClick={() => handleSetCurrentPage(sidebarItems[1])} sx={(currentPage === sidebarItems[1]) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
+                    <MenuItem onClick={() => handleSetCurrentPage(ALL_ORDERS_PAGE)} sx={(currentPage === ALL_ORDERS_PAGE) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
                         <ListItemIcon>
                             <FactCheckIcon fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>您的订单</ListItemText>
                     </MenuItem>
-                    <MenuItem onClick={() => handleSetCurrentPage(sidebarItems[2])} sx={(currentPage === sidebarItems[2]) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
+                    <MenuItem disabled onClick={() => handleSetCurrentPage(CLAIM_CARGO_PAGE)} sx={(currentPage === CLAIM_CARGO_PAGE) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
                         <ListItemIcon>
                             <InventoryIcon fontSize="small" />
                         </ListItemIcon>
@@ -141,21 +117,255 @@ export const Profilepage = () => {
     }
 
     const handleSetCurrentPage = (pageType) => {
-        switch (pageType) {
-            case sidebarItems[0]:
-                setCurrentPage(sidebarItems[0])
+        setCurrentPage(pageType)
+
+        // switch (pageType) {
+        //     case sidebarItems[0]:
+        //         setCurrentPage(sidebarItems[0])
+        //         break;
+
+        //     case sidebarItems[1]:
+        //         setCurrentPage(sidebarItems[1])
+        //         break;
+
+        //     case sidebarItems[2]:
+        //         setCurrentPage(sidebarItems[2])
+        //         break;
+
+        //     default: break;
+
+        // }
+    }
+
+    const UserProfile = () => {
+        return (
+            <Card sx={{ m: 2, py: 3, px: 2 }}>
+                <CardHeader
+                    title={
+                        <div style={{ display: 'flex' }}>
+                            <Typography variant="h6" component="h6" sx={{ fontWeight: 600, mr: 2, my: 'auto' }}>
+                                {auth.FullName}
+                            </Typography>
+                            <Typography variant="h5" component="h5" sx={{ fontWeight: 600, my: 'auto', color: '#0073DF' }}>
+                                ( 会员号:{auth.Username} )
+                            </Typography>
+                        </div>
+                    }
+                    subheader="You can edit your information in this page"
+                    action={
+                        <IconButton aria-label="edit-profile">
+                            <EditIcon />
+                        </IconButton>
+                    }
+                />
+                <CardContent sx={{ width: '100%', padding: 0 }}>
+                    <Grid container rowSpacing={1} columnSpacing={3} >
+                        <Grid item xs={12}>
+                            <Typography variant="h6" component="p" sx={{ fontWeight: 600 }}>
+                                您的个人资料
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Item>
+                                姓名: <b>{auth.FullName}</b>
+                            </Item>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Item>
+                                昵称: <b>{auth.UserNickname}</b>
+                            </Item>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Item>
+                                电话: <b>{auth.UserContactNo}</b>
+                            </Item>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Item>
+                                邮件: <b>{auth.UserEmailAddress}</b>
+                            </Item>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Item>
+                                微信: <b>{auth.WeChatID}</b>
+                            </Item>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+        )
+    }
+
+    const PasswordManager = () => {
+        const [newPassword, setNewPassword] = useState("")
+        const [showNewPassword, setShowNewPassword] = useState(false)
+        const [confirmPassword, setConfirmPassword] = useState("")
+        const [invalidInput, setInvalidInput] = useState(false)
+
+        useEffect(() => {
+            console.log(isUserProfileUpdate)
+            if (isArrayNotEmpty(isUserProfileUpdate)) {
+                if (isUserProfileUpdate[0].ReturnVal === 1 || isUserProfileUpdate[0].ReturnVal === '1') {
+                    toast.success('Your password is updated successfully.', {
+                        position: "top-center",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        draggable: false,
+                        theme: "colored",
+                    });
+                    setNewPassword('')
+                    setConfirmPassword('')
+                    setShowNewPassword(false)
+                    setInvalidInput(false)
+                    dispatch(GitAction.CallResetUserUpdateReturnValue())
+                }
+                else {
+                    toast.error('Error occured when trying to update password. Please try again.', {
+                        position: "top-center",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        draggable: false,
+                        theme: "colored",
+                    });
+                }
+            }
+        }, [isUserProfileUpdate])
+
+        const handleInputChange = (name, event) => {
+            switch (name) {
+                case 'NEW-PASSWORD':
+                    const validPassword = (!isStringNullOrEmpty(event.target.value) && event.target.value.length >= 8)
+                    setInvalidInput(!validPassword)
+                    setNewPassword(event.target.value)
+                    break;
+
+                case 'CONFIRM-PASSWORD':
+                    const matchPassword = (event.target.value === newPassword)
+                    setInvalidInput(!matchPassword)
+                    setConfirmPassword(event.target.value)
+                    break;
+
+                default: break;
+            }
+        }
+
+        const handleChangePassword = () => {
+            console.log(newPassword)
+            console.log(confirmPassword)
+            let validPassword = (!isStringNullOrEmpty(newPassword) && newPassword.length >= 8 && confirmPassword === newPassword)
+
+            if (validPassword) {
+                let LogonUser = localStorage.getItem("user")
+                try {
+                    LogonUser = JSON.parse(LogonUser)
+                    let USERID = auth ? auth.UserID : LogonUser.UserID
+                    if (!isStringNullOrEmpty(USERID)) {
+                        dispatch(GitAction.CallUpdatePassword({
+                            USERID: USERID,
+                            USERPASSWORD: newPassword
+                        }))
+                    }
+                    else {
+                        toast.error("")
+                    }
+                }
+                catch {
+
+                }
+
+                console.log(auth)
+                console.log(newPassword)
+
+            }
+            else
+                setInvalidInput(true)
+        }
+
+        return (
+            <Card sx={{ m: 2, py: 3, px: 2 }}>
+                <CardHeader
+                    title={
+                        <Typography variant="h6" component="h6" sx={{ fontWeight: 600 }}>
+                            更改密码
+                        </Typography>
+                    }
+                    subheader="To update your password, you are require to enter your old password"
+                />
+                <CardContent>
+                    {
+                        invalidInput === true &&
+                        <div style={{ marginBottom: 15 }}>
+                            <Typography variant="body" component="p" sx={{ color: '#FF5733', fontSize: 14 }}>
+                                The password contains invalid input. Please check with the inputs to fulfill: <br />
+                                ~ Minimum 8 characters <br />
+                                ~ Password is match with the Confirmation Password
+                            </Typography>
+                        </div>
+                    }
+
+                    <div>
+                        <FormControl sx={{ width: '50%', my: 1 }} variant="outlined" required size="small" >
+                            <InputLabel htmlFor="new-password">New Password</InputLabel>
+                            <FilledInput
+                                id="new-password"
+                                type={showNewPassword ? 'text' : 'password'}
+                                value={newPassword}
+                                onChange={(event) => handleInputChange('NEW-PASSWORD', event)}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton aria-label="toggle password visibility" onClick={() => setShowNewPassword(!showNewPassword)} edge="end">
+                                            {showNewPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                label="Password"
+                            />
+                        </FormControl>
+                    </div>
+                    <div>
+                        <FormControl sx={{ width: '50%', my: 1 }} variant="outlined" required size="small" >
+                            <InputLabel htmlFor="confirmation-password">Confirmation Password</InputLabel>
+                            <FilledInput
+                                id="confirmation-password"
+                                type={'password'}
+                                value={confirmPassword}
+                                onChange={(event) => handleInputChange('CONFIRM-PASSWORD', event)}
+                                label="Password"
+                            />
+                        </FormControl>
+                    </div>
+
+                    {
+                        !isFormSubmitting ?
+                            <Button disabled={invalidInput} sx={{ my: 1, width: '50%' }} onClick={handleChangePassword} variant="contained"> Change Password </Button>
+                            :
+                            <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '50%', my: 1 }}>
+                                A Moment ...
+                            </Button>
+                    }
+
+                </CardContent>
+            </Card>
+        )
+    }
+
+    const renderPageModule = (page) => {
+        switch (page) {
+            case USER_PROFILE_PAGE:
+                return <UserProfile />
+
+            case ALL_ORDERS_PAGE:
+                return <ParcelPage />
+
+            case CLAIM_CARGO_PAGE:
                 break;
 
-            case sidebarItems[1]:
-                setCurrentPage(sidebarItems[1])
-                break;
-
-            case sidebarItems[2]:
-                setCurrentPage(sidebarItems[2])
-                break;
+            case PASSWORD_MANAGER_PAGE:
+                return <PasswordManager />
 
             default: break;
-
         }
     }
 
@@ -167,138 +377,9 @@ export const Profilepage = () => {
                 </Grid>
 
                 <Grid item xs={12} md={9}>
-                    <Card sx={{ m: 2, py: 3, px: 2 }}>
-                        <CardHeader
-                            title={
-                                <div style={{ display: 'flex' }}>
-                                    <Typography variant="h6" component="h6" sx={{ fontWeight: 600, mr: 2, my: 'auto' }}>
-                                        {auth.FullName}
-                                    </Typography>
-                                    <Typography variant="h5" component="h5" sx={{ fontWeight: 600, my: 'auto', color: '#0073DF' }}>
-                                        ( 会员号:{auth.Username} )
-                                    </Typography>
-                                </div>
-                            }
-                            subheader="You can edit your information in this page"
-                            action={
-                                <IconButton aria-label="edit-profile">
-                                    <EditIcon />
-                                </IconButton>
-                            }
-                        />
-                        <CardContent sx={{ width: '100%', padding: 0 }}>
-                            <Grid container rowSpacing={1} columnSpacing={3} >
-                                <Grid item xs={12}>
-                                    <Typography variant="h6" component="p" sx={{ fontWeight: 600 }}>
-                                        您的个人资料
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Item>
-                                        姓名: <b>{auth.FullName}</b>
-                                    </Item>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Item>
-                                        昵称: <b>{auth.UserNickname}</b>
-                                    </Item>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Item>
-                                        电话: <b>{auth.UserContactNo}</b>
-                                    </Item>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Item>
-                                        邮件: <b>{auth.UserEmailAddress}</b>
-                                    </Item>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Item>
-                                        微信: <b>{auth.WeChatID}</b>
-                                    </Item>
-                                </Grid>
-                            </Grid>
-                        </CardContent>
-                    </Card>
+                    {renderPageModule(currentPage)}
                 </Grid>
             </Grid>
-
-            {/* Password Manager Form | Modal */}
-            <Dialog scroll="paper" open={openPasswordModal} onClose={() => setOpenPasswordModal(false)} aria-labelledby="password-manager" aria-describedby="password-manager-description" >
-                <DialogTitle id="registration-title" sx={{ fontWeight: 600 }}>
-                    {"Password Manager"}
-                    <IconButton
-                        aria-label="close"
-                        onClick={() => setOpenPasswordModal(false)}
-                        sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500], }}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        To update your password, you are require to enter your old password
-                    </DialogContentText>
-
-                    <FormControl sx={{ width: '100%', my: 1 }} variant="outlined" required size="small" >
-                        <InputLabel htmlFor="old-password">Current Password</InputLabel>
-                        <FilledInput
-                            id="old-password"
-                            type={showOldPassword ? 'text' : 'password'}
-                            value={oldPassword}
-                            onChange={(event) => handleInputChange('OLD-PASSWORD', event)}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton aria-label="toggle password visibility" onClick={() => setShowOldPassword(!showOldPassword)} edge="end">
-                                        {showOldPassword ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            label="Password"
-                        />
-                    </FormControl>
-                    <FormControl sx={{ width: '100%', my: 1 }} variant="outlined" required size="small" >
-                        <InputLabel htmlFor="new-password">New Password</InputLabel>
-                        <FilledInput
-                            id="new-password"
-                            type={showNewPassword ? 'text' : 'password'}
-                            value={newPassword}
-                            onChange={(event) => handleInputChange('NEW-PASSWORD', event)}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton aria-label="toggle password visibility" onClick={() => setShowNewPassword(!showNewPassword)} edge="end">
-                                        {showNewPassword ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            label="Password"
-                        />
-                    </FormControl>
-                    <FormControl sx={{ width: '100%', my: 1 }} variant="outlined" required size="small" >
-                        <InputLabel htmlFor="confirmation-password">Confirmation Password</InputLabel>
-                        <FilledInput
-                            id="confirmation-password"
-                            type={'password'}
-                            value={confirmPassword}
-                            onChange={(event) => handleInputChange('CONFIRM-PASSWORD', event)}
-                            label="Password"
-                        />
-                    </FormControl>
-                </DialogContent>
-                <DialogActions>
-                    {
-                        !isFormSubmitting ?
-                            <Button sx={{ mx: 2, my: 1 }} onClick={handleChangePassword} variant="contained" fullWidth> Change Password </Button>
-                            :
-                            <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mx: 2, my: 1 }}>
-                                A Moment ...
-                            </Button>
-                    }
-                </DialogActions>
-            </Dialog>
-            {/* Registration Form | Modal */}
-
 
         </div>
     )

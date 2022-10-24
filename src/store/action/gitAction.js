@@ -86,6 +86,15 @@ export class GitAction {
     };
   }
 
+  static UpdatePassword = "UpdatePassword";
+  static PasswordUpdated = "PasswordUpdated";
+  static CallUpdatePassword(propsData) {
+    return {
+      type: GitAction.UpdatePassword,
+      payload: propsData
+    };
+  }
+
   static GetParcelStatus2 = "GetParcelStatus2";
   static GotParcelStatus2 = "GotParcelStatus2";
   static CallGetParcelStatus2(propsData) {
