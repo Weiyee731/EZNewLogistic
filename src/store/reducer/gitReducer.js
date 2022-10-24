@@ -52,6 +52,14 @@ export function counterReducer(state = INITIAL_STATE, action) {
         userUpdateReturnValue: action.payload
       });
 
+    case GitAction.UpdatePassword:
+      return Object.assign({}, state, { loading: true });
+    case GitAction.PasswordUpdated:
+      return Object.assign({}, state, {
+        loading: false,
+        userUpdateReturnValue: action.payload
+      });
+
     case GitAction.ResetUserUpdateReturnValue:
       return Object.assign({}, state, {
         loading: false,
@@ -82,7 +90,7 @@ export function counterReducer(state = INITIAL_STATE, action) {
         loading: false,
         parcelStatus: action.payload
       });
-      
+
     case GitAction.FetchUserProfileByID:
       return Object.assign({}, state, { loading: true });
     case GitAction.UserProfileByIDFetched:

@@ -108,7 +108,7 @@ export class GitEpic {
                 toast.error("Invalid tracking number")
               }
               // return dispatch({ type: GitAction.GotParcelStatus, payload: json[0].ReturnVal === 1 ? json : [] });
-              return dispatch({ type: GitAction.GotParcelStatus, payload: json});
+              return dispatch({ type: GitAction.GotParcelStatus, payload: json });
             });
         } catch (error) {
           toast.error("Unable to get the status of your parcel")
@@ -135,7 +135,34 @@ export class GitEpic {
         }
       }
     }));
+
+  User_UpdateUserPassword = action$ =>
+    action$.pipe(filter(action => action.type === GitAction.UpdatePassword), map(action => {
+      return dispatch => {
+        try {
+          console.log(url + "User_UpdateUserPassword"
+            + "?USERID=" + action.payload.USERID
+            + '&USERPASSWORD=' + action.payload.USERPASSWORD
+          )
+          
+          return fetch(url + "User_UpdateUserPassword"
+            + "?USERID=" + action.payload.USERID
+            + '&USERPASSWORD=' + action.payload.USERPASSWORD
+          )
+            .then(response => response.json())
+            .then(json => {
+              json = JSON.parse(json)
+              return dispatch({ type: GitAction.PasswordUpdated, payload: json });
+            });
+        } catch (error) {
+          toast.error("Failed to update password. Please try again.")
+          return dispatch({ type: GitAction.PasswordUpdated, payload: [] });
+        }
+      }
+    }));
 }
 
 
 export let gitEpic = new GitEpic();
+
+// 
