@@ -11,7 +11,8 @@ export const TopbarNav = () => {
         <div
             style={{
                 height: "80px",
-                backgroundColor: "white",
+                backgroundColor: "#023047",
+                color: 'white',
                 boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)",
                 display: "flex",
                 alignItems: "center",
@@ -25,9 +26,9 @@ export const TopbarNav = () => {
             <div>
                 <HamburgerMenu></HamburgerMenu>
             </div>
-            <div style={{textAlign: 'center', width: '100%'}}>
+            <div style={{ textAlign: 'center', width: '100%' }}>
                 <h2>
-                    New-Logistics
+                    雅威国际物流
                 </h2>
             </div>
         </div>

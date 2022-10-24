@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch, Provider } from 'react-redux'
 import { GitAction } from "../store/action/gitAction";
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import { Card, CardContent, Typography, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Grid,Tabs, Tab,Box } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import SearchBar from "../components/SearchBar/SearchBar";
 import LoadingPanel from "../components/LoadingPanel/LoadingPanel";
@@ -54,12 +51,10 @@ export const ParcelPage = () => {
     const handleChange = (event, newValue) => {
         if (newValue === 0) {
             dispatch(GitAction.CallGetParcelStatus({ trackingNumber:  localStorage.getItem("user") !== undefined ? "and UserID=" + JSON.parse(localStorage.getItem("user")).UserID : "and UserID=" + 1 }))
-      
-            // dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + localStorage.getItem("user") !== undefined ? JSON.parse(localStorage.getItem("user")).UserID : 1 }))
             setUserID(localStorage.getItem("user") !== undefined ? JSON.parse(localStorage.getItem("user")).UserID : 1)
         }
         else {
-            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + unKnownUserID }))
+            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserCode=(SELECT [SettingValue] FROM.[dbo].[T_General_Setting] WHERE  [SettingID] = 1)" }))
             setUserID(unKnownUserID)
         }
         setValue(newValue);

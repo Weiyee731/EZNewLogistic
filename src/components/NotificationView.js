@@ -9,7 +9,7 @@ export const NotificationView = ({ title, message, type, date }) => {
                 // height: "80px",
                 backgroundColor: "white",
                 borderWidth: "3px 3px 3px 22px",
-                borderColor: type === "success" ? "green" : "red",
+                borderColor: "#023047",
                 borderStyle: "solid",
                 borderRadius: "10px",
                 padding: "20px",
