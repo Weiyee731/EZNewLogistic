@@ -15,8 +15,10 @@ import EmailIcon from '@mui/icons-material/Email';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { Typography, Grid, } from '@mui/material';
+import useAuth from "../../hooks/useAuth";
 const Footer = () => {
     const theme = useTheme()
+    const { auth, setAuth } = useAuth()
     return (
         <Box style={{ marginTop: "0px" }}>
             <Container>
@@ -27,11 +29,11 @@ const Footer = () => {
                     </Column>
                     <Column>
                         <Heading>相关资讯</Heading>
-                        <FooterLink href="#">常见问题</FooterLink>
-                        <FooterLink href="#">如何代运</FooterLink>
-                        <FooterLink href="#">普货和敏感货</FooterLink>
-                        <FooterLink  href="./pricing">海运费用</FooterLink>
-                        <FooterLink href="#">我的账户</FooterLink>
+                        <FooterLink href="/faq/0">常见问题</FooterLink>
+                        <FooterLink href="/faq/2">如何代运</FooterLink>
+                        <FooterLink href="/faq/2">普货和敏感货</FooterLink>
+                        <FooterLink href="/pricing">海运费用</FooterLink>
+                        <FooterLink href={auth?.UserID !== null ? "/profile" : "/login"}>我的账户</FooterLink>
                     </Column>
                     <Column>
                         <Heading>客服服务</Heading>

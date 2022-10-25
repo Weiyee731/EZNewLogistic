@@ -160,12 +160,12 @@ function HamburgerMenu() {
           </li>
 
           <li>
-            <ItemLink onClick={handleClick} to={auth?.UserID !== null ? "/profile" : "/login"}>
+            <ItemLink onClick={handleClick} to={auth.UserID !== null ? "/profile" : "/login"}>
               Profile
             </ItemLink>
           </li>
           <li>
-            <ItemLink onClick={handleClick} to="/faq">
+            <ItemLink onClick={handleClick} to="/faq/0">
               FAQ
             </ItemLink>
           </li>
