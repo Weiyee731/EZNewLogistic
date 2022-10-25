@@ -123,6 +123,11 @@ export function counterReducer(state = INITIAL_STATE, action) {
         loading: false,
         userUpdateReturnValue: action.payload
       });
+    case GitAction.ResetUserProfile:
+      return Object.assign({}, state, {
+        loading: false,
+        userProfile: []
+      });
 
 
     /////////////////////////////////////////////////// Default ///////////////////////////////////////////////////

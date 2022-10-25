@@ -33,6 +33,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import Tooltip from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
+import FormHelperText from '@mui/material/FormHelperText';
 import { styled } from '@mui/material/styles';
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -90,35 +91,41 @@ export const Profilepage = () => {
 
     const handleLogout = () => {
         setAuth({})
+        dispatch(GitAction.CallResetUserProfile())
         localStorage.setItem("user", "")
     }
 
     const renderSideMenu = () => {
+        const selectedStyle = {
+            bgcolor: 'rgb(99, 141, 161)',
+            color: '#F5F5F5',
+        }
+
         return (
             <Paper sx={{ maxWidth: '90%', width: '300px', mx: 3, my: 2, py: 2 }}>
                 <Typography variant="h5" component="p" sx={{ fontWeight: 600, textAlign: 'center' }}>目录</Typography>
                 <MenuList>
                     <Divider />
-                    <MenuItem onClick={() => handleSetCurrentPage(USER_PROFILE_PAGE)} sx={(currentPage === USER_PROFILE_PAGE) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
+                    <MenuItem onClick={() => handleSetCurrentPage(USER_PROFILE_PAGE)} sx={(currentPage === USER_PROFILE_PAGE) ? { ...selectedStyle } : {}}>
                         <ListItemIcon>
                             <PersonIcon fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>您的资料</ListItemText>
                     </MenuItem>
-                    <MenuItem onClick={() => handleSetCurrentPage(PASSWORD_MANAGER_PAGE)} sx={(currentPage === PASSWORD_MANAGER_PAGE) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
+                    <MenuItem onClick={() => handleSetCurrentPage(PASSWORD_MANAGER_PAGE)} sx={(currentPage === PASSWORD_MANAGER_PAGE) ? { ...selectedStyle } : {}}>
                         <ListItemIcon>
                             <KeyIcon fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>更改密码</ListItemText>
                     </MenuItem>
                     <Divider />
-                    <MenuItem onClick={() => handleSetCurrentPage(ALL_ORDERS_PAGE)} sx={(currentPage === ALL_ORDERS_PAGE) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
+                    <MenuItem onClick={() => handleSetCurrentPage(ALL_ORDERS_PAGE)} sx={(currentPage === ALL_ORDERS_PAGE) ? { ...selectedStyle } : {}}>
                         <ListItemIcon>
                             <FactCheckIcon fontSize="small" />
                         </ListItemIcon>
                         <ListItemText>您的订单</ListItemText>
                     </MenuItem>
-                    <MenuItem disabled onClick={() => handleSetCurrentPage(CLAIM_CARGO_PAGE)} sx={(currentPage === CLAIM_CARGO_PAGE) ? { bgcolor: '#FF5A1D', color: '#F5F5F5' } : {}}>
+                    <MenuItem disabled onClick={() => handleSetCurrentPage(CLAIM_CARGO_PAGE)} sx={(currentPage === CLAIM_CARGO_PAGE) ? { ...selectedStyle } : {}}>
                         <ListItemIcon>
                             <InventoryIcon fontSize="small" />
                         </ListItemIcon>
@@ -182,13 +189,13 @@ export const Profilepage = () => {
                     title={
                         <div style={{ display: 'flex' }}>
                             <Typography variant="h6" component="h6" sx={{ fontWeight: 600, mr: 2, my: 'auto' }}>
-                                {profile.Fullname}
+                                {profile && profile.Fullname}
                             </Typography>
                             <Typography variant="h5" component="h5" sx={{ fontWeight: 600, my: 'auto', mr: 1, color: '#0073DF' }}>
-                                ( 会员号:{profile.UserCode} )
+                                ( 会员号:{profile && profile.UserCode} )
                             </Typography>
                             <Typography variant="h5" component="h5" sx={{ fontWeight: 600, my: 'auto', color: '#0073DF' }}>
-                                [ {profile.AreaCode} ]
+                                [ {profile && profile.AreaCode} ]
                             </Typography>
                         </div>
                     }
@@ -263,7 +270,9 @@ export const Profilepage = () => {
                             <Typography variant="h6" component="p" sx={{ fontStyle: 'italic' }}> 没有资料 </Typography>
                         </CardContent>
                 }
-                <UpdateProfileForm open={isEditMode} setOpenModal={setEditMode} profile={{ ...profile }} isUserProfileUpdate={isUserProfileUpdate} />
+                {
+                    !isObjectUndefinedOrNull(userProfile) && <UpdateProfileForm open={isEditMode} setOpenModal={setEditMode} profile={{ ...profile }} isUserProfileUpdate={isUserProfileUpdate} />
+                }
             </Card>
         )
     }
@@ -447,6 +456,8 @@ export const Profilepage = () => {
                                 required
                                 size="small"
                                 sx={{ my: 1 }}
+                                error={isStringNullOrEmpty(accountInfo.FULLNAME)}
+                                helperText={isStringNullOrEmpty(accountInfo.FULLNAME) ? "您必须填写你的名字" : ''}
                             />
                             <TextField id="profile--nickname"
                                 value={accountInfo.USERNICKNAME}
@@ -472,19 +483,23 @@ export const Profilepage = () => {
                                 label="电话号码"
                                 fullWidth
                                 variant="filled"
-                                required
                                 size="small"
                                 sx={{ my: 1 }}
+                                required
+                                error={isStringNullOrEmpty(accountInfo.CONTACTNO)}
+                                helperText={isStringNullOrEmpty(accountInfo.CONTACTNO) ? "您必须填写你的电话号码" : ''}
                             />
                             <TextField id="profile--email"
                                 value={accountInfo.USEREMAIL}
                                 onChange={(event) => { handleInputChange("USEREMAIL", event) }}
                                 label="电子邮件"
                                 fullWidth
-                                required
                                 variant="filled"
                                 size="small"
                                 sx={{ my: 1 }}
+                                required
+                                error={isStringNullOrEmpty(accountInfo.USEREMAIL)}
+                                helperText={isStringNullOrEmpty(accountInfo.USEREMAIL) ? "您必须填写你的电子邮件" : ''}
                             />
                             <TextField id="profile--wechat"
                                 value={accountInfo.WECHATID}
@@ -546,8 +561,8 @@ export const Profilepage = () => {
     const AddressManager = () => {
         const [isCopyText, setIsCopyText] = useState("拷贝")
 
-        let UserCode = profile?.UserCode
-        let Username = profile?.Username
+        let UserCode = auth?.UserCode
+        let Username = auth?.Username
         try {
             let local_storage = localStorage.getItem("user")
             if (!isStringNullOrEmpty(local_storage)) {
@@ -616,49 +631,50 @@ export const Profilepage = () => {
                     subheader={"请点击以下的资料，他会自动拷贝你所想要的信息"}
                 />
                 <CardContent>
-                    <TableContainer
-                        component={Paper}
-                        sx={{}}
-                    >
-                        <Table size="small" aria-label="addresses table">
-                            <TableBody>
-                                <Tooltip title={isCopyText} placement="top" arrow>
-                                    <TableRow key={"Contact Person"} onClick={() => handleCopyToClipboard('雅威(10001KCH)')}>
-                                        <TableCell component="th" scope="row" sx={{ ...TitleStyle }} > 收货人: </TableCell>
-                                        <TableCell align="left" sx={{ ...CopyableStyle }}>雅威(10001KCH)</TableCell>
+                    {
+                        !isObjectUndefinedOrNull(profile) &&
+                        <TableContainer component={Paper}>
+                            <Table size="small" aria-label="addresses table">
+                                <TableBody>
+                                    <Tooltip title={isCopyText} placement="top" arrow>
+                                        <TableRow key={"Contact Person"} onClick={() => handleCopyToClipboard('雅威(10001KCH)')}>
+                                            <TableCell component="th" scope="row" sx={{ ...TitleStyle }} > 收货人: </TableCell>
+                                            <TableCell align="left" sx={{ ...CopyableStyle }}>雅威(10001KCH)</TableCell>
+                                        </TableRow>
+                                    </Tooltip>
+                                    <TableRow key={"Address"}>
+                                        <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 收货时间: </TableCell>
+                                        <TableCell align="left" sx={{ ...NormalStyle }}>星期日 - 星期五 8.30 - 17.30</TableCell>
                                     </TableRow>
-                                </Tooltip>
-                                <TableRow key={"Address"}>
-                                    <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 收货时间: </TableCell>
-                                    <TableCell align="left" sx={{ ...NormalStyle }}>星期日 - 星期五 8.30 - 17.30</TableCell>
-                                </TableRow>
-                                <Tooltip title={isCopyText} placement="top" arrow>
-                                    <TableRow key={"Collection Time"} onClick={() => handleCopyToClipboard('广东省东莞市虎门镇赤岗村赤岗路69号新艺工业园1号90雅威国际物流' + profile.UserCode + profile.AreaCode)}>
-                                        <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 仓库地址: </TableCell>
-                                        <TableCell align="left" sx={{ ...CopyableStyle }}>广东省东莞市虎门镇赤岗村赤岗路69号新艺工业园1号90雅威国际物流{profile.UserCode}{profile.AreaCode}</TableCell>
-                                    </TableRow>
-                                </Tooltip>
-                                <Tooltip title={isCopyText} placement="top" arrow>
-                                    <TableRow key={"Contact Number"} onClick={() => handleCopyToClipboard('13532819695')}>
-                                        <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 电话号码: </TableCell>
-                                        <TableCell align="left" sx={{ ...CopyableStyle }}>13532819695</TableCell>
-                                    </TableRow>
-                                </Tooltip>
-                                <Tooltip title={isCopyText} placement="top" arrow>
-                                    <TableRow key={"Postcode"} onClick={() => handleCopyToClipboard('523900')}>
-                                        <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 邮政编码: </TableCell>
-                                        <TableCell align="left" sx={{ ...CopyableStyle }}>523900</TableCell>
-                                    </TableRow>
-                                </Tooltip>
-                                <Tooltip title={isCopyText} placement="top" arrow>
-                                    <TableRow key={"RefNo"} onClick={() => handleCopyToClipboard(profile.UserCode + profile.AreaCode)}>
-                                        <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 代号: </TableCell>
-                                        <TableCell align="left" sx={{ ...CopyableStyle }}>({profile.UserCode + profile.AreaCode})</TableCell>
-                                    </TableRow>
-                                </Tooltip>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                    <Tooltip title={isCopyText} placement="top" arrow>
+                                        <TableRow key={"Collection Time"} onClick={() => handleCopyToClipboard('广东省东莞市虎门镇赤岗村赤岗路69号新艺工业园1号90雅威国际物流' + profile.UserCode + profile.AreaCode)}>
+                                            <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 仓库地址: </TableCell>
+                                            <TableCell align="left" sx={{ ...CopyableStyle }}>广东省东莞市虎门镇赤岗村赤岗路69号新艺工业园1号90雅威国际物流{profile.UserCode}{profile.AreaCode}</TableCell>
+                                        </TableRow>
+                                    </Tooltip>
+                                    <Tooltip title={isCopyText} placement="top" arrow>
+                                        <TableRow key={"Contact Number"} onClick={() => handleCopyToClipboard('13532819695')}>
+                                            <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 电话号码: </TableCell>
+                                            <TableCell align="left" sx={{ ...CopyableStyle }}>13532819695</TableCell>
+                                        </TableRow>
+                                    </Tooltip>
+                                    <Tooltip title={isCopyText} placement="top" arrow>
+                                        <TableRow key={"Postcode"} onClick={() => handleCopyToClipboard('523900')}>
+                                            <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 邮政编码: </TableCell>
+                                            <TableCell align="left" sx={{ ...CopyableStyle }}>523900</TableCell>
+                                        </TableRow>
+                                    </Tooltip>
+                                    <Tooltip title={isCopyText} placement="top" arrow>
+                                        <TableRow key={"RefNo"} onClick={() => handleCopyToClipboard(profile.UserCode + profile.AreaCode)}>
+                                            <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 代号: </TableCell>
+                                            <TableCell align="left" sx={{ ...CopyableStyle }}>({profile.UserCode + profile.AreaCode})</TableCell>
+                                        </TableRow>
+                                    </Tooltip>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    }
+
                 </CardContent>
             </Card>
         )
@@ -719,7 +735,7 @@ export const Profilepage = () => {
         }
 
         const handleChangePassword = () => {
-            let validPassword = (!isStringNullOrEmpty(newPassword) && newPassword.length >= 8 && confirmPassword === newPassword)
+            let validPassword = (!isStringNullOrEmpty(newPassword)  && confirmPassword === newPassword)
             if (validPassword) {
                 let LogonUser = localStorage.getItem("user")
                 try {
@@ -727,7 +743,7 @@ export const Profilepage = () => {
                     let USERID = auth ? auth.UserID : LogonUser.UserID
                     if (!isStringNullOrEmpty(USERID)) {
                         dispatch(GitAction.CallUpdatePassword({
-                            USERID: 1,
+                            USERID: USERID,
                             USERPASSWORD: newPassword
                         }))
                     }
@@ -747,6 +763,11 @@ export const Profilepage = () => {
             }
             else
                 setInvalidInput(true)
+        }
+
+        const handleInputKeydown = (e) => {
+            if (e.key === 'Enter' || e.keyCode === 13)
+                handleChangePassword()
         }
 
         return (
@@ -787,6 +808,7 @@ export const Profilepage = () => {
                                     </InputAdornment>
                                 }
                                 label="Password"
+                                onKeyDown={handleInputKeydown}
                             />
                         </FormControl>
                     </div>
@@ -799,6 +821,7 @@ export const Profilepage = () => {
                                 value={confirmPassword}
                                 onChange={(event) => handleInputChange('CONFIRM-PASSWORD', event)}
                                 label="Password"
+                                onKeyDown={handleInputKeydown}
                             />
                         </FormControl>
                     </div>

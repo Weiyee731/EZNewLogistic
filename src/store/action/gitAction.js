@@ -75,6 +75,13 @@ export class GitAction {
     };
   }
 
+  static ResetUserProfile = "ResetUserProfile";
+  static CallResetUserProfile() {
+    return {
+      type: GitAction.ResetUserProfile
+    };
+  }
+
   ///////////////////////////////////////////////////  sidebar configuration  ///////////////////////////////////////////////////
 
   static GetNotification = "GetNotification";

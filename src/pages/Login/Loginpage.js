@@ -63,7 +63,7 @@ export const Loginpage = () => {
         CONTACTNO: '',
         USEREMAIL: '',
         USERNICKNAME: '',
-        USERWECHATID: '-',
+        USERWECHATID: '',
         AGREEMENTCHECKED: '',
     })
 
@@ -139,7 +139,7 @@ export const Loginpage = () => {
                         CONTACTNO: '',
                         USEREMAIL: '',
                         USERNICKNAME: '',
-                        USERWECHATID: '-',
+                        USERWECHATID: '',
                         AGREEMENTCHECKED: '',
                     })
                     setOpenRegistrationModal(false)
@@ -295,35 +295,16 @@ export const Loginpage = () => {
         switch (modalName) {
             case REGISTRATION:
                 setOpenRegistrationModal(openModal)
-
-                if (openModal) {
-
-                }
-                else {
-
-                }
-
                 break;
 
             case PASSWORD_RECOVERY:
                 setOpenPasswordRecoveryModal(openModal)
-
-                if (openModal) {
-                }
-                else {
-
-                }
-
                 break;
 
             default:
                 break;
 
         }
-    }
-
-    const resetForm = () => {
-
     }
 
     return (
@@ -343,13 +324,13 @@ export const Loginpage = () => {
                         {
                             isLoginInvalidInput &&
                             <Typography sx={{ color: '#FF5733' }} variant="body" component="p" gutterBottom>
-                                The username or password is invalid
+                                你所使用的户口或密码错误哟，请重新尝试登入
                             </Typography>
                         }
 
                         <TextField
                             id="login-user--username"
-                            label="Username"
+                            label="用户户口"
                             value={loginAccount.USERNAME}
                             variant="filled"
                             sx={{ width: '100%', mb: 2 }}
@@ -358,7 +339,7 @@ export const Loginpage = () => {
                         />
 
                         <FormControl sx={{ width: '100%', mb: 2 }} variant="outlined">
-                            <InputLabel htmlFor="login-user--password">Password</InputLabel>
+                            <InputLabel htmlFor="login-user--password">用户密码</InputLabel>
                             <FilledInput
                                 id="login-user--password"
                                 type={showLoginPassword ? 'text' : 'password'}
@@ -382,20 +363,20 @@ export const Loginpage = () => {
 
                         {
                             !isFormSubmitting ?
-                                <Button onClick={handleLogin} variant="contained" sx={{ width: '100%', mb: 2 }}>Login</Button>
+                                <Button onClick={handleLogin} variant="contained" sx={{ width: '100%', mb: 2 }}>登入</Button>
                                 :
                                 <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mb: 2 }}>
-                                    A Moment ...
+                                    请稍等 ...
                                 </Button>
                         }
 
                         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                             <Link href="#" underline="always" style={{ color: "#0074D9" }} onClick={() => handleModal(REGISTRATION, true)}>
-                                New User? Register Here!
+                                新来的? 点击这里来注册个账号吧! 
                             </Link>
-                            <Link href="#" underline="hover" style={{ color: "#323232" }} onClick={() => handleModal(PASSWORD_RECOVERY, true)}>
-                                Forgot Password?
-                            </Link>
+                            {/* <Link href="#" underline="hover" style={{ color: "#323232" }} onClick={() => handleModal(PASSWORD_RECOVERY, true)}>
+                                亲，忘记了密码了嘛？点这里
+                            </Link> */}
                         </Stack>
                     </div>
                 </Grid>
@@ -425,10 +406,11 @@ export const Loginpage = () => {
                         label="Full Name"
                         fullWidth
                         variant="filled"
-                        required
                         size="small"
                         sx={{ my: 1 }}
-                    // helperText={(isStringNullOrEmpty(signupAccount.FULLNAME) ? <Typography sx={{ color: '#FF5733' }} variant="body" component="span" gutterBottom >Require Your Full Name</Typography> : "")}
+                        required
+                        error={isStringNullOrEmpty(signupAccount.FULLNAME)}
+                        helperText={isStringNullOrEmpty(signupAccount.FULLNAME) ? "您必须填写你的名字" : ''}
                     />
                     <TextField id="registration--nickname" value={signupAccount.USERNICKNAME} onChange={(event) => { handleInputChange("REGISTRATION-NICKNAME", event) }} label="Nick Name (Optional)" fullWidth variant="filled" size="small" sx={{ my: 1 }} />
 
@@ -448,6 +430,9 @@ export const Loginpage = () => {
                                 </InputAdornment>
                             }
                             label="Password"
+                            required
+                            error={isStringNullOrEmpty(signupAccount.PASSWORD)}
+                            helperText={isStringNullOrEmpty(signupAccount.PASSWORD) ? "您必须填写你的密码, 请确保密码是由8个字母与以上所组成" : ''}
                         />
                     </FormControl>
 
@@ -471,9 +456,42 @@ export const Loginpage = () => {
                         </Select>
                         <FormHelperText>The area code is represent your residental area</FormHelperText>
                     </FormControl>
-                    <TextField id="registration--contact" value={signupAccount.CONTACTNO} onChange={(event) => { handleInputChange("REGISTRATION-CONTACTNO", event) }} label="Contact Number" fullWidth variant="filled" required size="small" sx={{ width: '100%', my: 1 }} />
-                    <TextField id="registration--email" value={signupAccount.USEREMAIL} onChange={(event) => { handleInputChange("REGISTRATION-EMAIL", event) }} label="Email Address" fullWidth variant="filled" required size="small" sx={{ my: 1 }} />
-                    {/* <TextField id="registration--wechatid" value={signupAccount.USERWECHATID} onChange={(event) => { handleInputChange("REGISTRATION-WECHATID", event) }} label="WeChat ID" fullWidth variant="filled" size="small" sx={{ my: 1 }} /> */}
+                    <TextField
+                        id="registration--contact"
+                        value={signupAccount.CONTACTNO}
+                        onChange={(event) => { handleInputChange("REGISTRATION-CONTACTNO", event) }}
+                        label="Contact Number"
+                        fullWidth
+                        variant="filled"
+                        size="small"
+                        sx={{ width: '100%', my: 1 }}
+                        required
+                        error={isStringNullOrEmpty(signupAccount.CONTACTNO)}
+                        helperText={isStringNullOrEmpty(signupAccount.CONTACTNO) ? "您必须填写你的电话号码" : ''}
+                    />
+                    <TextField
+                        id="registration--email"
+                        value={signupAccount.USEREMAIL}
+                        onChange={(event) => { handleInputChange("REGISTRATION-EMAIL", event) }}
+                        label="Email Address"
+                        fullWidth
+                        variant="filled"
+                        size="small"
+                        sx={{ my: 1 }}
+                        required
+                        error={isStringNullOrEmpty(signupAccount.USEREMAIL)}
+                        helperText={isStringNullOrEmpty(signupAccount.USEREMAIL) ? "您必须填写你的电子邮件" : ''}
+                    />
+                    <TextField
+                        id="registration--wechatid"
+                        value={signupAccount.USERWECHATID}
+                        onChange={(event) => { handleInputChange("REGISTRATION-WECHATID", event) }}
+                        label="WeChat ID"
+                        fullWidth
+                        variant="filled"
+                        size="small"
+                        sx={{ my: 1 }}
+                    />
                 </DialogContent>
                 <DialogActions>
                     {
