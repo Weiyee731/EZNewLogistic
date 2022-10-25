@@ -156,7 +156,7 @@ export class GitEpic {
       }
     }));
 
-    User_ViewGeneralSetting = action$ =>
+  User_ViewGeneralSetting = action$ =>
     action$.pipe(filter(action => action.type === GitAction.GetGeneralSetting), map(action => {
       return dispatch => {
         try {
@@ -174,14 +174,14 @@ export class GitEpic {
       }
     }));
 
-    User_UpdateUserPassword = action$ =>
+  User_UpdateUserPassword = action$ =>
     action$.pipe(filter(action => action.type === GitAction.UpdatePassword), map(action => {
       return dispatch => {
         try {
           return fetch(url + "User_UpdateUserPassword"
-          + "?USERID=" + action.payload.USERID
-          + '&USERPASSWORD=' + action.payload.USERPASSWORD
-        )
+            + "?USERID=" + action.payload.USERID
+            + '&USERPASSWORD=' + action.payload.USERPASSWORD
+          )
             .then(response => response.json())
             .then(json => {
               json = JSON.parse(json)
@@ -192,6 +192,59 @@ export class GitEpic {
         }
       }
     }));
+
+  User_ProfileByID = action$ =>
+    action$.pipe(filter(action => action.type === GitAction.FetchUserProfileByID), map(action => {
+      return dispatch => {
+        try {
+          return fetch(url +
+            "User_ViewProfileByID?" +
+            "USERID=" + action.payload.UserID
+          )
+            .then(response => response.json())
+            .then(json => {
+              json = JSON.parse(json)
+              return dispatch({ type: GitAction.UserProfileByIDFetched, payload: json });
+            });
+        } catch (error) {
+          toast.error("Error Code: User_ProfileByID")
+          return dispatch({ type: GitAction.UserProfileByIDFetched, payload: [] });
+        }
+      }
+    }));
+
+  User_UpdateUserProfile = action$ =>
+    action$.pipe(filter(action => action.type === GitAction.UpdateUserProfile), map(action => {
+      return dispatch => {
+        try {
+          return fetch(url +
+            "User_UpdateUserProfile?" +
+            "USERID=" + action.payload.USERID +
+            "&USERCODE=" + action.payload.USERCODE +
+            "&USERAREAID=" + action.payload.USERAREAID +
+            "&FULLNAME=" + action.payload.FULLNAME +
+            "&CONTACTNO=" + action.payload.CONTACTNO +
+            "&USEREMAIL=" + action.payload.USEREMAIL +
+            "&USERADDRESS=" + action.payload.USERADDRESS +
+            "&MINSELFPICKUPPRICE=" + action.payload.MINSELFPICKUPPRICE +
+            "&CUBICSELFPICKUPPRICE=" + action.payload.CUBICSELFPICKUPPRICE +
+            "&CONSOLIDATEPRICE=" + action.payload.CONSOLIDATEPRICE +
+            "&DELIVERYCARGO=" + action.payload.DELIVERYCARGO +
+            "&DELIVERYFIRSTPRICE=" + action.payload.DELIVERYFIRSTPRICE +
+            "&DELIVERYSUBPRICE=" + action.payload.DELIVERYSUBPRICE
+          )
+            .then(response => response.json())
+            .then(json => {
+              json = JSON.parse(json)
+              return dispatch({ type: GitAction.UserProfileUpdated, payload: json });
+            });
+        } catch (error) {
+          toast.error("Error Code: User_ProfileByID")
+          return dispatch({ type: GitAction.UserProfileUpdated, payload: [] });
+        }
+      }
+    }));
+
 }
 
 export let gitEpic = new GitEpic();

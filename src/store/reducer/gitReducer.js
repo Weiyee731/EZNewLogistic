@@ -7,7 +7,8 @@ const INITIAL_STATE = {
   viewNotification: [],
   areaCodes: [],
   parcelStatus: [],
-  setting: []
+  setting: [],
+  userProfile: [],
 };
 
 export function counterReducer(state = INITIAL_STATE, action) {
@@ -67,7 +68,6 @@ export function counterReducer(state = INITIAL_STATE, action) {
         userUpdateReturnValue: []
       });
 
-    ////////////////////////////////////////////////////// User ///////////////////////////////////////////////////
     case GitAction.FetchUserAreaCode:
       return Object.assign({}, state, { loading: true });
     case GitAction.UserAreaCodeFetched:
@@ -97,7 +97,7 @@ export function counterReducer(state = INITIAL_STATE, action) {
     case GitAction.UserProfileByIDFetched:
       return Object.assign({}, state, {
         loading: false,
-        logonUser: action.payload
+        userProfile: action.payload
       });
 
     case GitAction.GetParcelStatus2:
@@ -114,6 +114,14 @@ export function counterReducer(state = INITIAL_STATE, action) {
       return Object.assign({}, state, {
         loading: false,
         setting: action.payload
+      });
+
+    case GitAction.UpdateUserProfile:
+      return Object.assign({}, state, { loading: true });
+    case GitAction.UserProfileUpdated:
+      return Object.assign({}, state, {
+        loading: false,
+        userUpdateReturnValue: action.payload
       });
 
 

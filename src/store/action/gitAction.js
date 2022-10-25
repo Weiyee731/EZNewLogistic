@@ -61,7 +61,16 @@ export class GitAction {
   static UserProfileByIDFetched = "USER_PROFILE_BY_ID_FETCHED";
   static CallFetchUserProfileByID(propsData) {
     return {
-      type: GitAction.UpdateUserAccountPassword,
+      type: GitAction.FetchUserProfileByID,
+      payload: propsData
+    };
+  }
+
+  static UpdateUserProfile = "UPDATE_USER_PROFILE";
+  static UserProfileUpdated = "USER_PROFILE_UPDATED";
+  static CallUpdateUserProfile(propsData) {
+    return {
+      type: GitAction.UpdateUserProfile,
       payload: propsData
     };
   }

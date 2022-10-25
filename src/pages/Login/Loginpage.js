@@ -63,7 +63,7 @@ export const Loginpage = () => {
         CONTACTNO: '',
         USEREMAIL: '',
         USERNICKNAME: '',
-        USERWECHATID: '',
+        USERWECHATID: '-',
         AGREEMENTCHECKED: '',
     })
 
@@ -139,7 +139,7 @@ export const Loginpage = () => {
                         CONTACTNO: '',
                         USEREMAIL: '',
                         USERNICKNAME: '',
-                        USERWECHATID: '',
+                        USERWECHATID: '-',
                         AGREEMENTCHECKED: '',
                     })
                     setOpenRegistrationModal(false)
@@ -473,7 +473,7 @@ export const Loginpage = () => {
                     </FormControl>
                     <TextField id="registration--contact" value={signupAccount.CONTACTNO} onChange={(event) => { handleInputChange("REGISTRATION-CONTACTNO", event) }} label="Contact Number" fullWidth variant="filled" required size="small" sx={{ width: '100%', my: 1 }} />
                     <TextField id="registration--email" value={signupAccount.USEREMAIL} onChange={(event) => { handleInputChange("REGISTRATION-EMAIL", event) }} label="Email Address" fullWidth variant="filled" required size="small" sx={{ my: 1 }} />
-                    <TextField id="registration--wechatid" value={signupAccount.USERWECHATID} onChange={(event) => { handleInputChange("REGISTRATION-WECHATID", event) }} label="WeChat ID" fullWidth variant="filled" size="small" sx={{ my: 1 }} />
+                    {/* <TextField id="registration--wechatid" value={signupAccount.USERWECHATID} onChange={(event) => { handleInputChange("REGISTRATION-WECHATID", event) }} label="WeChat ID" fullWidth variant="filled" size="small" sx={{ my: 1 }} /> */}
                 </DialogContent>
                 <DialogActions>
                     {

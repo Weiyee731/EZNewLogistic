@@ -21,6 +21,17 @@ import Divider from '@mui/material/Divider';
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -35,42 +46,51 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import useAuth from "../hooks/useAuth";
 import { toast } from 'react-toastify'
-import { isArrayNotEmpty, isStringNullOrEmpty } from '../tools/Helpers'
+import { isArrayNotEmpty, isObjectUndefinedOrNull, isStringNullOrEmpty } from '../tools/Helpers'
 import { ParcelPage } from "./ParcelPage";
 import { NotificationView } from "../components/NotificationView";
 
 export const Profilepage = () => {
     const { auth, setAuth } = useAuth()
     const navigate = useNavigate()
-    const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#F4F5F5',
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'left',
-        color: theme.palette.text.secondary,
-    }));
 
     // dispatch and global props here
     const dispatch = useDispatch();
     const isFormSubmitting = useSelector(state => state.counterReducer.loading)
+    const userProfile = useSelector(state => state.counterReducer.userProfile)
     const isUserProfileUpdate = useSelector(state => state.counterReducer.userUpdateReturnValue)
     const viewNotification = useSelector(state => state.counterReducer.viewNotification)
-    // HOOKS HERE
+
+    // CONSTANT OR STYLE HERE
     const USER_PROFILE_PAGE = 'User Profile'
     const ALL_ORDERS_PAGE = 'All Orders'
     const CLAIM_CARGO_PAGE = 'Claim Cargo'
     const PASSWORD_MANAGER_PAGE = 'Password Manager'
 
+
+    // HOOKS HERE
     const [currentPage, setCurrentPage] = useState(USER_PROFILE_PAGE)
+    const [profile, setProfile] = useState(null)
+
+    // USE EFFECT
+    useEffect(() => {
+        dispatch(GitAction.CallGetNotification({ status: 1 }));
+
+        if (!isObjectUndefinedOrNull(auth) && !isStringNullOrEmpty(auth.UserID)) {
+            dispatch(GitAction.CallFetchUserProfileByID({ UserID: auth.UserID }));
+        }
+    }, [])
+
+    useEffect(() => {
+        if (isArrayNotEmpty(userProfile) && profile !== userProfile[0]) {
+            setProfile(userProfile[0])
+        }
+    }, [userProfile])
 
     const handleLogout = () => {
         setAuth({})
         localStorage.setItem("user", "")
     }
-
-    useEffect(() => {
-        dispatch(GitAction.CallGetNotification({ status: 1 }))
-    }, [])
 
     const renderSideMenu = () => {
         return (
@@ -146,78 +166,348 @@ export const Profilepage = () => {
     const UserProfile = () => {
         const [isEditMode, setEditMode] = useState(false)
 
-        const toggleEditProfile = () => {
-            setEditMode(!isEditMode)
-        }
+        const Item = styled(Paper)(({ theme }) => ({
+            backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#F4F5F5',
+            ...theme.typography.body2,
+            padding: theme.spacing(1),
+            textAlign: 'left',
+            color: theme.palette.text.secondary,
+        }));
 
         return (
+
             <Card sx={{ m: 2, py: 3, px: 2 }}>
                 <CardHeader
                     title={
                         <div style={{ display: 'flex' }}>
                             <Typography variant="h6" component="h6" sx={{ fontWeight: 600, mr: 2, my: 'auto' }}>
-                                {auth.FullName}
+                                {profile.Fullname}
+                            </Typography>
+                            <Typography variant="h5" component="h5" sx={{ fontWeight: 600, my: 'auto', mr: 1, color: '#0073DF' }}>
+                                ( 会员号:{profile.UserCode} )
                             </Typography>
                             <Typography variant="h5" component="h5" sx={{ fontWeight: 600, my: 'auto', color: '#0073DF' }}>
-                                ( 会员号:{auth.Username} )
+                                [ {profile.AreaCode} ]
                             </Typography>
                         </div>
                     }
-                    subheader="You can edit your information in this page"
+                    subheader="这是你的个人资料板，请您慢用。"
                     action={
-                        <IconButton aria-label="edit-profile" onClick={() => toggleEditProfile()}>
-                            {
-                                isEditMode ? <CloseIcon /> : <EditIcon />
-                            }
+                        <IconButton aria-label="edit-profile" onClick={() => setEditMode(true)}>
+                            <EditIcon />
                         </IconButton>
                     }
                 />
-                <CardContent sx={{ width: '100%', padding: 0 }}>
-                    {
-                        !isEditMode ?
-                            <Grid container rowSpacing={1} columnSpacing={3} >
+                {
+                    !isObjectUndefinedOrNull(profile) ?
+                        <CardContent sx={{ width: '100%', padding: 0 }}>
+                            <Grid container rowSpacing={2} columnSpacing={3} >
                                 <Grid item xs={12}>
                                     <Typography variant="h6" component="p" sx={{ fontWeight: 600 }}>
                                         您的个人资料
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={6}>
-                                    <Item>
-                                        姓名: <b>{auth.FullName}</b>
-                                    </Item>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Item>
-                                        昵称: <b>{auth.UserNickname}</b>
-                                    </Item>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Item>
-                                        电话: <b>{auth.UserContactNo}</b>
-                                    </Item>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Item>
-                                        邮件: <b>{auth.UserEmailAddress}</b>
-                                    </Item>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Item>
-                                        微信: <b>{auth.WeChatID}</b>
-                                    </Item>
-                                </Grid>
-                            </Grid>
-                            :
-                            <Grid container>
-                                <Grid item xs={12} >
-                                    <Grid item xs={12}>
 
-                                    </Grid>
+                                <Grid item xs={6}>
+                                    <Item>
+                                        户口: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.Username}</b>
+                                    </Item>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Item>
+                                        户口状态: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.UserStatus}</b>
+                                    </Item>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Item>
+                                        姓名: <b>{profile.Fullname}</b>
+                                    </Item>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Item>
+                                        昵称: <b>{profile.UserNickname}</b>
+                                    </Item>
+                                </Grid>
+
+                                <Grid item xs={3}>
+                                    <Item>
+                                        地区: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.AreaCode}</b>
+                                    </Item>
+                                </Grid>
+                                <Grid item xs={9}>
+                                    <Item>
+                                        地址: <b>{profile.UserAddress}</b>
+                                    </Item>
+                                </Grid>
+
+                                <Grid item xs={4}>
+                                    <Item>
+                                        电话: <b>{profile.UserContactNo}</b>
+                                    </Item>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Item>
+                                        邮件: <b>{profile.UserEmailAddress}</b>
+                                    </Item>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Item>
+                                        微信: <b>{profile.UserWechatID}</b>
+                                    </Item>
                                 </Grid>
                             </Grid>
-                    }
-                </CardContent>
+                        </CardContent>
+                        :
+                        <CardContent>
+                            <Typography variant="h6" component="p" sx={{ fontStyle: 'italic' }}> 没有资料 </Typography>
+                        </CardContent>
+                }
+                <UpdateProfileForm open={isEditMode} setOpenModal={setEditMode} profile={{ ...profile }} isUserProfileUpdate={isUserProfileUpdate} />
             </Card>
+        )
+    }
+
+    const UpdateProfileForm = ({ open, setOpenModal, profile, isUserProfileUpdate }) => {
+        const [openRegistrationModal, setOpenRegistrationModal] = useState(open)
+        const [accountInfo, setAccountInfo] = useState(null)
+
+        useEffect(() => {
+            setOpenRegistrationModal(open)
+
+            if (open === false) {
+                setTimeout(() => { setAccountInfo(null) }, 300)
+            }
+            else {
+                if (!isObjectUndefinedOrNull(profile)) {
+
+                    const info = {
+                        USERID: profile.UserID,
+                        USERCODE: profile.UserCode,
+                        USERAREAID: profile.UserAreaID,
+                        FULLNAME: profile.Fullname,
+                        USERNICKNAME: isStringNullOrEmpty(profile.UserNickname) ? "-" : profile.UserNickname,
+                        CONTACTNO: profile.UserContactNo,
+                        USEREMAIL: isStringNullOrEmpty(profile.UserEmailAddress) ? "-" : profile.UserEmailAddress,
+                        USERADDRESS: isStringNullOrEmpty(profile.UserAddress) ? "-" : profile.UserAddress,
+                        WECHATID: isStringNullOrEmpty(profile.UserWechatID) ? "-" : profile.UserWechatID,
+                        MINSELFPICKUPPRICE: isStringNullOrEmpty(profile.MinimumPrice) ? 0 : profile.MinimumPrice,
+                        CUBICSELFPICKUPPRICE: isStringNullOrEmpty(profile.SelfPickOverCubic) ? 0 : profile.SelfPickOverCubic,
+                        CONSOLIDATEPRICE: isStringNullOrEmpty(profile.ConsolidatedPrice) ? 0 : profile.ConsolidatedPrice,
+                        DELIVERYCARGO: isStringNullOrEmpty(profile.LargeDeliveryPrice) ? 0 : profile.LargeDeliveryPrice,
+                        DELIVERYFIRSTPRICE: isStringNullOrEmpty(profile.SmallDeliveryFirstPrice) ? 0 : profile.SmallDeliveryFirstPrice,
+                        DELIVERYSUBPRICE: isStringNullOrEmpty(profile.SmallDeliverySubPrice) ? 0 : profile.SmallDeliverySubPrice,
+                    }
+                    setAccountInfo({ ...info })
+                }
+            }
+        }, [open])
+
+        useEffect(() => {
+            if (isArrayNotEmpty(isUserProfileUpdate)) {
+                if (isUserProfileUpdate[0].ReturnVal === 1 || isUserProfileUpdate[0].ReturnVal === "1") {
+                    toast.success("您的资料已经成功更新。", {
+                        position: "top-center",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        draggable: false,
+                        theme: "colored",
+                    })
+                    dispatch(GitAction.CallFetchUserProfileByID({ UserID: profile.UserID }))
+                    setTimeout(() => { setAccountInfo(null) }, 300)
+                }
+                else {
+                    toast.error("您的资料无法更新，请稍后再试。", {
+                        position: "top-center",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        draggable: false,
+                        theme: "colored",
+                    })
+                }
+                dispatch(GitAction.CallResetUserUpdateReturnValue())
+            }
+
+        }, [isUserProfileUpdate])
+
+        const handleCloseModal = () => {
+            setOpenRegistrationModal(false)
+            setOpenModal(false)
+        }
+
+        const handleInputChange = (name, event) => {
+            let info = accountInfo;
+
+            switch (name) {
+                case 'FULLNAME':
+                    info.FULLNAME = isStringNullOrEmpty(event.target.value) ? "" : event.target.value.toUpperCase()
+                    setAccountInfo({ ...info })
+                    break;
+
+                case 'USERNICKNAME':
+                    info.USERNICKNAME = event.target.value
+                    setAccountInfo({ ...info })
+                    break;
+
+                case 'USERADDRESS':
+                    info.USERADDRESS = event.target.value
+                    setAccountInfo({ ...info })
+                    break;
+
+                case 'CONTACTNO':
+                    info.CONTACTNO = event.target.value
+                    setAccountInfo({ ...info })
+                    break;
+
+                case 'USEREMAIL':
+                    info.USEREMAIL = event.target.value
+                    setAccountInfo({ ...info })
+                    break;
+
+                case 'WECHATID':
+                    info.WECHATID = event.target.value
+                    setAccountInfo({ ...info })
+                    break;
+
+                default: break;
+            }
+        }
+
+        const handleUpdateUserProfile = () => {
+            let submittingProps = { ...accountInfo }
+
+            if (!isObjectUndefinedOrNull(submittingProps)) {
+                let isvalid = (
+                    !isStringNullOrEmpty(submittingProps.FULLNAME) &&
+                    !isStringNullOrEmpty(submittingProps.CONTACTNO) &&
+                    !isStringNullOrEmpty(submittingProps.USEREMAIL)
+                )
+
+                if (isvalid) {
+                    submittingProps.WECHATID = !isStringNullOrEmpty(submittingProps.WECHATID) ? submittingProps.WECHATID : "-"
+                    submittingProps.USERNICKNAME = !isStringNullOrEmpty(submittingProps.USERNICKNAME) ? submittingProps.USERNICKNAME : "-"
+                    submittingProps.USERADDRESS = !isStringNullOrEmpty(submittingProps.USERADDRESS) ? submittingProps.USERADDRESS : "-"
+
+                    dispatch(GitAction.CallUpdateUserProfile(submittingProps))
+                }
+                else {
+                    toast.error("请确保您已经填入重要输入 (*), 请重试输入并且提交表格。", {
+                        position: "top-center",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        draggable: false,
+                        theme: "colored",
+                    })
+
+                }
+            }
+            else {
+                toast.error("请确保您已经填入重要输入 (*), 请重试输入并且提交表格。", {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    draggable: false,
+                    theme: "colored",
+                })
+            }
+        }
+
+        return (
+            <Dialog scroll="paper" open={openRegistrationModal} onClose={handleCloseModal} aria-labelledby="update-profile-title" aria-describedby="update-profile-description" >
+                <DialogTitle id="update-profile-title">
+                    <Typography variant="h5" component="p" sx={{ fontWeight: 600 }}>
+                        更改个人资料
+                    </Typography>
+                    <IconButton
+                        aria-label="close"
+                        onClick={handleCloseModal}
+                        sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500], }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                {
+                    isObjectUndefinedOrNull(accountInfo) ?
+                        <DialogContent>Relogin</DialogContent>
+                        :
+                        <DialogContent>
+                            <DialogContentText>
+                                您可以随意的更改您的个人资料
+                            </DialogContentText>
+                            <TextField id="profile--fullname"
+                                value={accountInfo.FULLNAME}
+                                onChange={(event) => { handleInputChange("FULLNAME", event) }}
+                                label="全名"
+                                fullWidth
+                                variant="filled"
+                                required
+                                size="small"
+                                sx={{ my: 1 }}
+                            />
+                            <TextField id="profile--nickname"
+                                value={accountInfo.USERNICKNAME}
+                                onChange={(event) => { handleInputChange("USERNICKNAME", event) }}
+                                label="昵称"
+                                fullWidth
+                                variant="filled"
+                                size="small"
+                                sx={{ my: 1 }}
+                            />
+                            <TextField id="profile--address"
+                                value={accountInfo.USERADDRESS}
+                                onChange={(event) => { handleInputChange("USERADDRESS", event) }}
+                                label="住家地址"
+                                fullWidth
+                                variant="filled"
+                                size="small"
+                                sx={{ my: 1 }}
+                            />
+                            <TextField id="profile--contact"
+                                value={accountInfo.CONTACTNO}
+                                onChange={(event) => { handleInputChange("CONTACTNO", event) }}
+                                label="电话号码"
+                                fullWidth
+                                variant="filled"
+                                required
+                                size="small"
+                                sx={{ my: 1 }}
+                            />
+                            <TextField id="profile--email"
+                                value={accountInfo.USEREMAIL}
+                                onChange={(event) => { handleInputChange("USEREMAIL", event) }}
+                                label="电子邮件"
+                                fullWidth
+                                required
+                                variant="filled"
+                                size="small"
+                                sx={{ my: 1 }}
+                            />
+                            <TextField id="profile--wechat"
+                                value={accountInfo.WECHATID}
+                                onChange={(event) => { handleInputChange("WECHATID", event) }}
+                                label="微信"
+                                fullWidth
+                                variant="filled"
+                                size="small"
+                                sx={{ my: 1 }}
+                            />
+                        </DialogContent>
+
+                }
+                <DialogActions>
+                    {
+                        !isFormSubmitting ?
+                            <Button sx={{ mx: 2, my: 1 }} onClick={handleUpdateUserProfile} variant="contained" fullWidth> Submit </Button>
+                            :
+                            <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mx: 2, my: 1 }}>
+                                A Moment ...
+                            </Button>
+                    }
+                </DialogActions>
+            </Dialog>
         )
     }
 
@@ -253,6 +543,42 @@ export const Profilepage = () => {
     }
 
     const AddressManager = () => {
+        let UserCode = auth?.UserCode
+        let Username = auth?.Username
+        try {
+            let local_storage = localStorage.getItem("user")
+            if (!isStringNullOrEmpty(local_storage)) {
+                if (isStringNullOrEmpty(UserCode) || isStringNullOrEmpty(Username)) {
+                    local_storage = JSON.parse(local_storage)
+                    UserCode = local_storage.UserCode
+                    Username = local_storage.Username
+                }
+            }
+            else {
+                toast.error("系统出现故障，请重新登入。", {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    draggable: false,
+                    theme: "colored",
+                })
+                handleLogout()
+            }
+
+        }
+        catch {
+            toast.error("系统出现故障，请重新登入。", {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                draggable: false,
+                theme: "colored",
+            })
+            handleLogout()
+        }
+
         return (
             <Card sx={{ m: 2, py: 2, px: 2 }}>
                 <CardHeader
@@ -263,21 +589,28 @@ export const Profilepage = () => {
                     }
                 />
                 <CardContent>
-                    {viewNotification && viewNotification.length > 0 ? viewNotification.map((item, index) => {
-                        return (
-                            <NotificationView
-                                key={index}
-                                message={item.NotificationDesc}
-                                title={item.NotificationTitle}
-                                date={item.CreatedDate}
-                            />
-                        )
-                    })
-                        :
-                        <div style={{ textAlign: 'center', fontWeight: 'bold' }}>
-                            No notification for the moment / 目前没有任何通告
-                        </div>
-                    }
+                    <TableContainer component={Paper}>
+                        <Table size="medium" aria-label="addresses table">
+                            <TableBody>
+                                <TableRow key={"Contact Person"}>
+                                    <TableCell component="th" scope="row" sx={{ width: '20%', fontWeight: 600 }}> 联络人员: </TableCell>
+                                    <TableCell align="left">({UserCode})EZ转运KU倉</TableCell>
+                                </TableRow>
+                                <TableRow key={"Address"}>
+                                    <TableCell component="th" scope="row" sx={{ width: '20%', fontWeight: 600 }}> 仓库地址: </TableCell>
+                                    <TableCell align="left">广东省东莞市虎门镇赤岗村赤岗路69号101新艺工业园1号仓KU倉 {UserCode} (轉會員weiyee)</TableCell>
+                                </TableRow>
+                                <TableRow key={"Contact Number"}>
+                                    <TableCell component="th" scope="row" sx={{ width: '20%', fontWeight: 600 }}> 电话号码: </TableCell>
+                                    <TableCell align="left">13532819695</TableCell>
+                                </TableRow>
+                                <TableRow key={"Postcode"}>
+                                    <TableCell component="th" scope="row" sx={{ width: '20%', fontWeight: 600 }}> 邮政编码: </TableCell>
+                                    <TableCell align="left">523900</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </CardContent>
             </Card>
         )
@@ -352,7 +685,14 @@ export const Profilepage = () => {
                     }
                     else {
                         handleLogout()
-                        toast.error("请重新登入，并且重试更换密码。")
+                        toast.error("请重新登入，并且重试更换密码。", {
+                            position: "top-center",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            draggable: false,
+                            theme: "colored",
+                        })
                     }
                 }
                 catch { }
@@ -436,6 +776,7 @@ export const Profilepage = () => {
                     <>
                         <UserProfile />
                         <NotificationModule />
+                        <AddressManager />
                     </>
                 )
 
