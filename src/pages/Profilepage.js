@@ -107,7 +107,7 @@ export const Profilepage = () => {
         }
 
         return (
-            <Paper sx={{ maxWidth: '90%', width: '100%',  my: 2, py: 2 }}>
+            <Paper sx={{  width: '100%',  my: 2, py: 2 }}>
                 <Typography variant="h5" component="p" sx={{ fontWeight: 600, textAlign: 'center' }}>目录</Typography>
                 <MenuList>
                     <Divider />
