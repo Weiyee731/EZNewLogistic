@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   viewNotification: [],
   areaCodes: [],
   parcelStatus: [],
+  setting: []
 };
 
 export function counterReducer(state = INITIAL_STATE, action) {
@@ -105,6 +106,14 @@ export function counterReducer(state = INITIAL_STATE, action) {
       return Object.assign({}, state, {
         loading: false,
         parcelStatus: action.payload
+      });
+
+    case GitAction.GetGeneralSetting:
+      return Object.assign({}, state, { loading: true });
+    case GitAction.GotGeneralSetting:
+      return Object.assign({}, state, {
+        loading: false,
+        setting: action.payload
       });
 
 

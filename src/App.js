@@ -26,7 +26,7 @@ function App() {
             <Route path="/faq" element={<FAQpage />} />
             <Route path="/pricing" element={<Pricingpage />} />
 
-            {/* <Route path="/parcelpage" element={<ParcelPage />} /> */}
+            <Route path="/parcelpage" element={<ParcelPage />} />
 
             {/* Protected Routes for Login */}
             <Route element={<RequireAuth />}>

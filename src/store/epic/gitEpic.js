@@ -103,9 +103,9 @@ export class GitEpic {
             .then(response => response.json())
             .then(json => {
               json = JSON.parse(json)
-              if (json[0].ReturnVal === 0) {
-                toast.error("Invalid tracking number")
-              }
+              // if (json[0].ReturnVal === 0) {
+              //   toast.error("Invalid tracking number")
+              // }
               return dispatch({ type: GitAction.GotParcelStatus, payload: json[0].ReturnVal === 1 ? [] : json });
             });
         } catch (error) {
@@ -156,32 +156,43 @@ export class GitEpic {
       }
     }));
 
-  User_UpdateUserPassword = action$ =>
+    User_ViewGeneralSetting = action$ =>
+    action$.pipe(filter(action => action.type === GitAction.GetGeneralSetting), map(action => {
+      return dispatch => {
+        try {
+          return fetch(
+            url + "User_ViewGeneralSetting?USERID=" + action.payload.UserID
+          )
+            .then(response => response.json())
+            .then(json => {
+              json = JSON.parse(json)
+              return dispatch({ type: GitAction.GotGeneralSetting, payload: json });
+            });
+        } catch (error) {
+          return dispatch({ type: GitAction.GotGeneralSetting, payload: [] });
+        }
+      }
+    }));
+
+    User_UpdateUserPassword = action$ =>
     action$.pipe(filter(action => action.type === GitAction.UpdatePassword), map(action => {
       return dispatch => {
         try {
-          console.log(url + "User_UpdateUserPassword"
-            + "?USERID=" + action.payload.USERID
-            + '&USERPASSWORD=' + action.payload.USERPASSWORD
-          )
-
           return fetch(url + "User_UpdateUserPassword"
-            + "?USERID=" + action.payload.USERID
-            + '&USERPASSWORD=' + action.payload.USERPASSWORD
-          )
+          + "?USERID=" + action.payload.USERID
+          + '&USERPASSWORD=' + action.payload.USERPASSWORD
+        )
             .then(response => response.json())
             .then(json => {
               json = JSON.parse(json)
               return dispatch({ type: GitAction.PasswordUpdated, payload: json });
             });
         } catch (error) {
-          toast.error("Failed to update password. Please try again.")
           return dispatch({ type: GitAction.PasswordUpdated, payload: [] });
         }
       }
     }));
 }
-
 
 export let gitEpic = new GitEpic();
 
