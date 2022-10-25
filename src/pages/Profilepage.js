@@ -23,6 +23,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import { styled } from '@mui/material/styles';
 
+import CloseIcon from '@mui/icons-material/Close';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import EditIcon from '@mui/icons-material/Edit';
@@ -36,6 +37,7 @@ import useAuth from "../hooks/useAuth";
 import { toast } from 'react-toastify'
 import { isArrayNotEmpty, isStringNullOrEmpty } from '../tools/Helpers'
 import { ParcelPage } from "./ParcelPage";
+import { NotificationView } from "../components/NotificationView";
 
 export const Profilepage = () => {
     const { auth, setAuth } = useAuth()
@@ -52,6 +54,7 @@ export const Profilepage = () => {
     const dispatch = useDispatch();
     const isFormSubmitting = useSelector(state => state.counterReducer.loading)
     const isUserProfileUpdate = useSelector(state => state.counterReducer.userUpdateReturnValue)
+    const viewNotification = useSelector(state => state.counterReducer.viewNotification)
     // HOOKS HERE
     const USER_PROFILE_PAGE = 'User Profile'
     const ALL_ORDERS_PAGE = 'All Orders'
@@ -65,7 +68,9 @@ export const Profilepage = () => {
         localStorage.setItem("user", "")
     }
 
-
+    useEffect(() => {
+        dispatch(GitAction.CallGetNotification({ status: 1 }))
+    }, [])
 
     const renderSideMenu = () => {
         return (
@@ -137,7 +142,14 @@ export const Profilepage = () => {
         // }
     }
 
+
     const UserProfile = () => {
+        const [isEditMode, setEditMode] = useState(false)
+
+        const toggleEditProfile = () => {
+            setEditMode(!isEditMode)
+        }
+
         return (
             <Card sx={{ m: 2, py: 3, px: 2 }}>
                 <CardHeader
@@ -153,44 +165,119 @@ export const Profilepage = () => {
                     }
                     subheader="You can edit your information in this page"
                     action={
-                        <IconButton aria-label="edit-profile">
-                            <EditIcon />
+                        <IconButton aria-label="edit-profile" onClick={() => toggleEditProfile()}>
+                            {
+                                isEditMode ? <CloseIcon /> : <EditIcon />
+                            }
                         </IconButton>
                     }
                 />
                 <CardContent sx={{ width: '100%', padding: 0 }}>
-                    <Grid container rowSpacing={1} columnSpacing={3} >
-                        <Grid item xs={12}>
-                            <Typography variant="h6" component="p" sx={{ fontWeight: 600 }}>
-                                您的个人资料
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Item>
-                                姓名: <b>{auth.FullName}</b>
-                            </Item>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Item>
-                                昵称: <b>{auth.UserNickname}</b>
-                            </Item>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Item>
-                                电话: <b>{auth.UserContactNo}</b>
-                            </Item>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Item>
-                                邮件: <b>{auth.UserEmailAddress}</b>
-                            </Item>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Item>
-                                微信: <b>{auth.WeChatID}</b>
-                            </Item>
-                        </Grid>
-                    </Grid>
+                    {
+                        !isEditMode ?
+                            <Grid container rowSpacing={1} columnSpacing={3} >
+                                <Grid item xs={12}>
+                                    <Typography variant="h6" component="p" sx={{ fontWeight: 600 }}>
+                                        您的个人资料
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Item>
+                                        姓名: <b>{auth.FullName}</b>
+                                    </Item>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Item>
+                                        昵称: <b>{auth.UserNickname}</b>
+                                    </Item>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Item>
+                                        电话: <b>{auth.UserContactNo}</b>
+                                    </Item>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Item>
+                                        邮件: <b>{auth.UserEmailAddress}</b>
+                                    </Item>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Item>
+                                        微信: <b>{auth.WeChatID}</b>
+                                    </Item>
+                                </Grid>
+                            </Grid>
+                            :
+                            <Grid container>
+                                <Grid item xs={12} >
+                                    <Grid item xs={12}>
+
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                    }
+                </CardContent>
+            </Card>
+        )
+    }
+
+    const NotificationModule = () => {
+        return (
+            <Card sx={{ m: 2, py: 2, px: 2 }}>
+                <CardHeader
+                    title={
+                        <Typography variant="h6" component="h6" sx={{ fontWeight: 600 }}>
+                            最新资讯
+                        </Typography>
+                    }
+                />
+                <CardContent>
+                    {viewNotification && viewNotification.length > 0 ? viewNotification.map((item, index) => {
+                        return (
+                            <NotificationView
+                                key={index}
+                                message={item.NotificationDesc}
+                                title={item.NotificationTitle}
+                                date={item.CreatedDate}
+                            />
+                        )
+                    })
+                        :
+                        <div style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                            No notification for the moment / 目前没有任何通告
+                        </div>
+                    }
+                </CardContent>
+            </Card>
+        )
+    }
+
+    const AddressManager = () => {
+        return (
+            <Card sx={{ m: 2, py: 2, px: 2 }}>
+                <CardHeader
+                    title={
+                        <Typography variant="h6" component="h6" sx={{ fontWeight: 600 }}>
+                            您的地址
+                        </Typography>
+                    }
+                />
+                <CardContent>
+                    {viewNotification && viewNotification.length > 0 ? viewNotification.map((item, index) => {
+                        return (
+                            <NotificationView
+                                key={index}
+                                message={item.NotificationDesc}
+                                title={item.NotificationTitle}
+                                date={item.CreatedDate}
+                            />
+                        )
+                    })
+                        :
+                        <div style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                            No notification for the moment / 目前没有任何通告
+                        </div>
+                    }
                 </CardContent>
             </Card>
         )
@@ -203,7 +290,6 @@ export const Profilepage = () => {
         const [invalidInput, setInvalidInput] = useState(false)
 
         useEffect(() => {
-            console.log(isUserProfileUpdate)
             if (isArrayNotEmpty(isUserProfileUpdate)) {
                 if (isUserProfileUpdate[0].ReturnVal === 1 || isUserProfileUpdate[0].ReturnVal === '1') {
                     toast.success('Your password is updated successfully.', {
@@ -252,10 +338,7 @@ export const Profilepage = () => {
         }
 
         const handleChangePassword = () => {
-            console.log(newPassword)
-            console.log(confirmPassword)
             let validPassword = (!isStringNullOrEmpty(newPassword) && newPassword.length >= 8 && confirmPassword === newPassword)
-
             if (validPassword) {
                 let LogonUser = localStorage.getItem("user")
                 try {
@@ -263,21 +346,16 @@ export const Profilepage = () => {
                     let USERID = auth ? auth.UserID : LogonUser.UserID
                     if (!isStringNullOrEmpty(USERID)) {
                         dispatch(GitAction.CallUpdatePassword({
-                            USERID: USERID,
+                            USERID: 1,
                             USERPASSWORD: newPassword
                         }))
                     }
                     else {
-                        toast.error("")
+                        handleLogout()
+                        toast.error("请重新登入，并且重试更换密码。")
                     }
                 }
-                catch {
-
-                }
-
-                console.log(auth)
-                console.log(newPassword)
-
+                catch { }
             }
             else
                 setInvalidInput(true)
@@ -291,23 +369,23 @@ export const Profilepage = () => {
                             更改密码
                         </Typography>
                     }
-                    subheader="To update your password, you are require to enter your old password"
+                    subheader="更新您的密码，请务必重新输入于确保的密码是于重新输入密码相称"
                 />
                 <CardContent>
                     {
                         invalidInput === true &&
                         <div style={{ marginBottom: 15 }}>
                             <Typography variant="body" component="p" sx={{ color: '#FF5733', fontSize: 14 }}>
-                                The password contains invalid input. Please check with the inputs to fulfill: <br />
-                                ~ Minimum 8 characters <br />
-                                ~ Password is match with the Confirmation Password
+                                你所设定的新密码必须符合以下条件： <br />
+                                ~ 至少8个字母与以上 <br />
+                                ～ 新密码与重新输入密码必须相称
                             </Typography>
                         </div>
                     }
 
                     <div>
                         <FormControl sx={{ width: '50%', my: 1 }} variant="outlined" required size="small" >
-                            <InputLabel htmlFor="new-password">New Password</InputLabel>
+                            <InputLabel htmlFor="new-password">新的密码</InputLabel>
                             <FilledInput
                                 id="new-password"
                                 type={showNewPassword ? 'text' : 'password'}
@@ -326,7 +404,7 @@ export const Profilepage = () => {
                     </div>
                     <div>
                         <FormControl sx={{ width: '50%', my: 1 }} variant="outlined" required size="small" >
-                            <InputLabel htmlFor="confirmation-password">Confirmation Password</InputLabel>
+                            <InputLabel htmlFor="confirmation-password">重新输入密码</InputLabel>
                             <FilledInput
                                 id="confirmation-password"
                                 type={'password'}
@@ -339,10 +417,10 @@ export const Profilepage = () => {
 
                     {
                         !isFormSubmitting ?
-                            <Button disabled={invalidInput} sx={{ my: 1, width: '50%' }} onClick={handleChangePassword} variant="contained"> Change Password </Button>
+                            <Button disabled={invalidInput} sx={{ my: 1, width: '50%' }} onClick={handleChangePassword} variant="contained"> 确认更改密码 </Button>
                             :
                             <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '50%', my: 1 }}>
-                                A Moment ...
+                                请稍等 ...
                             </Button>
                     }
 
@@ -354,7 +432,12 @@ export const Profilepage = () => {
     const renderPageModule = (page) => {
         switch (page) {
             case USER_PROFILE_PAGE:
-                return <UserProfile />
+                return (
+                    <>
+                        <UserProfile />
+                        <NotificationModule />
+                    </>
+                )
 
             case ALL_ORDERS_PAGE:
                 return <ParcelPage />
@@ -376,7 +459,7 @@ export const Profilepage = () => {
                     {renderSideMenu()}
                 </Grid>
 
-                <Grid item xs={12} md={9}>
+                <Grid item xs={12} md={9} sx={{ maxHeight: '70vh', overflowY: 'auto' }}>
                     {renderPageModule(currentPage)}
                 </Grid>
             </Grid>
