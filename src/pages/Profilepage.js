@@ -31,6 +31,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
+import Tooltip from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 
@@ -210,7 +211,7 @@ export const Profilepage = () => {
 
                                 <Grid item xs={6}>
                                     <Item>
-                                        户口: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.Username}</b>
+                                        户口: <b style={{ fontSize: 16, color: '#0073DF' }}>{profile.Username}</b>
                                     </Item>
                                 </Grid>
                                 <Grid item xs={6}>
@@ -543,8 +544,10 @@ export const Profilepage = () => {
     }
 
     const AddressManager = () => {
-        let UserCode = auth?.UserCode
-        let Username = auth?.Username
+        const [isCopyText, setIsCopyText] = useState("拷贝")
+
+        let UserCode = profile?.UserCode
+        let Username = profile?.Username
         try {
             let local_storage = localStorage.getItem("user")
             if (!isStringNullOrEmpty(local_storage)) {
@@ -579,6 +582,29 @@ export const Profilepage = () => {
             handleLogout()
         }
 
+        const TitleStyle = {
+            width: '20%',
+            fontWeight: 600,
+            bgcolor: '#F3F3F3',
+            border: '1px solid rgba(77,77,77,.3)'
+        }
+
+        const CopyableStyle = {
+            border: '1px solid rgba(77,77,77,.3)',
+            cursor: 'pointer',
+            '&:hover': { bgcolor: '#F3F3F3' }
+        }
+
+        const NormalStyle = {
+            border: '1px solid rgba(77,77,77,.3)',
+        }
+
+        const handleCopyToClipboard = (text) => {
+            navigator.clipboard.writeText(text)
+            setIsCopyText("已拷贝！")
+            setTimeout(() => { setIsCopyText("拷贝") }, 500)
+        }
+
         return (
             <Card sx={{ m: 2, py: 2, px: 2 }}>
                 <CardHeader
@@ -587,27 +613,49 @@ export const Profilepage = () => {
                             您的地址
                         </Typography>
                     }
+                    subheader={"请点击以下的资料，他会自动拷贝你所想要的信息"}
                 />
                 <CardContent>
-                    <TableContainer component={Paper}>
-                        <Table size="medium" aria-label="addresses table">
+                    <TableContainer
+                        component={Paper}
+                        sx={{}}
+                    >
+                        <Table size="small" aria-label="addresses table">
                             <TableBody>
-                                <TableRow key={"Contact Person"}>
-                                    <TableCell component="th" scope="row" sx={{ width: '20%', fontWeight: 600 }}> 联络人员: </TableCell>
-                                    <TableCell align="left">({UserCode})EZ转运KU倉</TableCell>
-                                </TableRow>
+                                <Tooltip title={isCopyText} placement="top" arrow>
+                                    <TableRow key={"Contact Person"} onClick={() => handleCopyToClipboard('雅威(10001KCH)')}>
+                                        <TableCell component="th" scope="row" sx={{ ...TitleStyle }} > 收货人: </TableCell>
+                                        <TableCell align="left" sx={{ ...CopyableStyle }}>雅威(10001KCH)</TableCell>
+                                    </TableRow>
+                                </Tooltip>
                                 <TableRow key={"Address"}>
-                                    <TableCell component="th" scope="row" sx={{ width: '20%', fontWeight: 600 }}> 仓库地址: </TableCell>
-                                    <TableCell align="left">广东省东莞市虎门镇赤岗村赤岗路69号101新艺工业园1号仓KU倉 {UserCode} (轉會員weiyee)</TableCell>
+                                    <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 收货时间: </TableCell>
+                                    <TableCell align="left" sx={{ ...NormalStyle }}>星期日 - 星期五 8.30 - 17.30</TableCell>
                                 </TableRow>
-                                <TableRow key={"Contact Number"}>
-                                    <TableCell component="th" scope="row" sx={{ width: '20%', fontWeight: 600 }}> 电话号码: </TableCell>
-                                    <TableCell align="left">13532819695</TableCell>
-                                </TableRow>
-                                <TableRow key={"Postcode"}>
-                                    <TableCell component="th" scope="row" sx={{ width: '20%', fontWeight: 600 }}> 邮政编码: </TableCell>
-                                    <TableCell align="left">523900</TableCell>
-                                </TableRow>
+                                <Tooltip title={isCopyText} placement="top" arrow>
+                                    <TableRow key={"Collection Time"} onClick={() => handleCopyToClipboard('广东省东莞市虎门镇赤岗村赤岗路69号新艺工业园1号90雅威国际物流' + profile.UserCode + profile.AreaCode)}>
+                                        <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 仓库地址: </TableCell>
+                                        <TableCell align="left" sx={{ ...CopyableStyle }}>广东省东莞市虎门镇赤岗村赤岗路69号新艺工业园1号90雅威国际物流{profile.UserCode}{profile.AreaCode}</TableCell>
+                                    </TableRow>
+                                </Tooltip>
+                                <Tooltip title={isCopyText} placement="top" arrow>
+                                    <TableRow key={"Contact Number"} onClick={() => handleCopyToClipboard('13532819695')}>
+                                        <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 电话号码: </TableCell>
+                                        <TableCell align="left" sx={{ ...CopyableStyle }}>13532819695</TableCell>
+                                    </TableRow>
+                                </Tooltip>
+                                <Tooltip title={isCopyText} placement="top" arrow>
+                                    <TableRow key={"Postcode"} onClick={() => handleCopyToClipboard('523900')}>
+                                        <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 邮政编码: </TableCell>
+                                        <TableCell align="left" sx={{ ...CopyableStyle }}>523900</TableCell>
+                                    </TableRow>
+                                </Tooltip>
+                                <Tooltip title={isCopyText} placement="top" arrow>
+                                    <TableRow key={"RefNo"} onClick={() => handleCopyToClipboard(profile.UserCode + profile.AreaCode)}>
+                                        <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 代号: </TableCell>
+                                        <TableCell align="left" sx={{ ...CopyableStyle }}>({profile.UserCode + profile.AreaCode})</TableCell>
+                                    </TableRow>
+                                </Tooltip>
                             </TableBody>
                         </Table>
                     </TableContainer>
