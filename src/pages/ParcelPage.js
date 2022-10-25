@@ -9,8 +9,10 @@ import Pagination from '@mui/material/Pagination';
 import SearchBar from "../components/SearchBar/SearchBar";
 import LoadingPanel from "../components/LoadingPanel/LoadingPanel";
 import EmptyBox from "../assets/empty-box.png"
+import useAuth from "../hooks/useAuth";
 
 export const ParcelPage = () => {
+    const { auth, setAuth } = useAuth()
 
     const { userParcel, setting } = useSelector(state => ({
         userParcel: state.counterReducer.parcelStatus,
@@ -28,7 +30,7 @@ export const ParcelPage = () => {
     useEffect(() => {
         dispatch(GitAction.CallGetParcelStatus({ trackingNumber: localStorage.getItem("user") !== undefined ? "and UserID=" + JSON.parse(localStorage.getItem("user")).UserID : "and UserID=" + 1 }))
         dispatch(GitAction.CallGetGeneralSetting({ UserID: localStorage.getItem("user") !== undefined ? JSON.parse(localStorage.getItem("user")).UserID : 1 }))
-        setUserCode(localStorage.getItem("user") !== undefined && JSON.parse(localStorage.getItem("user")).UserCode )
+        setUserCode(localStorage.getItem("user") !== undefined && JSON.parse(localStorage.getItem("user")).UserCode)
     }, [])
 
     const layoutStyle = { fontWeight: "600", fontSize: "10pt", color: "#253949", letterSpacing: 1 }
@@ -55,14 +57,16 @@ export const ParcelPage = () => {
 
 
     const handleChange = (event, newValue) => {
+
+
         if (newValue === 0) {
             dispatch(GitAction.CallGetParcelStatus({ trackingNumber: localStorage.getItem("user") !== undefined ? "and UserID=" + JSON.parse(localStorage.getItem("user")).UserID : "and UserID=" + 1 }))
 
             // dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + localStorage.getItem("user") !== undefined ? JSON.parse(localStorage.getItem("user")).UserID : 1 }))
-            setUserCode(localStorage.getItem("user") !== undefined && JSON.parse(localStorage.getItem("user")).UserCode )
+            setUserCode(localStorage.getItem("user") !== undefined && JSON.parse(localStorage.getItem("user")).UserCode)
         }
         else {
-            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserCode=(SELECT [SettingValue] FROM.[dbo].[T_General_Setting] WHERE  [SettingID] = 1)"  }))
+            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserCode=(SELECT [SettingValue] FROM.[dbo].[T_General_Setting] WHERE  [SettingID] = 1)" }))
             setUserCode(unKnownUserCode)
         }
         setValue(newValue);
@@ -84,7 +88,7 @@ export const ParcelPage = () => {
             >
                 {value === index && (
                     <Box sx={{ p: 3 }}>
-                        <Typography>{children}</Typography>
+                        <div>{children}</div>
                     </Box>
                 )}
             </div>
@@ -157,7 +161,7 @@ export const ParcelPage = () => {
                                 checkUserParcel(statusID).map((data, index) => {
                                     return (
                                         index > ((page - 1) * pageSize) - 1 && index < (page * pageSize) &&
-                                        <Grid item md={6} xs={12} sm={12} >
+                                        <Grid item md={6} xs={12} sm={12} key={"parcellayout_" + index}>
                                             <Card>
                                                 <CardContent>
                                                     <Grid container spacing={2}>
@@ -204,7 +208,7 @@ export const ParcelPage = () => {
                                         {
                                             CheckUser(UserCode).map((data, index) => {
                                                 return (
-                                                    <Grid item md={6} xs={12} sm={6}>
+                                                    <Grid item md={6} xs={12} sm={6} key={"parcellayout_" + index}>
                                                         <Card>
                                                             <CardContent>
                                                                 <Typography style={layoutStyle}># {index + 1}</Typography>
@@ -234,14 +238,14 @@ export const ParcelPage = () => {
                                         orientation="vertical" sx={{ borderRight: 1, borderColor: 'divider' }} variant="scrollable">
                                         {
                                             parcelStatus.length > 0 && parcelStatus.map((x, index) => {
-                                                return (<Tab label={x.ContainerStatusCN} {...a11yProps(x.ContainerStatusID)} />)
+                                                return (<Tab key={"status_" + index} label={x.ContainerStatusCN} {...a11yProps(x.ContainerStatusID)} />)
                                             })
                                         }
                                     </Tabs>
                                 </Box>
                                 {
                                     parcelStatus.length > 0 && parcelStatus.map((x, index) => {
-                                        return (<TabPanel style={{ width: "100%" }} value={parcelValue} index={x.ContainerStatusID}>  {userParcelLayout(x.ContainerStatusID)}  </TabPanel>)
+                                        return (<TabPanel key={"status_" + index} style={{ width: "100%" }} value={parcelValue} index={x.ContainerStatusID}>  {userParcelLayout(x.ContainerStatusID)}  </TabPanel>)
                                     })
                                 }
                             </Box>
