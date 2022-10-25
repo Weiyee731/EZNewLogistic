@@ -27,7 +27,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
-import { isStringNullOrEmpty, isArrayNotEmpty } from "../../Repository/Helper"
+import { isStringNullOrEmpty, isArrayNotEmpty, getWindowDimensions } from "../../Repository/Helper"
 import LoginWallpaper from "../../assets/login-wallpaper.jpg"
 import './Loginpage.css';
 
@@ -72,6 +72,7 @@ export const Loginpage = () => {
     const [isLoginInvalidInput, setIsLoginInvalidInput] = useState(null)
     const [openRegistrationModal, setOpenRegistrationModal] = useState(false)
     const [openPasswordRecoveryModal, setOpenPasswordRecoveryModal] = useState(false)
+    const [recoveryEmail, setRecoveryEmail] = useState('')
     /* PLACE YOUR HOOKS HERE */
 
     // init()
@@ -310,12 +311,16 @@ export const Loginpage = () => {
     return (
         <div className="container">
             <Grid container spacing={2}>
-                <Grid item md={6}>
-                    <div className="login-wallpaper" style={{ backgroundImage: `url(${LoginWallpaper})`, }}>
-                        {/* <img src={LoginWallpaper} alt='loginpage--wallpaper' width={'100%'} height={'100%'} /> */}
-                    </div>
-                </Grid>
-                <Grid item md={6} sx={{ display: 'flex', p: 1, }}>
+                {
+                    getWindowDimensions().screenWidth >= 768 &&
+                    <Grid item md={6} xs={12}>
+                        <div className="login-wallpaper" style={{ backgroundImage: `url(${LoginWallpaper})`, }}>
+                            {/* <img src={LoginWallpaper} alt='loginpage--wallpaper' width={'100%'} height={'100%'} /> */}
+                        </div>
+                    </Grid>
+                }
+
+                <Grid item md={6} xs={12} sx={{ display: 'flex', p: 1, }}>
                     <div className="login-panel">
                         <div className="logo-container">
 
@@ -370,14 +375,18 @@ export const Loginpage = () => {
                                 </Button>
                         }
 
-                        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                            <Link href="#" underline="always" style={{ color: "#0074D9" }} onClick={() => handleModal(REGISTRATION, true)}>
-                                新来的? 点击这里来注册个账号吧! 
-                            </Link>
-                            {/* <Link href="#" underline="hover" style={{ color: "#323232" }} onClick={() => handleModal(PASSWORD_RECOVERY, true)}>
-                                亲，忘记了密码了嘛？点这里
-                            </Link> */}
-                        </Stack>
+                        <div className="account-manager">
+                            <p>
+                                <Link href="#" underline="always" style={{ color: "#0074D9" }} onClick={() => handleModal(REGISTRATION, true)}>
+                                    新来的? 点这里注册个账号吧!
+                                </Link>
+                            </p>
+                            <p>
+                                <Link href="#" underline="hover" style={{ color: "#323232" }} onClick={() => handleModal(PASSWORD_RECOVERY, true)}>
+                                    亲，忘记了密码了吗?
+                                </Link>
+                            </p>
+                        </div>
                     </div>
                 </Grid>
             </Grid>
@@ -432,7 +441,7 @@ export const Loginpage = () => {
                             label="Password"
                             required
                             error={isStringNullOrEmpty(signupAccount.PASSWORD)}
-                            helperText={isStringNullOrEmpty(signupAccount.PASSWORD) ? "您必须填写你的密码, 请确保密码是由8个字母与以上所组成" : ''}
+                            helpertext={isStringNullOrEmpty(signupAccount.PASSWORD) ? "您必须填写你的密码, 请确保密码是由8个字母与以上所组成" : ''}
                         />
                     </FormControl>
 
@@ -497,6 +506,48 @@ export const Loginpage = () => {
                     {
                         !isFormSubmitting ?
                             <Button sx={{ mx: 2, my: 1 }} onClick={handleRegistration} variant="contained" fullWidth> Submit </Button>
+                            :
+                            <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mx: 2, my: 1 }}>
+                                A Moment ...
+                            </Button>
+                    }
+                </DialogActions>
+            </Dialog>
+            {/* Registration Form | Modal */}
+
+            {/* Registration Form | Modal */}
+            <Dialog scroll="paper" open={openPasswordRecoveryModal} onClose={() => handleModal(PASSWORD_RECOVERY, false)} aria-labelledby="password-recovery-title" aria-describedby="password-recovery-description" >
+                <DialogTitle id="password-recovery-title">
+                    {"Recover Your Account"}
+                    <IconButton
+                        aria-label="close"
+                        onClick={() => handleModal(PASSWORD_RECOVERY, false)}
+                        sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500], }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        To recover your account and password, please enter your email.
+                    </DialogContentText>
+                    <TextField id="registration--fullname"
+                        value={recoveryEmail}
+                        onChange={(event) => { handleInputChange("RECOVERY-EMAIL", event) }}
+                        label="Email Address"
+                        fullWidth
+                        variant="filled"
+                        size="small"
+                        sx={{ my: 1 }}
+                        required
+                        error={isStringNullOrEmpty(recoveryEmail)}
+                        helperText={isStringNullOrEmpty(recoveryEmail) ? "您必须填写你的电子邮件" : ''}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    {
+                        !isFormSubmitting ?
+                            <Button sx={{ mx: 2, my: 1 }} onClick={handleRegistration} variant="contained" fullWidth> Recovery Your Account </Button>
                             :
                             <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mx: 2, my: 1 }}>
                                 A Moment ...
