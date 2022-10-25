@@ -33,7 +33,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import Tooltip from '@mui/material/Tooltip';
 import TextField from '@mui/material/TextField';
-import FormHelperText from '@mui/material/FormHelperText';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Chip from '@mui/material/Chip';
+
 import { styled } from '@mui/material/styles';
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -102,7 +107,7 @@ export const Profilepage = () => {
         }
 
         return (
-            <Paper sx={{ maxWidth: '90%', width: '100%', mx: 3, my: 2, py: 2 }}>
+            <Paper sx={{ maxWidth: '90%', width: '100%',  my: 2, py: 2 }}>
                 <Typography variant="h5" component="p" sx={{ fontWeight: 600, textAlign: 'center' }}>目录</Typography>
                 <MenuList>
                     <Divider />
@@ -184,7 +189,7 @@ export const Profilepage = () => {
 
         return (
 
-            <Card sx={{ m: 2, py: 3, px: 2 }}>
+            <Card sx={{ py: 3, px: 2 }}>
                 <CardHeader
                     title={
                         <Grid container>
@@ -530,17 +535,24 @@ export const Profilepage = () => {
         )
     }
 
-    const NotificationModule = () => {
+    const NotificationAccordion = () => {
+        const [expanded, setExpanded] = useState(false)
+
         return (
-            <Card sx={{ m: 2, py: 2, px: 2 }}>
-                <CardHeader
-                    title={
-                        <Typography variant="h6" component="h6" sx={{ fontWeight: 600 }}>
-                            最新资讯
-                        </Typography>
-                    }
-                />
-                <CardContent>
+            <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} sx={{ my: 2, }}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="notification-content"
+                    id="panel1bh-header"
+                    sx={{ display: 'flex' }}
+                >
+
+                    <Typography sx={{ flexShrink: 0, fontWeight: 600, my: 'auto', mr: 2 }}>
+                        最新资讯
+                    </Typography>
+                    {viewNotification && <Chip size="small" color="warning" sx={{ my: 'auto', minWidth: '50px' }} label={viewNotification.length} />}
+                </AccordionSummary>
+                <AccordionDetails>
                     {viewNotification && viewNotification.length > 0 ? viewNotification.map((item, index) => {
                         return (
                             <NotificationView
@@ -556,9 +568,12 @@ export const Profilepage = () => {
                             No notification for the moment / 目前没有任何通告
                         </div>
                     }
-                </CardContent>
-            </Card>
+
+                </AccordionDetails>
+            </Accordion>
+
         )
+
     }
 
     const AddressManager = () => {
@@ -624,7 +639,7 @@ export const Profilepage = () => {
         }
 
         return (
-            <Card sx={{ m: 2, py: 2, px: 2 }}>
+            <Card sx={{ py: 2, px: 2 }}>
                 <CardHeader
                     title={
                         <Typography variant="h6" component="h6" sx={{ fontWeight: 600 }}>
@@ -774,7 +789,7 @@ export const Profilepage = () => {
         }
 
         return (
-            <Card sx={{ m: 2, py: 3, px: 2 }}>
+            <Card sx={{ py: 3, px: 2 }}>
                 <CardHeader
                     title={
                         <Typography variant="h6" component="h6" sx={{ fontWeight: 600 }}>
@@ -849,7 +864,7 @@ export const Profilepage = () => {
                 return (
                     <>
                         <UserProfile />
-                        <NotificationModule />
+                        <NotificationAccordion />
                         <AddressManager />
                     </>
                 )
@@ -868,13 +883,13 @@ export const Profilepage = () => {
     }
 
     return (
-        <div style={{ minHeight: '70vh', padding: '1rem 0rem', maxWidth: '1196px', display: 'flex', marginLeft: 'auto', marginRight: 'auto' }}>
+        <div className="user-profile--container thin-scrollbar" style={{ minHeight: '70vh', padding: '1rem 0rem', maxWidth: '1200px', display: 'flex', marginLeft: 'auto', marginRight: 'auto' }}>
             <Grid container spacing={1}>
                 <Grid item xs={12} md={3} >
                     {renderSideMenu()}
                 </Grid>
 
-                <Grid item xs={12} md={9} sx={(getWindowDimensions().screenWidth >= 768) ? { maxHeight: '70vh', overflowY: 'auto' } : {}}>
+                <Grid item xs={12} md={9} sx={(getWindowDimensions().screenWidth >= 768) ? { maxHeight: '70vh', overflowY: 'auto', my: 2 } : {}}>
                     {renderPageModule(currentPage)}
                 </Grid>
             </Grid>

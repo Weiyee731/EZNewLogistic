@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.MuiPaper-root-MuiAccordion-root.Mui-expanded {
+  margin: 0 !important;
+}

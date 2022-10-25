@@ -12,7 +12,7 @@ export const NotificationView = ({ title, message, type, date }) => {
                 borderColor: "#023047",
                 borderStyle: "solid",
                 borderRadius: "10px",
-                padding: "20px",
+                padding: "10px",
                 margin: "10px 0px 10px 0px",
             }}
         >
