@@ -396,7 +396,7 @@ export const Loginpage = () => {
             {/* Registration Form | Modal */}
             <Dialog scroll="paper" open={openRegistrationModal} onClose={() => handleModal(REGISTRATION, false)} aria-labelledby="registration-title" aria-describedby="registration-description" >
                 <DialogTitle id="registration-title">
-                    {"Register New Account"}
+                    注册个人账号
                     <IconButton
                         aria-label="close"
                         onClick={() => handleModal(REGISTRATION, false)}
@@ -407,12 +407,12 @@ export const Loginpage = () => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        To register a new account into our system, we may require your basic personal information.
+                        我们需要您的个人讯息，以便我们方便联络您
                     </DialogContentText>
                     <TextField id="registration--fullname"
                         value={signupAccount.FULLNAME}
                         onChange={(event) => { handleInputChange("REGISTRATION-FULLNAME", event) }}
-                        label="Full Name"
+                        label="您的全名"
                         fullWidth
                         variant="filled"
                         size="small"
@@ -421,11 +421,11 @@ export const Loginpage = () => {
                         error={isStringNullOrEmpty(signupAccount.FULLNAME)}
                         helperText={isStringNullOrEmpty(signupAccount.FULLNAME) ? "您必须填写你的名字" : ''}
                     />
-                    <TextField id="registration--nickname" value={signupAccount.USERNICKNAME} onChange={(event) => { handleInputChange("REGISTRATION-NICKNAME", event) }} label="Nick Name (Optional)" fullWidth variant="filled" size="small" sx={{ my: 1 }} />
+                    <TextField id="registration--nickname" value={signupAccount.USERNICKNAME} onChange={(event) => { handleInputChange("REGISTRATION-NICKNAME", event) }} label="昵称" fullWidth variant="filled" size="small" sx={{ my: 1 }} />
 
-                    <TextField id="registration--username" value={signupAccount.USERNAME} onChange={(event) => { handleInputChange("REGISTRATION-USERNAME", event) }} label="Username" fullWidth variant="filled" required size="small" sx={{ my: 1 }} />
+                    <TextField id="registration--username" value={signupAccount.USERNAME} onChange={(event) => { handleInputChange("REGISTRATION-USERNAME", event) }} label="账户户口" fullWidth variant="filled" required size="small" sx={{ my: 1 }} />
                     <FormControl sx={{ width: '100%', my: 1 }} variant="outlined" required size="small" >
-                        <InputLabel htmlFor="registration--password">Password</InputLabel>
+                        <InputLabel htmlFor="registration--password">账户密码</InputLabel>
                         <FilledInput
                             id="registration--password"
                             type={showRegistrationPassword ? 'text' : 'password'}
@@ -446,12 +446,12 @@ export const Loginpage = () => {
                     </FormControl>
 
                     <FormControl sx={{ width: '100%', my: 1 }} variant="filled" size="small" >
-                        <InputLabel id="area-code--select">Area Code</InputLabel>
+                        <InputLabel id="area-code--select">住址地区</InputLabel>
                         <Select
                             labelId="area-code--select"
                             id="area-code--select--dropdown"
                             value={signupAccount.USERAREAID}
-                            label="Area Code"
+                            label="住址地区"
                             onChange={(event) => { handleInputChange("REGISTRATION-AREACODE", event) }}
                         >
                             {
@@ -463,13 +463,12 @@ export const Loginpage = () => {
                                     <MenuItem disabled><i>There is no Area Code to Select</i></MenuItem>
                             }
                         </Select>
-                        <FormHelperText>The area code is represent your residental area</FormHelperText>
                     </FormControl>
                     <TextField
                         id="registration--contact"
                         value={signupAccount.CONTACTNO}
                         onChange={(event) => { handleInputChange("REGISTRATION-CONTACTNO", event) }}
-                        label="Contact Number"
+                        label="电话号码"
                         fullWidth
                         variant="filled"
                         size="small"
@@ -482,7 +481,7 @@ export const Loginpage = () => {
                         id="registration--email"
                         value={signupAccount.USEREMAIL}
                         onChange={(event) => { handleInputChange("REGISTRATION-EMAIL", event) }}
-                        label="Email Address"
+                        label="电子邮件"
                         fullWidth
                         variant="filled"
                         size="small"
@@ -495,7 +494,7 @@ export const Loginpage = () => {
                         id="registration--wechatid"
                         value={signupAccount.USERWECHATID}
                         onChange={(event) => { handleInputChange("REGISTRATION-WECHATID", event) }}
-                        label="WeChat ID"
+                        label="微信"
                         fullWidth
                         variant="filled"
                         size="small"
@@ -505,10 +504,10 @@ export const Loginpage = () => {
                 <DialogActions>
                     {
                         !isFormSubmitting ?
-                            <Button sx={{ mx: 2, my: 1 }} onClick={handleRegistration} variant="contained" fullWidth> Submit </Button>
+                            <Button sx={{ mx: 2, my: 1 }} onClick={handleRegistration} variant="contained" fullWidth> 注册账号 </Button>
                             :
                             <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mx: 2, my: 1 }}>
-                                A Moment ...
+                                请稍等 ...
                             </Button>
                     }
                 </DialogActions>
@@ -518,7 +517,7 @@ export const Loginpage = () => {
             {/* Registration Form | Modal */}
             <Dialog scroll="paper" open={openPasswordRecoveryModal} onClose={() => handleModal(PASSWORD_RECOVERY, false)} aria-labelledby="password-recovery-title" aria-describedby="password-recovery-description" >
                 <DialogTitle id="password-recovery-title">
-                    {"Recover Your Account"}
+                    索回您的账户
                     <IconButton
                         aria-label="close"
                         onClick={() => handleModal(PASSWORD_RECOVERY, false)}
@@ -529,12 +528,12 @@ export const Loginpage = () => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        To recover your account and password, please enter your email.
+                        请输入您的电子邮件来索取您的账户
                     </DialogContentText>
-                    <TextField id="registration--fullname"
+                    <TextField id="recovery-email"
                         value={recoveryEmail}
                         onChange={(event) => { handleInputChange("RECOVERY-EMAIL", event) }}
-                        label="Email Address"
+                        label="电子邮件"
                         fullWidth
                         variant="filled"
                         size="small"
@@ -547,10 +546,10 @@ export const Loginpage = () => {
                 <DialogActions>
                     {
                         !isFormSubmitting ?
-                            <Button sx={{ mx: 2, my: 1 }} onClick={handleRegistration} variant="contained" fullWidth> Recovery Your Account </Button>
+                            <Button sx={{ mx: 2, my: 1 }} onClick={handleRegistration} variant="contained" fullWidth> 索取您的账户 </Button>
                             :
                             <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mx: 2, my: 1 }}>
-                                A Moment ...
+                                请稍等 ...
                             </Button>
                     }
                 </DialogActions>
