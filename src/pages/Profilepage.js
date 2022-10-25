@@ -48,7 +48,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import useAuth from "../hooks/useAuth";
 import { toast } from 'react-toastify'
-import { isArrayNotEmpty, isObjectUndefinedOrNull, isStringNullOrEmpty } from '../tools/Helpers'
+import { isArrayNotEmpty, isObjectUndefinedOrNull, isStringNullOrEmpty, getWindowDimensions } from '../tools/Helpers'
 import { ParcelPage } from "./ParcelPage";
 import { NotificationView } from "../components/NotificationView";
 
@@ -102,7 +102,7 @@ export const Profilepage = () => {
         }
 
         return (
-            <Paper sx={{ maxWidth: '90%', width: '300px', mx: 3, my: 2, py: 2 }}>
+            <Paper sx={{ maxWidth: '90%', width: '100%', mx: 3, my: 2, py: 2 }}>
                 <Typography variant="h5" component="p" sx={{ fontWeight: 600, textAlign: 'center' }}>目录</Typography>
                 <MenuList>
                     <Divider />
@@ -187,17 +187,18 @@ export const Profilepage = () => {
             <Card sx={{ m: 2, py: 3, px: 2 }}>
                 <CardHeader
                     title={
-                        <div style={{ display: 'flex' }}>
-                            <Typography variant="h6" component="h6" sx={{ fontWeight: 600, mr: 2, my: 'auto' }}>
-                                {profile && profile.Fullname}
-                            </Typography>
-                            <Typography variant="h5" component="h5" sx={{ fontWeight: 600, my: 'auto', mr: 1, color: '#0073DF' }}>
-                                ( 会员号:{profile && profile.UserCode} )
-                            </Typography>
-                            <Typography variant="h5" component="h5" sx={{ fontWeight: 600, my: 'auto', color: '#0073DF' }}>
-                                [ {profile && profile.AreaCode} ]
-                            </Typography>
-                        </div>
+                        <Grid container>
+                            <Grid item xs={12} lg={'auto'}>
+                                <Typography variant="h6" component="p" sx={{ fontWeight: 600, mr: 2 }}>
+                                    {profile && profile.Fullname}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} lg={3}>
+                                <Typography variant="h6" component="p" sx={{ fontWeight: 600, color: '#0073DF' }}>
+                                    ( 会员号:{profile && profile.UserCode} )[{profile && profile.AreaCode}]
+                                </Typography>
+                            </Grid>
+                        </Grid>
                     }
                     subheader="这是你的个人资料板，请您慢用。"
                     action={
@@ -211,54 +212,54 @@ export const Profilepage = () => {
                         <CardContent sx={{ width: '100%', padding: 0 }}>
                             <Grid container rowSpacing={2} columnSpacing={3} >
                                 <Grid item xs={12}>
-                                    <Typography variant="h6" component="p" sx={{ fontWeight: 600 }}>
+                                    <Typography variant="subtitle" component="p" sx={{ fontWeight: 600 }}>
                                         您的个人资料
                                     </Typography>
                                 </Grid>
 
-                                <Grid item xs={6}>
+                                <Grid item xs={12} md={6}>
                                     <Item>
                                         户口: <b style={{ fontSize: 16, color: '#0073DF' }}>{profile.Username}</b>
                                     </Item>
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} md={6}>
                                     <Item>
                                         户口状态: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.UserStatus}</b>
                                     </Item>
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} md={6}>
                                     <Item>
                                         姓名: <b>{profile.Fullname}</b>
                                     </Item>
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} md={6}>
                                     <Item>
                                         昵称: <b>{profile.UserNickname}</b>
                                     </Item>
                                 </Grid>
 
-                                <Grid item xs={3}>
+                                <Grid item xs={12} md={3}>
                                     <Item>
                                         地区: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.AreaCode}</b>
                                     </Item>
                                 </Grid>
-                                <Grid item xs={9}>
+                                <Grid item xs={12} md={9}>
                                     <Item>
                                         地址: <b>{profile.UserAddress}</b>
                                     </Item>
                                 </Grid>
 
-                                <Grid item xs={4}>
+                                <Grid item xs={12} md={6} lg={4} >
                                     <Item>
                                         电话: <b>{profile.UserContactNo}</b>
                                     </Item>
                                 </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={12} md={6} lg={4}>
                                     <Item>
                                         邮件: <b>{profile.UserEmailAddress}</b>
                                     </Item>
                                 </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={12} lg={4}>
                                     <Item>
                                         微信: <b>{profile.UserWechatID}</b>
                                     </Item>
@@ -323,7 +324,9 @@ export const Profilepage = () => {
                         draggable: false,
                         theme: "colored",
                     })
-                    dispatch(GitAction.CallFetchUserProfileByID({ UserID: profile.UserID }))
+
+                    if (!isObjectUndefinedOrNull(profile))
+                        dispatch(GitAction.CallFetchUserProfileByID({ UserID: profile.UserID }))
                     setTimeout(() => { setAccountInfo(null) }, 300)
                 }
                 else {
@@ -598,7 +601,7 @@ export const Profilepage = () => {
         }
 
         const TitleStyle = {
-            width: '20%',
+            width: '30%',
             fontWeight: 600,
             bgcolor: '#F3F3F3',
             border: '1px solid rgba(77,77,77,.3)'
@@ -735,7 +738,7 @@ export const Profilepage = () => {
         }
 
         const handleChangePassword = () => {
-            let validPassword = (!isStringNullOrEmpty(newPassword)  && confirmPassword === newPassword)
+            let validPassword = (!isStringNullOrEmpty(newPassword) && confirmPassword === newPassword)
             if (validPassword) {
                 let LogonUser = localStorage.getItem("user")
                 try {
@@ -793,7 +796,7 @@ export const Profilepage = () => {
                     }
 
                     <div>
-                        <FormControl sx={{ width: '50%', my: 1 }} variant="outlined" required size="small" >
+                        <FormControl sx={{ width: '80%', my: 1 }} variant="outlined" required size="small" >
                             <InputLabel htmlFor="new-password">新的密码</InputLabel>
                             <FilledInput
                                 id="new-password"
@@ -813,7 +816,7 @@ export const Profilepage = () => {
                         </FormControl>
                     </div>
                     <div>
-                        <FormControl sx={{ width: '50%', my: 1 }} variant="outlined" required size="small" >
+                        <FormControl sx={{ width: '80%', my: 1 }} variant="outlined" required size="small" >
                             <InputLabel htmlFor="confirmation-password">重新输入密码</InputLabel>
                             <FilledInput
                                 id="confirmation-password"
@@ -828,7 +831,7 @@ export const Profilepage = () => {
 
                     {
                         !isFormSubmitting ?
-                            <Button disabled={invalidInput} sx={{ my: 1, width: '50%' }} onClick={handleChangePassword} variant="contained"> 确认更改密码 </Button>
+                            <Button disabled={invalidInput} sx={{ my: 1, width: '80%' }} onClick={handleChangePassword} variant="contained"> 确认更改密码 </Button>
                             :
                             <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '50%', my: 1 }}>
                                 请稍等 ...
@@ -871,7 +874,7 @@ export const Profilepage = () => {
                     {renderSideMenu()}
                 </Grid>
 
-                <Grid item xs={12} md={9} sx={{ maxHeight: '70vh', overflowY: 'auto' }}>
+                <Grid item xs={12} md={9} sx={(getWindowDimensions().screenWidth >= 768) ? { maxHeight: '70vh', overflowY: 'auto' } : {}}>
                     {renderPageModule(currentPage)}
                 </Grid>
             </Grid>
