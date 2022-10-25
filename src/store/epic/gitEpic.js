@@ -137,24 +137,24 @@ export class GitEpic {
       }
     }));
 
-  User_ViewProfileByID = action$ =>
-    action$.pipe(filter(action => action.type === GitAction.GetParcelStatus), map(action => {
-      return dispatch => {
-        try {
-          return fetch(
-            url + "User_ViewProfileByID?USERID=" + action.payload.USERID
-          )
-            .then(response => response.json())
-            .then(json => {
-              json = JSON.parse(json)
-              return dispatch({ type: GitAction.GotParcelStatus, payload: json });
-            });
-        } catch (error) {
-          toast.error("Unable to get the status of your parcel")
-          return dispatch({ type: GitAction.GotParcelStatus, payload: [] });
-        }
-      }
-    }));
+  // User_ViewProfileByID = action$ =>
+  //   action$.pipe(filter(action => action.type === GitAction.GetParcelStatus), map(action => {
+  //     return dispatch => {
+  //       try {
+  //         return fetch(
+  //           url + "User_ViewProfileByID?USERID=" + action.payload.USERID
+  //         )
+  //           .then(response => response.json())
+  //           .then(json => {
+  //             json = JSON.parse(json)
+  //             return dispatch({ type: GitAction.GotParcelStatus, payload: json });
+  //           });
+  //       } catch (error) {
+  //         toast.error("Unable to get the status of your parcel")
+  //         return dispatch({ type: GitAction.GotParcelStatus, payload: [] });
+  //       }
+  //     }
+  //   }));
 
   User_ViewGeneralSetting = action$ =>
     action$.pipe(filter(action => action.type === GitAction.GetGeneralSetting), map(action => {

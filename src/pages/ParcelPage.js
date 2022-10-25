@@ -9,6 +9,8 @@ import Pagination from '@mui/material/Pagination';
 import SearchBar from "../components/SearchBar/SearchBar";
 import LoadingPanel from "../components/LoadingPanel/LoadingPanel";
 import EmptyBox from "../assets/empty-box.png"
+import { isStringNullOrEmpty } from "../tools/Helpers";
+import useAuth from "../hooks/useAuth";
 
 export const ParcelPage = () => {
 
@@ -16,6 +18,7 @@ export const ParcelPage = () => {
         userParcel: state.counterReducer.parcelStatus,
         setting: state.counterReducer.setting,
     }));
+    const { auth } = useAuth()
     const dispatch = useDispatch()
 
     function a11yProps(index) {
@@ -26,9 +29,17 @@ export const ParcelPage = () => {
     }
 
     useEffect(() => {
-        dispatch(GitAction.CallGetParcelStatus({ trackingNumber: localStorage.getItem("user") !== undefined ? "and UserID=" + JSON.parse(localStorage.getItem("user")).UserID : "and UserID=" + 1 }))
-        dispatch(GitAction.CallGetGeneralSetting({ UserID: localStorage.getItem("user") !== undefined ? JSON.parse(localStorage.getItem("user")).UserID : 1 }))
-        setUserCode(localStorage.getItem("user") !== undefined && JSON.parse(localStorage.getItem("user")).UserCode )
+        let LogonUser = localStorage.getItem("user")
+        let LogonUserCode = ""
+
+        if (LogonUser !== undefined) {
+            LogonUserCode = JSON.parse(LogonUser).UserCode
+            LogonUser = JSON.parse(LogonUser).UserID
+
+            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + LogonUser }))
+            dispatch(GitAction.CallGetGeneralSetting({ UserID: LogonUser }))
+            setUserCode(LogonUserCode)
+        }
     }, [])
 
     const layoutStyle = { fontWeight: "600", fontSize: "10pt", color: "#253949", letterSpacing: 1 }
@@ -55,14 +66,21 @@ export const ParcelPage = () => {
 
 
     const handleChange = (event, newValue) => {
-        if (newValue === 0) {
-            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: localStorage.getItem("user") !== undefined ? "and UserID=" + JSON.parse(localStorage.getItem("user")).UserID : "and UserID=" + 1 }))
+        let LogonUser = localStorage.getItem("user")
+        let LogonUserCode = ""
+        if (LogonUser !== undefined) {
+            LogonUserCode = JSON.parse(LogonUser).UserCode
+            LogonUser = JSON.parse(LogonUser).UserID
+        }
 
-            // dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + localStorage.getItem("user") !== undefined ? JSON.parse(localStorage.getItem("user")).UserID : 1 }))
-            setUserCode(localStorage.getItem("user") !== undefined && JSON.parse(localStorage.getItem("user")).UserCode )
+        if (newValue === 0) {
+            if (LogonUser !== undefined) {
+                dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + LogonUser }))
+                setUserCode(LogonUserCode)
+            }
         }
         else {
-            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserCode=(SELECT [SettingValue] FROM.[dbo].[T_General_Setting] WHERE  [SettingID] = 1)"  }))
+            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserCode=(SELECT [SettingValue] FROM.[dbo].[T_General_Setting] WHERE  [SettingID] = 1)" }))
             setUserCode(unKnownUserCode)
         }
         setValue(newValue);
@@ -152,32 +170,28 @@ export const ParcelPage = () => {
                 </Grid>
                 {
                     checkUserParcel(statusID).length > 0 ?
-                        <Grid container spacing={2}>
-                            {
-                                checkUserParcel(statusID).map((data, index) => {
-                                    return (
-                                        index > ((page - 1) * pageSize) - 1 && index < (page * pageSize) &&
-                                        <Grid item md={6} xs={12} sm={12} >
-                                            <Card>
-                                                <CardContent>
-                                                    <Grid container spacing={2}>
-                                                        <Grid item md={6} xs={12} sm={6}>
-                                                            <Typography style={layoutStyle}>物流信息：{data.CourierName}  {data.TrackingNumber}</Typography>
-                                                            <Typography style={layoutStyle}>包裹名称：{data.Item}</Typography>
-                                                            <Typography style={layoutStyle}>包裹状态：{data.StockStatus}</Typography>
-                                                        </Grid>
-                                                        <Grid item md={6} xs={12} sm={6}>
-                                                            <Typography style={layoutStyle}>包裹尺寸：{data.ProductDimensionDeep + "cm x " + data.ProductDimensionHeight + "cm x " + data.ProductDimensionWidth + "cm"}</Typography>
-                                                            <Typography style={layoutStyle}>包裹重量：{data.ProductWeight + "kg"}</Typography>
-                                                        </Grid>
-                                                    </Grid>
-                                                </CardContent>
-                                            </Card>
-                                        </Grid>
-                                    )
-                                })
-                            }
-                        </Grid >
+                        checkUserParcel(statusID).map((data, index) => {
+                            return (
+                                index > ((page - 1) * pageSize) - 1 && index < (page * pageSize) &&
+                                <div className="row" style={{ paddingTop: "10pt" }}>
+                                    <Card>
+                                        <CardContent>
+                                            <Grid container spacing={2}>
+                                                <Grid item md={6} xs={12} sm={6}>
+                                                    <Typography style={layoutStyle}>物流信息：{data.CourierName}  {data.TrackingNumber}</Typography>
+                                                    <Typography style={layoutStyle}>包裹名称：{data.Item}</Typography>
+                                                    <Typography style={layoutStyle}>包裹状态：{data.StockStatus}</Typography>
+                                                </Grid>
+                                                <Grid item md={6} xs={12} sm={6}>
+                                                    <Typography style={layoutStyle}>包裹尺寸：{data.ProductDimensionDeep + "cm x " + data.ProductDimensionHeight + "cm x " + data.ProductDimensionWidth + "cm"}</Typography>
+                                                    <Typography style={layoutStyle}>包裹重量：{data.ProductWeight + "kg"}</Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            )
+                        })
                         :
                         <div style={{ textAlign: "center" }}>
                             <img src={EmptyBox} style={{ height: "150pt" }}></img>
@@ -197,14 +211,14 @@ export const ParcelPage = () => {
                             CheckUser(UserCode).length > 0 ?
                                 <>
                                     <div className="row">
-                                        <Typography style={{ fontSize: "14pt", color: "#253949", letterSpacing: 1 }}>如有属于您的快递单号包裹可截图快递物流信息联系我们的客服</Typography>
+                                        <Typography style={{ fontSize: "12pt", color: "#253949", letterSpacing: 1 }}>如有属于您的快递单号包裹可截图快递物流信息联系我们的客服</Typography>
                                         <Typography style={{ fontWeight: "600", fontSize: "10pt", color: "#253949", letterSpacing: 1, paddingBottom: "10pt" }}>注意： 如包裹超过3个月无人认领，公司会自行处理包裹，不做另行通知</Typography>
                                     </div>
                                     <Grid container spacing={2}>
                                         {
                                             CheckUser(UserCode).map((data, index) => {
                                                 return (
-                                                    <Grid item md={6} xs={12} sm={6}>
+                                                    <Grid item md={6} xs={12} sm={12}>
                                                         <Card>
                                                             <CardContent>
                                                                 <Typography style={layoutStyle}># {index + 1}</Typography>
@@ -241,6 +255,7 @@ export const ParcelPage = () => {
                                 </Box>
                                 {
                                     parcelStatus.length > 0 && parcelStatus.map((x, index) => {
+
                                         return (<TabPanel style={{ width: "100%" }} value={parcelValue} index={x.ContainerStatusID}>  {userParcelLayout(x.ContainerStatusID)}  </TabPanel>)
                                     })
                                 }
@@ -252,7 +267,7 @@ export const ParcelPage = () => {
     }
 
     return (
-        <div className="container">
+        <div className="container" style={{ padding: "15pt" }}>
             {
                 UserCode !== unKnownUserCode &&
                 <SearchBar

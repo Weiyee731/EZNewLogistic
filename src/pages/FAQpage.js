@@ -52,13 +52,7 @@ export const FAQpage = () => {
                 {
                     DetailID: 2, DetailTitle: " 海运计算方式?", DetailsDesc:
                     {
-                        // type: "list",
                         type: "customise",
-                        // data: [
-                        //     { item: "海运费 (古晋自提) 是以单件立方计算" }, { item: "计算法： 长(m) X 高(m) X 宽(m)" },
-                        //     { item: "例子：0.56m X 0.35m X 1.08m = 1.222m3" }, { item: "若货物体积小过 0.01m3 为小包裹，RM4/件" }
-                        //     , { item: "若 1 立方 (m3) 单个 货物重量是 500公斤以上将会用以下计算方式" }, { item: "计算法： 实重/500 = m3，例子：600kg / 500kg = 1.2m3" }
-                        // ]
                     }
                 },
                 { DetailID: 3, DetailTitle: " 海运时效", DetailsDesc: "21-25 工作日" },
