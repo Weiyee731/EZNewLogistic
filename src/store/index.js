@@ -11,7 +11,7 @@ const rootEpic = combineEpics(
   gitEpic.User_ViewAreaCode,
   gitEpic.Notification_ViewNotification,
   gitEpic.Inventory_ViewStockByFilter,
-  gitEpic.User_ViewProfileByID,
+  // gitEpic.User_ViewProfileByID,
   gitEpic.User_UpdateUserPassword,
   gitEpic.Inventory_ViewStockByFilter2,
   gitEpic.User_ViewGeneralSetting,

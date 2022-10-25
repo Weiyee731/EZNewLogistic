@@ -19,7 +19,7 @@ export default function Homepage() {
     const dispatch = useDispatch()
 
     const [trackingNumber, setTrackingNumber] = useState("");
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const theme = useTheme();
 
     const handleOpenClose = () => {
@@ -136,9 +136,10 @@ export default function Homepage() {
                             Search
                         </Button>
                     </div>
-                    {parcelStatus && parcelStatus.length > 0 &&
+                    <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} />
+                    {/* {parcelStatus && parcelStatus.length > 0 &&
                         <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} data={parcelStatus[0]} />
-                    }
+                    } */}
                 </div>
             </div>
         </div>
