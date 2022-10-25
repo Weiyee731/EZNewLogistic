@@ -30,7 +30,7 @@ const Footer = () => {
                         <FooterLink href="#">常见问题</FooterLink>
                         <FooterLink href="#">如何代运</FooterLink>
                         <FooterLink href="#">普货和敏感货</FooterLink>
-                        <FooterLink href="#">海运费用</FooterLink>
+                        <FooterLink  href="./pricing">海运费用</FooterLink>
                         <FooterLink href="#">我的账户</FooterLink>
                     </Column>
                     <Column>
@@ -59,7 +59,7 @@ const Footer = () => {
                                 <Grid item xs={10}>Mon - Sat : 9:00am - 6:00pm</Grid>
                             </Grid>
                         </FooterText>
-                        <FooterLink href="#">
+                        <FooterLink href="./pricing">
                             <Grid container spacing={2} >
                                 <Grid item xs={2} ><FacebookIcon /></Grid>
                                 <Grid item xs={10}>Yourway Logistic Sdn Bhd</Grid>

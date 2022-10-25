@@ -134,8 +134,8 @@ export const FAQpage = () => {
                                                     id="panel1a-header"
                                                 >
                                                     <Grid container spacing={2}>
-                                                        <Grid item xs={2}><InfoIcon /></Grid>
-                                                        <Grid item xs={10}><Typography>{details.DetailTitle}</Typography></Grid>
+                                                        <Grid item xs={1}><InfoIcon /></Grid>
+                                                        <Grid item xs={11}><Typography>{details.DetailTitle}</Typography></Grid>
                                                     </Grid>
                                                 </AccordionSummary>
                                                 <AccordionDetails style={{ color: "#686868" }}>
@@ -147,7 +147,7 @@ export const FAQpage = () => {
                                                                 details.DetailsDesc.data.map((x, index) => {
                                                                     return (
                                                                         <Grid container spacing={2} key={index}>
-                                                                            <Grid item xs={2}>
+                                                                            <Grid item xs={1}>
                                                                                 {details.DetailsDesc.typeList === "num" ?
                                                                                     index + 1 + ". "
                                                                                     :
@@ -156,7 +156,7 @@ export const FAQpage = () => {
                                                                                         <ArrowCircleRightIcon />
                                                                                 }
                                                                             </Grid>
-                                                                            <Grid item xs={10}><Typography>{x.item}</Typography></Grid>
+                                                                            <Grid item xs={11}><Typography>{x.item}</Typography></Grid>
                                                                         </Grid>
                                                                     )
                                                                 })
@@ -165,10 +165,10 @@ export const FAQpage = () => {
                                                                     details.DetailsDesc.data.map((x, idx) => {
                                                                         return (
                                                                             <Grid container spacing={2} key={idx}>
-                                                                                <Grid item xs={2}>
+                                                                                <Grid item xs={1}>
                                                                                     <ArrowCircleRightIcon />
                                                                                 </Grid>
-                                                                                <Grid item xs={10}><Typography><label style={{ paddingRight: "10pt", fontWeight: "600" }}>{x.title} :</label> <label>{x.item}</label> </Typography></Grid>
+                                                                                <Grid item xs={11}><Typography><label style={{ paddingRight: "10pt", fontWeight: "600" }}>{x.title} :</label> <label>{x.item}</label> </Typography></Grid>
                                                                             </Grid>
                                                                         )
                                                                     })
