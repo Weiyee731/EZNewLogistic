@@ -194,7 +194,7 @@ export const ParcelPage = () => {
                         })
                         :
                         <div style={{ textAlign: "center" }}>
-                            <img src={EmptyBox} style={{ height: "150pt" }}></img>
+                            <img src={EmptyBox} style={{ height: "100pt" }}></img>
                             <Typography style={{ fontWeight: "600", fontSize: "15pt", color: "#253949", letterSpacing: 1 }}>暂无此状态包裹</Typography>
                         </div>
                 }
