@@ -40,7 +40,7 @@ const SearchBox = (props) => {
           ? props.onChange(e)
           : {}
       }
-      autofocus
+      autoFocus
     //   autoFocus={props.autoFocus ? props.autoFocus : false}
       size="small"
       margin="normal"

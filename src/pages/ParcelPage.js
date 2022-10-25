@@ -11,9 +11,9 @@ import LoadingPanel from "../components/LoadingPanel/LoadingPanel";
 import EmptyBox from "../assets/empty-box.png"
 import { isStringNullOrEmpty } from "../tools/Helpers";
 import useAuth from "../hooks/useAuth";
+import { toast, Flip } from "react-toastify";
 
 export const ParcelPage = () => {
-
     const { userParcel, setting } = useSelector(state => ({
         userParcel: state.counterReducer.parcelStatus,
         setting: state.counterReducer.setting,
@@ -102,7 +102,7 @@ export const ParcelPage = () => {
             >
                 {value === index && (
                     <Box sx={{ p: 3 }}>
-                        <Typography>{children}</Typography>
+                        <div>{children}</div>
                     </Box>
                 )}
             </div>
@@ -173,7 +173,7 @@ export const ParcelPage = () => {
                         checkUserParcel(statusID).map((data, index) => {
                             return (
                                 index > ((page - 1) * pageSize) - 1 && index < (page * pageSize) &&
-                                <div className="row" style={{ paddingTop: "10pt" }}>
+                                <div className="row" style={{ paddingTop: "10pt" }} key={"parcellayout_" + index}>
                                     <Card>
                                         <CardContent>
                                             <Grid container spacing={2}>
@@ -218,7 +218,7 @@ export const ParcelPage = () => {
                                         {
                                             CheckUser(UserCode).map((data, index) => {
                                                 return (
-                                                    <Grid item md={6} xs={12} sm={12}>
+                                                    <Grid item md={6} xs={12} sm={6} key={"parcellayout_" + index}>
                                                         <Card>
                                                             <CardContent>
                                                                 <Typography style={layoutStyle}># {index + 1}</Typography>
@@ -234,7 +234,10 @@ export const ParcelPage = () => {
                                     </Grid>
                                 </>
                                 :
-                                <LoadingPanel />
+                                <div style={{ textAlign: "center" }}>
+                                    <img src={EmptyBox} style={{ height: "150pt" }}></img>
+                                    <Typography style={{ fontWeight: "600", fontSize: "15pt", color: "#253949", letterSpacing: 1 }}>暂无待认领包裹</Typography>
+                                </div>
                             :
                             <div style={{ textAlign: "center" }}>
                                 <img src={EmptyBox} style={{ height: "150pt" }}></img>
@@ -248,15 +251,14 @@ export const ParcelPage = () => {
                                         orientation="vertical" sx={{ borderRight: 1, borderColor: 'divider' }} variant="scrollable">
                                         {
                                             parcelStatus.length > 0 && parcelStatus.map((x, index) => {
-                                                return (<Tab label={x.ContainerStatusCN} {...a11yProps(x.ContainerStatusID)} />)
+                                                return (<Tab key={"status_" + index} label={x.ContainerStatusCN} {...a11yProps(x.ContainerStatusID)} />)
                                             })
                                         }
                                     </Tabs>
                                 </Box>
                                 {
                                     parcelStatus.length > 0 && parcelStatus.map((x, index) => {
-
-                                        return (<TabPanel style={{ width: "100%" }} value={parcelValue} index={x.ContainerStatusID}>  {userParcelLayout(x.ContainerStatusID)}  </TabPanel>)
+                                        return (<TabPanel key={"status_" + index} style={{ width: "100%" }} value={parcelValue} index={x.ContainerStatusID}>  {userParcelLayout(x.ContainerStatusID)}  </TabPanel>)
                                     })
                                 }
                             </Box>
