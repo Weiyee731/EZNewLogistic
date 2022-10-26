@@ -55,13 +55,11 @@ export const ParcelPage = () => {
     const [unKnownUserCode, setUnknownUserCode] = React.useState(3);
     const parcelStatus = [
         { ContainerStatusID: 0, ContainerStatus: "All", ContainerStatusCN: "全部包裹" },
-        { ContainerStatusID: 1, ContainerStatus: "Pending", ContainerStatusCN: "已入库系统" },
-        { ContainerStatusID: 2, ContainerStatus: "China Warehouse", ContainerStatusCN: "已到中国仓库" },
-        { ContainerStatusID: 3, ContainerStatus: "Loaded To Container", ContainerStatusCN: "已装箱" },
-        { ContainerStatusID: 4, ContainerStatus: "Shipped", ContainerStatusCN: "已在船运途中" },
-        { ContainerStatusID: 5, ContainerStatus: "Malaysia Kastam", ContainerStatusCN: "已到港，等待报关" },
-        { ContainerStatusID: 6, ContainerStatus: "Malaysia Warehouse", ContainerStatusCN: "已到马来西亚仓库" },
-        { ContainerStatusID: 7, ContainerStatus: "Unloaded Completed", ContainerStatusCN: "" }
+        { ContainerStatusID: 1, ContainerStatus: "China Warehouse", ContainerStatusCN: "抵达中国仓库" },
+        { ContainerStatusID: 2, ContainerStatus: "Leave Port", ContainerStatusCN: "运输途中" },
+        { ContainerStatusID: 3, ContainerStatus: "Reach Kuching Warehouse", ContainerStatusCN: "抵达东马仓库" },
+        // { ContainerStatusID: 5, ContainerStatus: "Pending Pick Up", ContainerStatusCN: "待取货包裹" },
+        // { ContainerStatusID: 6, ContainerStatus: "Done Pick Up", ContainerStatusCN: "已取货" },
     ];
 
 
@@ -147,8 +145,31 @@ export const ParcelPage = () => {
         if (listing.length > 0) {
             if (parcelValue === 0)
                 dataListing = listing
-            else
-                dataListing = listing.filter((x) => x.StockStatusID === statusID)
+            else {
+                let minStatus = 0
+                let maxStatus = 0
+
+                switch (statusID) {
+                    case 1:
+                        minStatus = 0
+                        maxStatus = 2
+                        break;
+
+                    case 2:
+                        minStatus = 2
+                        maxStatus = 9
+                        break;
+
+                    case 3:
+                        minStatus = 8
+                        maxStatus = 11
+                        break;
+
+                    default:
+                        break;
+                }
+                dataListing = listing.filter((x) => x.StockStatusID < maxStatus && x.StockStatusID > minStatus)
+            }
         }
         return dataListing
     }
