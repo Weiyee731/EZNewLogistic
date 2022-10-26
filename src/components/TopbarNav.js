@@ -11,7 +11,7 @@ export const TopbarNav = () => {
         <div
             style={{
                 height: "80px",
-                backgroundColor: "#023047",
+                backgroundColor: "#5A98B7",
                 color: 'white',
                 boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)",
                 display: "flex",

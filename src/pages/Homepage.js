@@ -3,7 +3,7 @@ import { useSelector, useDispatch, Provider } from 'react-redux'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import { NotificationView } from "../components/NotificationView";
-import { Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardHeader, Grid, TextField, Typography } from "@mui/material";
 import { GitAction } from "../store/action/gitAction";
 import { BasicAlertDialog } from "../components/BasicAlertDialog";
 import { useTheme } from '@mui/material/styles';
@@ -33,6 +33,7 @@ export default function Homepage() {
 
     useEffect(() => {
         if (parcelStatus && parcelStatus.length > 0) {
+            console.log(parcelStatus[0])
             handleOpenClose();
         }
         return () => {
@@ -69,18 +70,24 @@ export default function Homepage() {
                     variant="h4"
                     style={{ fontWeight: "bold", color: 'black' }}
                 >
-                    Notifications
+                    通告
                 </Typography>
-                {viewNotification && viewNotification.length > 0 ? viewNotification.map((item, index) => {
-                    return (
-                        <NotificationView
-                            key={index}
-                            message={item.NotificationDesc}
-                            title={item.NotificationTitle}
-                            date={item.CreatedDate}
-                        />
-                    )
-                })
+
+                {viewNotification && viewNotification.length > 0 ?
+                    <Grid container spacing={2}>
+                        {viewNotification.map((item, index) => {
+                            return (
+                                <Grid item xs={12} sm={12} md={12} lg={3} xl={2}>
+                                    <NotificationView
+                                        key={index}
+                                        message={item.NotificationDesc}
+                                        title={item.NotificationTitle}
+                                        date={item.CreatedDate}
+                                    />
+                                </Grid>
+                            )
+                        })}
+                    </Grid>
                     :
                     <div
                         style={{
@@ -88,7 +95,7 @@ export default function Homepage() {
                             fontWeight: 'bold'
                         }}
                     >
-                        No notification for the moment / 目前没有任何通告
+                        目前没有任何通告
                     </div>
                 }
 
@@ -113,30 +120,94 @@ export default function Homepage() {
                             justifyContent: 'space-between'
                         }}
                     >
-                        <TextField
-                            sx={{
-                                width: "80%",
-                            }}
-                            id="trackingNumber"
-                            type="text"
-                            color="secondary"
-                            label="Tracking Number"
-                            onChange={(e) => setTrackingNumber(e.target.value)}
-                            value={trackingNumber}
-                        />
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            sx={{
-                                width: "15%",
-                                color: 'secondary',
-                            }}
-                            onClick={() => dispatch(GitAction.CallGetParcelStatus2({ trackingNumber: `and TrackingNumber='${trackingNumber}'` }))}
-                        >
-                            Search
-                        </Button>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={12} md={12} lg={10} xl={10}>
+                                <TextField
+                                    sx={{
+                                        width: "100%",
+                                        backgroundColor: 'white',
+                                    }}
+                                    id="trackingNumber"
+                                    type="text"
+                                    color="secondary"
+                                    label="Tracking Number"
+                                    onChange={(e) => setTrackingNumber(e.target.value)}
+                                    value={trackingNumber}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={12} lg={2} xl={2}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    sx={{
+                                        width: '100%',
+                                        height: '100%',
+                                        color: 'white',
+                                    }}
+                                    onClick={() => dispatch(GitAction.CallGetParcelStatus2({ trackingNumber: `and TrackingNumber='${trackingNumber}'` }))}
+                                >
+                                    Search
+                                </Button>
+                            </Grid>
+                        </Grid>
                     </div>
-                    <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} />
+                    {parcelStatus && parcelStatus.length > 0 &&
+                        <Card sx={{ marginTop: '40px' }}>
+                            <CardContent>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={12}>
+                                        <Typography variant="h5" fontWeight={'bold'} component="div" sx={{ textAlign: 'center' }}>
+                                            {parcelStatus[0].TrackingNumber}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                                <Grid container spacing={2}>
+                                    <Grid container spacing={2} lg={3} md={3} sm={12} sx={{ marginTop: '20px' }}>
+                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <Typography variant="h3" fontWeight={'bold'} component="div" sx={{ textAlign: 'center', color: theme.palette.primary.main }}>
+                                                {parcelStatus[0].Status} / N/A
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                                            Current status
+                                        </Grid>
+                                    </Grid>
+                                    <Grid container spacing={2} lg={3} md={3} sm={12} sx={{ marginTop: '20px' }}>
+                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <Typography variant="h3" fontWeight={'bold'} component="div" sx={{ textAlign: 'center', color: theme.palette.primary.main }}>
+                                                {parcelStatus[0].ProductDimensionDeep} * {parcelStatus[0].ProductDimensionHeight} * {parcelStatus[0].ProductDimensionWidth}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                                            Volume
+                                        </Grid>
+                                    </Grid>
+                                    <Grid container spacing={2} lg={3} md={3} sm={12} sx={{ marginTop: '20px' }}>
+                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <Typography variant="h3" fontWeight={'bold'} component="div" sx={{ textAlign: 'center', color: theme.palette.primary.main }}>
+                                                {parcelStatus[0].CourierName}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                                            Courier Name
+                                        </Grid>
+                                    </Grid>
+                                    <Grid container spacing={2} lg={3} md={3} sm={12} sx={{ marginTop: '20px' }}>
+                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                                            <Typography variant="h3" fontWeight={'bold'} component="div" sx={{ textAlign: 'center', color: theme.palette.primary.main }}>
+                                                {parcelStatus[0].Remark}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                                            Remark
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </CardContent>
+                        </Card>
+                    }
+
+                    {/* <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} /> */}
                     {/* {parcelStatus && parcelStatus.length > 0 &&
                         <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} data={parcelStatus[0]} />
                     } */}

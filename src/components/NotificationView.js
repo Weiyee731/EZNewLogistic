@@ -1,38 +1,23 @@
 import React from "react";
+import { Card, CardContent, Typography, Divider } from "@mui/material";
 
 export const NotificationView = ({ title, message, type, date }) => {
     return (
-        <div
-            style={{
-                display: "flex",
-                flexDirection: "column",
-                // height: "80px",
-                backgroundColor: "white",
-                borderWidth: "3px 3px 3px 22px",
-                borderColor: "#023047",
-                borderStyle: "solid",
-                borderRadius: "10px",
-                padding: "10px",
-                margin: "10px 0px 10px 0px",
-            }}
-        >
-            <div
-                style={{
-                    fontSize: "25px",
-                    fontWeight: "bold",
-                    color: "#101010",
-                }}
-            >
-                {title}
-            </div>
-            <div dangerouslySetInnerHTML={{ __html: message }} />
-            <div
-                style={{
-                    color: '#a9a9a9'
-                }}
-            >
-                {date}
-            </div>
-        </div>
+        <Card sx={{ margin: '10px 0' }}>
+            <CardContent>
+                <Typography variant="h4" fontWeight={'bold'}>
+                    {title}
+                </Typography>
+                <div dangerouslySetInnerHTML={{ __html: message }} />
+                <Divider variant="middle" sx={{ margin: '10px 0' }} />
+                <div
+                    style={{
+                        color: '#a9a9a9'
+                    }}
+                >
+                    {date}
+                </div>
+            </CardContent>
+        </Card>
     );
 }

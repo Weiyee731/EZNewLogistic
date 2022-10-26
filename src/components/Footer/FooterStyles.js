@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 export const FooterContainer = styled.div`
-background: #023047;
+background: #5A98B7;
 padding: 120px 0px;
 
 @media (max-width: 768px) {
@@ -69,6 +69,6 @@ font-size: 32px;
 color: #fff;
 margin-bottom: 20px;
 font-weight: bold;
-color: #8ECAE6;
+color: #fff;
 `;
 

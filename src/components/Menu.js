@@ -12,7 +12,7 @@ const COLORS = {
 };
 
 const MenuLabel = styled.label`
-  background-color: ${COLORS.primaryLight};
+  background-color: ${COLORS.white};
   position: fixed;
   border-radius: 50%;
   height: 60px;
