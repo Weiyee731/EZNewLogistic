@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -112,81 +112,153 @@ export const FAQpage = () => {
             </div>
         )
     }
-    return (
-        <div style={{ margin: "20px 16px" }}  >
-            <div style={{ padding: "10pt 20pt 0pt" }}>
-                <Typography style={{ fontWeight: "bold", fontSize: "20pt" }}>   常见问题  </Typography>
-                <hr />
+
+    function a11yProps(index) {
+        return {
+            id: `simple-tab-${index}`,
+            'aria-controls': `simple-tabpanel-${index}`,
+        };
+    }
+
+    function TabPanel(props) {
+        const { children, value, index, ...other } = props;
+        return (
+            <div
+                role="tabpanel"
+                hidden={value !== index}
+                id={`simple-tabpanel-${index}`}
+                aria-labelledby={`simple-tab-${index}`}
+                {...other}
+            >
+                {value === index && (
+                    <Box sx={{ p: 3 }}>
+                        <div>{children}</div>
+                    </Box>
+                )}
             </div>
-            {
-                FAQItem.length > 0 && FAQItem.map((data, dataIndex) => {
-                    return (
-                        <div style={{ padding: "0pt 20pt 10pt" }} key={dataIndex}>
-                            <Typography style={{ fontWeight: "600", fontSize: "15pt", paddingTop: "15pt" }}>{data.FAQTitle}</Typography>
-                            {
-                                data.FAQDetails.length > 0 && data.FAQDetails.map((details, detailIndex) => {
-                                    return (
-                                        <div className="row" style={{ paddingTop: "10pt" }} key={'faq_' + detailIndex}>
-                                            <Accordion>
-                                                <AccordionSummary
-                                                    expandIcon={<ExpandMoreIcon />}
-                                                    aria-controls="panel1a-content"
-                                                    id="panel1a-header"
-                                                >
-                                                    <Grid container spacing={2}>
-                                                        <Grid item xs={2}><InfoIcon /></Grid>
-                                                        <Grid item xs={10}><Typography>{details.DetailTitle}</Typography></Grid>
-                                                    </Grid>
-                                                </AccordionSummary>
-                                                <AccordionDetails style={{ color: "#686868" }}>
-                                                    {
-                                                        details.DetailsDesc.type === undefined ?
-                                                            <Typography>  {details.DetailsDesc}  </Typography>
-                                                            :
-                                                            details.DetailsDesc.type === "list" ?
-                                                                details.DetailsDesc.data.map((x, index) => {
-                                                                    return (
-                                                                        <Grid container spacing={2} key={index}>
-                                                                            <Grid item xs={2}>
-                                                                                {details.DetailsDesc.typeList === "num" ?
-                                                                                    index + 1 + ". "
+        );
+    }
+
+    const [parcelValue, setParcelValue] = React.useState(0);
+    const FaqTitleList = [
+        { FaqTitleID: 0, FaqTitle: "包裹咨询" },
+        { FaqTitleID: 1, FaqTitle: "服务咨询" },
+        { FaqTitleID: 2, FaqTitle: "运输咨询" },
+        { FaqTitleID: 3, FaqTitle: "售后咨询" },
+        { FaqTitleID: 4, FaqTitle: "付款咨询" }
+    ];
+    const handleParcelStatusChange = (event, newValue) => {
+        setParcelValue(newValue);
+    };
+
+    useEffect(() => {
+        let path = window.location.pathname
+        let length = 0
+        if (path !== undefined) {
+            length = path.split("/").length
+            path = path.split("/")[length - 1]
+            if (path !== 0) {
+                setParcelValue(parseInt(path))
+            }
+        }
+    }, [])
+
+
+    const FAQLayout = (FaqTitleID) => {
+        return (
+            FAQItem.length > 0 && FAQItem.filter((x) => x.FAQID === FaqTitleID + 1).map((data, dataIndex) => {
+                return (
+                    <div style={{ padding: "0pt 20pt 10pt" }} key={dataIndex}>
+                        <Typography style={{ fontWeight: "600", fontSize: "15pt", paddingTop: "15pt" }}>{data.FAQTitle}</Typography>
+                        {
+                            data.FAQDetails.length > 0 && data.FAQDetails.map((details, detailIndex) => {
+                                return (
+                                    <div className="row" key={'faq_' + detailIndex}>
+                                        <Accordion>
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon />}
+                                                aria-controls="panel1a-content"
+                                                id="panel1a-header"
+                                            >
+                                                <Grid container spacing={2}>
+                                                    <Grid item xs={1}><InfoIcon /></Grid>
+                                                    <Grid item xs={11}><Typography>{details.DetailTitle}</Typography></Grid>
+                                                </Grid>
+                                            </AccordionSummary>
+                                            <AccordionDetails style={{ color: "#686868" }}>
+                                                {
+                                                    details.DetailsDesc.type === undefined ?
+                                                        <Typography>  {details.DetailsDesc}  </Typography>
+                                                        :
+                                                        details.DetailsDesc.type === "list" ?
+                                                            details.DetailsDesc.data.map((x, index) => {
+                                                                return (
+                                                                    <Grid container spacing={2} key={index}>
+                                                                        <Grid item xs={1}>
+                                                                            {details.DetailsDesc.typeList === "num" ?
+                                                                                index + 1 + ". "
+                                                                                :
+                                                                                details.DetailsDesc.typeList === "empty" ? ""
                                                                                     :
-                                                                                    details.DetailsDesc.typeList === "empty" ? ""
-                                                                                        :
-                                                                                        <ArrowCircleRightIcon />
-                                                                                }
+                                                                                    <ArrowCircleRightIcon />
+                                                                            }
+                                                                        </Grid>
+                                                                        <Grid item xs={11}><Typography>{x.item}</Typography></Grid>
+                                                                    </Grid>
+                                                                )
+                                                            })
+                                                            :
+                                                            details.DetailsDesc.type === "boldList" ?
+                                                                details.DetailsDesc.data.map((x, idx) => {
+                                                                    return (
+                                                                        <Grid container spacing={2} key={idx}>
+                                                                            <Grid item xs={1}>
+                                                                                <ArrowCircleRightIcon />
                                                                             </Grid>
-                                                                            <Grid item xs={10}><Typography>{x.item}</Typography></Grid>
+                                                                            <Grid item xs={11}><Typography><label style={{ paddingRight: "10pt", fontWeight: "600" }}>{x.title} :</label> <label>{x.item}</label> </Typography></Grid>
                                                                         </Grid>
                                                                     )
                                                                 })
                                                                 :
-                                                                details.DetailsDesc.type === "boldList" ?
-                                                                    details.DetailsDesc.data.map((x, idx) => {
-                                                                        return (
-                                                                            <Grid container spacing={2} key={idx}>
-                                                                                <Grid item xs={2}>
-                                                                                    <ArrowCircleRightIcon />
-                                                                                </Grid>
-                                                                                <Grid item xs={10}><Typography><label style={{ paddingRight: "10pt", fontWeight: "600" }}>{x.title} :</label> <label>{x.item}</label> </Typography></Grid>
-                                                                            </Grid>
-                                                                        )
-                                                                    })
-                                                                    :
-                                                                    customizeLayout()
-                                                    }
-                                                </AccordionDetails>
-                                            </Accordion>
-                                        </div>
+                                                                customizeLayout()
+                                                }
+                                            </AccordionDetails>
+                                        </Accordion>
+                                    </div>
 
-                                    )
-                                })
-                            }
+                                )
+                            })
+                        }
 
-                        </div>
-                    )
-                })
-            }
+                    </div>
+                )
+            })
+        )
+    }
+
+    return (
+        <div className="row" style={{ margin: "20px 16px" }} >
+            <div style={{ padding: "10pt 20pt 0pt" }}>
+                <Typography style={{ fontWeight: "bold", fontSize: "20pt" }}>   常见问题  </Typography>
+                <hr />
+            </div>
+            <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'darkgrey' }}>
+                    <Tabs value={parcelValue} onChange={handleParcelStatusChange} aria-label="FaqTitleList"
+                        orientation="vertical" sx={{ borderRight: 1, borderColor: 'divider' }} variant="scrollable">
+                        {
+                            FaqTitleList.length > 0 && FaqTitleList.map((x, index) => {
+                                return (<Tab key={"status_" + index} style={{ fontWeight: "bold" }} label={x.FaqTitle} {...a11yProps(x.FaqTitleID)} />)
+                            })
+                        }
+                    </Tabs>
+                </Box>
+                {
+                    FaqTitleList.length > 0 && FaqTitleList.map((x, index) => {
+                        return (<TabPanel key={"status_" + index} style={{ width: "100%" }} value={parcelValue} index={x.FaqTitleID}>  {FAQLayout(x.FaqTitleID)}  </TabPanel>)
+                    })
+                }
+            </Box>
         </div>
     )
 }
