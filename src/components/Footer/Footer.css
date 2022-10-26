@@ -1,0 +1,16 @@
+
+.footer-container-grid {
+    max-width: 1196px;
+    margin: auto !important;
+}
+
+@media screen and (max-width: 768px) {
+
+    .footer-container-grid {
+        margin: 15px;
+    }
+
+    .container-item {
+        padding-left: 10px !important;
+    }
+}

@@ -1,64 +1,74 @@
+import React from 'react';
 import styled from 'styled-components';
 
-export const Box = styled.div`
-background: #023047;;
-width: 100%;
-`;
+export const FooterContainer = styled.div`
+background: #023047;
+padding: 120px 0px;
 
-export const Container = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	max-width: 1000px;
-	margin: 0 auto;
-	background: #023047;
-`
-
-export const Column = styled.div`
-display: flex;
-flex-direction: column;
-text-align: center;
-margin: 0 20px;
-
-`;
-
-export const Row = styled.div`
-display: grid;
-grid-template-columns: repeat(auto-fill,
-						minmax(250px, 1fr));
-grid-gap: 20px;
-
-@media (max-width: 1000px) {
-	grid-template-columns: repeat(auto-fill,
-						minmax(250px, 1fr));
+@media (max-width: 768px) {
+	padding: 30px;
 }
+
 `;
+
+// export const Container = styled.div`
+// 	display: flex;
+// 	flex-direction: column;
+// 	justify-content: center;
+// 	max-width: 1196px;
+// 	margin: auto;
+// 	background: #023047;
+// `
+
+// export const Column = styled.div`
+// display: flex;
+// flex-direction: column;
+// text-align: center;
+// margin: 0 20px;
+// `;
+
+// export const Row = styled.div`
+// display: grid;
+// grid-template-columns: repeat(auto-fill, minmax(33.333%, 2fr));
+// grid-gap: 10px;
+
+// @media (max-width: 1196px) {
+// 	grid-template-columns: repeat(auto-fill, minmax(33.333%, 2fr));
+// }
+// `;
 
 export const FooterText = styled.div`
 color: #fff;
 margin-bottom: 5px;
-font-size: 14px;
+font-size: 16px;
 text-decoration: none;
-text-align:left;
-`;
+word-wrap: break-word;
+display: flex;
 
-export const FooterLink = styled.a`
-color: #fff;
-margin-bottom: 5px;
-font-size: 14px;
-text-decoration: none;
-text-align:left;
-&:hover {
-	color: #8ECAE6;
-	transition: 200ms ease-in;
+@media (max-width: 768px) {
+	width: 360px;
 }
 `;
 
+// export const FooterLink = styled.a`
+// color: #fff;
+// margin-bottom: 5px;
+// font-size: 14px;
+// text-decoration: none;
+// &:hover {
+// 	color: #8ECAE6;
+// 	transition: 200ms ease-in;
+// }
+// @media (max-width: 768px) {
+// 	width: 360px;
+// }
+// `;
+
 export const Heading = styled.p`
-font-size: 24px;
+font-size: 32px;
 color: #fff;
 margin-bottom: 20px;
-text-align:left;
 font-weight: bold;
 color: #8ECAE6;
 `;
+

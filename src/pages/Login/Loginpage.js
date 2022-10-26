@@ -30,6 +30,7 @@ import { toast } from 'react-toastify';
 import { isStringNullOrEmpty, isArrayNotEmpty, getWindowDimensions } from "../../Repository/Helper"
 import LoginWallpaper from "../../assets/login-wallpaper.jpg"
 import './Loginpage.css';
+import Icon from "../../assets/yw_icon.png"
 
 export const Loginpage = () => {
     const REGISTRATION = 'registration'
@@ -323,7 +324,7 @@ export const Loginpage = () => {
                 <Grid item md={6} xs={12} sx={{ display: 'flex', p: 1, }}>
                     <div className="login-panel">
                         <div className="logo-container">
-
+                            <img src={Icon} alt="logo" width="100%" height="100%" />
                         </div>
 
                         {
@@ -332,7 +333,7 @@ export const Loginpage = () => {
                                 你所使用的户口或密码错误哟，请重新尝试登入
                             </Typography>
                         }
-
+                        <Typography variant="h4" component="h4" sx={{ textAlign: 'center', mb: 2 }}>雅威国际物流</Typography>
                         <TextField
                             id="login-user--username"
                             label="用户户口"
