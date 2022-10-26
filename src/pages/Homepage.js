@@ -7,6 +7,8 @@ import { Box, Button, Card, CardContent, CardHeader, Grid, TextField, Typography
 import { GitAction } from "../store/action/gitAction";
 import { BasicAlertDialog } from "../components/BasicAlertDialog";
 import { useTheme } from '@mui/material/styles';
+import AnnouncementIcon from '@mui/icons-material/Announcement';
+import { letterSpacing } from "@mui/system";
 
 export default function Homepage() {
     const { loading, state, viewNotification, parcelStatus } = useSelector(state => ({
@@ -24,7 +26,6 @@ export default function Homepage() {
 
     const handleOpenClose = () => {
         setOpen(!open);
-
     };
 
     useEffect(() => {
@@ -66,7 +67,135 @@ export default function Homepage() {
                 style={{ margin: "40px 40px 0px 40px" }}
             >
                 {/* notification area */}
-                <Typography
+
+                <Grid container spacing={2} style={{ paddingBottom: "20pt" }}>
+                    <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
+                        <Card style={{ height: "300pt" }}>
+                            <CardContent>
+                                <Typography variant="h6" style={{ fontWeight: "bold", color: 'black', textAlign: 'center' }}  >
+                                    物流查询
+                                </Typography>
+                                <TextField
+                                    sx={{
+                                        width: "100%",
+                                        backgroundColor: 'white',
+                                    }}
+                                    style={{ paddingTop: "10pt", paddingBottom: "10pt" }}
+                                    id="trackingNumber"
+                                    type="text"
+                                    color="secondary"
+                                    label="Tracking Number"
+                                    onChange={(e) => setTrackingNumber(e.target.value)}
+                                    value={trackingNumber}
+                                />
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: "#5A98B7",
+                                        width: '100%',
+                                        height: '100%',
+                                        color: 'white',
+                                        fontWeight: "bold",
+                                        fontSize: "11pt",
+                                        letterSpacing: "1pt"
+                                    }}
+                                    onClick={() => dispatch(GitAction.CallGetParcelStatus2({ trackingNumber: `and TrackingNumber='${trackingNumber}'` }))}
+                                >
+                                    查询
+                                </Button>
+                                {parcelStatus && parcelStatus.length > 0 &&
+                                    <Card style={{ marginTop: "10pt" }}>
+                                        <CardContent>
+                                            <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}  > <strong>物流单号：</strong> {parcelStatus[0].CourierName}   {parcelStatus[0].TrackingNumber}</Typography>
+                                            <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}  > <strong>货物状态：</strong> {parcelStatus[0].Status}</Typography>
+                                            <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}  > <strong>货物尺寸：</strong> {parcelStatus[0].ProductDimensionDeep}cm x {parcelStatus[0].ProductDimensionHeight}cm x {parcelStatus[0].ProductDimensionWidth}cm</Typography>
+                                            <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}  > <strong>货物体积：</strong> {parseFloat((parcelStatus[0].ProductDimensionDeep * parcelStatus[0].ProductDimensionHeight * parcelStatus[0].ProductDimensionWidth) / 1000000).toFixed(3)} m³</Typography>
+                                            <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}  > <strong>货物重量：</strong> {parcelStatus[0].ProductWeight}kg</Typography>
+                                        </CardContent>
+                                    </Card>
+                                }
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    <Grid item md={6} xs={12} >
+                        <Card style={{ height: "300pt", overflowY: "scroll",flexshrink: 0 }} >
+                            <CardContent>
+                                <Typography variant="h6" style={{ fontWeight: "bold", color: 'black', textAlign: 'center', paddingBottom: "10pt" }}  >
+                                    公告处
+                                </Typography>
+                                <div>
+                                    {viewNotification.map((item, index) => {
+                                        return (
+                                            <>
+                                                <NotificationView
+                                                    key={index}
+                                                    message={item.NotificationDesc}
+                                                    title={item.NotificationTitle}
+                                                    date={item.CreatedDate}
+                                                />
+                                                 <NotificationView
+                                                    key={index}
+                                                    message={item.NotificationDesc}
+                                                    title={item.NotificationTitle}
+                                                    date={item.CreatedDate}
+                                                />
+                                                 <NotificationView
+                                                    key={index}
+                                                    message={item.NotificationDesc}
+                                                    title={item.NotificationTitle}
+                                                    date={item.CreatedDate}
+                                                />
+                                                 <NotificationView
+                                                    key={index}
+                                                    message={item.NotificationDesc}
+                                                    title={item.NotificationTitle}
+                                                    date={item.CreatedDate}
+                                                />
+                                                 <NotificationView
+                                                    key={index}
+                                                    message={item.NotificationDesc}
+                                                    title={item.NotificationTitle}
+                                                    date={item.CreatedDate}
+                                                />
+                                                 <NotificationView
+                                                    key={index}
+                                                    message={item.NotificationDesc}
+                                                    title={item.NotificationTitle}
+                                                    date={item.CreatedDate}
+                                                />
+                                                 <NotificationView
+                                                    key={index}
+                                                    message={item.NotificationDesc}
+                                                    title={item.NotificationTitle}
+                                                    date={item.CreatedDate}
+                                                />
+                                                 <NotificationView
+                                                    key={index}
+                                                    message={item.NotificationDesc}
+                                                    title={item.NotificationTitle}
+                                                    date={item.CreatedDate}
+                                                />
+                                                 <NotificationView
+                                                    key={index}
+                                                    message={item.NotificationDesc}
+                                                    title={item.NotificationTitle}
+                                                    date={item.CreatedDate}
+                                                />
+                                                 <NotificationView
+                                                    key={index}
+                                                    message={item.NotificationDesc}
+                                                    title={item.NotificationTitle}
+                                                    date={item.CreatedDate}
+                                                />
+                                            </>
+                                        )
+                                    })}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                </Grid>
+                {/* <Typography
                     variant="h4"
                     style={{ fontWeight: "bold", color: 'black' }}
                 >
@@ -97,10 +226,10 @@ export default function Homepage() {
                     >
                         目前没有任何通告
                     </div>
-                }
+                } */}
 
                 {/* parcel area */}
-                <div
+                {/* <div
                     style={{
                         marginTop: "80px",
                         marginBottom: "80px",
@@ -150,8 +279,8 @@ export default function Homepage() {
                                 </Button>
                             </Grid>
                         </Grid>
-                    </div>
-                    {parcelStatus && parcelStatus.length > 0 &&
+                    </div> */}
+                {/* {parcelStatus && parcelStatus.length > 0 &&
                         <Card sx={{ marginTop: '40px' }}>
                             <CardContent>
                                 <Grid container spacing={2}>
@@ -205,14 +334,14 @@ export default function Homepage() {
                                 </Grid>
                             </CardContent>
                         </Card>
-                    }
+                    } */}
 
-                    {/* <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} /> */}
-                    {/* {parcelStatus && parcelStatus.length > 0 &&
+                {/* <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} /> */}
+                {/* {parcelStatus && parcelStatus.length > 0 &&
                         <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} data={parcelStatus[0]} />
                     } */}
-                </div>
+                {/* </div> */}
             </div>
-        </div>
+        </div >
     );
 }

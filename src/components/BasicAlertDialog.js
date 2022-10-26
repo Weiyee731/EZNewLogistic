@@ -24,7 +24,10 @@ function BootstrapDialogTitle(props) {
     const { children, onClose, ...other } = props;
 
     return (
-        <DialogTitle sx={{ m: 0, p: 2, backgroundColor: theme.palette.secondary.main, color: 'white' }} {...other}>
+        <DialogTitle sx={{ m: 0, p: 2, 
+        // backgroundColor: theme.palette.secondary.main,
+        backgroundColor:"#5A98B7",
+         color: 'white' }} {...other}>
             {children}
             {/* {onClose ? (
                 <IconButton
@@ -77,15 +80,6 @@ export const BasicAlertDialog = ({ open, handleOpenClose, data }) => {
                         <Grid item xs={1}><ReportIcon style={{ fill: 'red' }} /></Grid>
                         <Grid item xs={11}><Typography style={{ fontWeight: "600", fontSize: "11pt" }}>若无法辨别货物类型，需先质询客服，若违规运输违禁品造成货物被海关充公，公司将不会赔偿, 需自行负上法律责任以及缴付罚款，请知悉</Typography></Grid>
                     </Grid>
-                    {/* Current Status: {data.StockStatus}
-                    <br />
-                    Parcel Height: {data.ProductDimensionHeight}
-                    <br />
-                    Parcel Width: {data.ProductDimensionDeep}
-                    <br />
-                    Parcel Length: {data.ProductDimensionWidth}
-                    <br />
-                    Parcel Weight: {data.ProductWeight} */}
                 </Typography>
             </DialogContent>
             <DialogActions>

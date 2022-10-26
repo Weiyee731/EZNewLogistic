@@ -12,16 +12,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
 export const TempSelfCollect = () => {
-    const [tableHeader, setTableHeader] = React.useState(["重量", "首重"]);
-    const [kchData, setKchData] = React.useState([
-        { condition: "单件0.013m³及以下", price: "RM 5/0.013m³" },
-        { condition: "单件0.013m³及以上", price: "RM 480/1m³" }
-    ]);
-    const [saData, setSaData] = React.useState([
-        { condition: "单件0.013m³及以下", price: "RM 6/0.013m³" },
-        { condition: "单件0.013m³及以上", price: "RM 520/1m³" }
-    ]);
-
+ 
     const header = [
         "", "单个货物体制", "计算方式", "古晋自提运费",
     ]
