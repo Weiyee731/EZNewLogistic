@@ -10,6 +10,9 @@ import { useTheme } from '@mui/material/styles';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
 import { letterSpacing } from "@mui/system";
 import { images } from '../constants'
+import { Tracking } from "../components/Homepage/Tracking";
+import { OurServices } from "../components/Homepage/OurServices";
+import { FlowOfDelivery } from "../components/Homepage/FlowOfDelivery";
 
 export default function Homepage() {
     const { loading, state, viewNotification, parcelStatus } = useSelector(state => ({
@@ -20,10 +23,7 @@ export default function Homepage() {
     }));
 
     const dispatch = useDispatch()
-
-    const [trackingNumber, setTrackingNumber] = useState("");
     const [open, setOpen] = useState(true);
-    const theme = useTheme();
 
     const handleOpenClose = () => {
         setOpen(!open);
@@ -32,16 +32,6 @@ export default function Homepage() {
     useEffect(() => {
         dispatch(GitAction.CallGetNotification({ status: 2 }))
     }, [])
-
-    useEffect(() => {
-        if (parcelStatus && parcelStatus.length > 0) {
-            console.log(parcelStatus[0])
-            handleOpenClose();
-        }
-        return () => {
-            setTrackingNumber("");
-        }
-    }, [parcelStatus])
 
     return (
         <div>
@@ -72,47 +62,7 @@ export default function Homepage() {
                         <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
                             <Card style={{ height: "300pt" }}>
                                 <CardContent>
-                                    <Typography variant="h6" style={{ fontWeight: "bold", color: 'black', textAlign: 'center' }}>
-                                        物流查询
-                                    </Typography>
-                                    <TextField
-                                        sx={{
-                                            width: "100%",
-                                            backgroundColor: 'white',
-                                        }}
-                                        style={{ marginBottom: '10px' }}
-                                        id="trackingNumber"
-                                        type="text"
-                                        color="secondary"
-                                        label="快递单号"
-                                        onChange={(e) => setTrackingNumber(e.target.value)}
-                                        value={trackingNumber}
-                                    />
-                                    <Button
-                                        color="secondary"
-                                        variant="contained"
-                                        sx={{
-                                            color: 'white',
-                                            display: 'block',
-                                            margin: '0 auto',
-                                            width: '100px',
-                                            fontWeight: 'bold',
-                                        }}
-                                        onClick={() => dispatch(GitAction.CallGetParcelStatus2({ trackingNumber: `and TrackingNumber='${trackingNumber}'` }))}
-                                    >
-                                        查询
-                                    </Button>
-                                    {parcelStatus && parcelStatus.length > 0 &&
-                                        <Card style={{ marginTop: "10pt" }}>
-                                            <CardContent>
-                                                <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}> <strong>物流单号：</strong> {parcelStatus[0].CourierName}   {parcelStatus[0].TrackingNumber}</Typography>
-                                                <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}> <strong>货物状态：</strong> {parcelStatus[0].Status}</Typography>
-                                                <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}> <strong>货物尺寸：</strong> {parcelStatus[0].ProductDimensionDeep}cm x {parcelStatus[0].ProductDimensionHeight}cm x {parcelStatus[0].ProductDimensionWidth}cm</Typography>
-                                                <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}> <strong>货物体积：</strong> {parseFloat((parcelStatus[0].ProductDimensionDeep * parcelStatus[0].ProductDimensionHeight * parcelStatus[0].ProductDimensionWidth) / 1000000).toFixed(3)} m³</Typography>
-                                                <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}> <strong>货物重量：</strong> {parcelStatus[0].ProductWeight}kg</Typography>
-                                            </CardContent>
-                                        </Card>
-                                    }
+                                    <Tracking parcelStatus={parcelStatus[0]} />
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -142,149 +92,12 @@ export default function Homepage() {
 
                 {/* Our services */}
                 <div style={styles.sectionMargin}>
-                    <Typography variant="h4" style={styles.header}>
-                        我们的服务
-                    </Typography>
-                    <Grid container spacing={4}>
-                        <Grid item xs={12} sm={12} md={12} lg={3} xl={3} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                            <div style={styles.ourServicesImageContainer}>
-                                <img src={images.delivery} style={styles.ourServicesImage} />
-                            </div>
-                            <Typography variant="h5">
-                                代运
-                            </Typography>
-                            <div style={styles.ourServicesDesc}>
-                                我们提供专业中马海运物流服务，善于处理包裹，装柜，报关，清关以及派送的事务。
-                            </div>
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={12} lg={3} xl={3} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                            <div style={styles.ourServicesImageContainer}>
-                                <img src={images.purchase} style={styles.ourServicesImage} />
-                            </div>
-                            <Typography variant="h5">
-                                代购
-                            </Typography>
-                            <div style={styles.ourServicesDesc}>
-                                我们提供一条龙代购服务。主要让您更简易方便购买中国平台货物
-                            </div>
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={12} lg={3} xl={3} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                            <div style={styles.ourServicesImageContainer}>
-                                <img src={images.pay} style={styles.ourServicesImage} />
-                            </div>
-                            <Typography variant="h5">
-                                代付
-                            </Typography>
-                            <div style={styles.ourServicesDesc}>
-                                我们提供人民币兑换，充值，代付与转账服务。高汇率兑换率，快充安全
-                            </div>
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={12} lg={3} xl={3} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                            <div style={styles.ourServicesImageContainer}>
-                                <img src={images.search} style={styles.ourServicesImage} />
-                            </div>
-                            <Typography variant="h5">
-                                木架与验货
-                            </Typography>
-                            <div style={styles.ourServicesDesc}>
-                                我们提供验货与打木架服务，保障与减少货物破损机率
-                            </div>
-                        </Grid>
-                    </Grid>
+                    <OurServices />
                 </div>
 
                 {/* Flow of service */}
                 <div style={styles.sectionMargin}>
-                    <Typography variant="h4" style={styles.header}>
-                        代运流程
-                    </Typography>
-                    <Grid container spacing={4}>
-                        <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
-                            <div style={styles.flowOfService}>
-                                <div style={styles.ourServicesImageContainer}>
-                                    <img src={images.location} style={styles.ourServicesImage} />
-                                </div>
-                                <div>
-                                    <Typography variant="h5">
-                                        注册/登录账户查看地址
-                                    </Typography>
-                                    <div style={styles.flowOfServiceDesc}>
-                                        获取会员号和国内转运仓收货地址
-                                    </div>
-                                </div>
-                            </div>
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={4}>
-                        <Grid item xs={12} sm={12} md={12} lg={6} xl={6} />
-                        <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
-                            <div style={styles.flowOfService}>
-                                <div style={styles.ourServicesImageContainer}>
-                                    <img src={images.warehouse} style={styles.ourServicesImage} />
-                                </div>
-                                <div>
-                                    <Typography variant="h5">
-                                        包裹寄送到仓库
-                                    </Typography>
-                                    <div style={styles.flowOfServiceDesc}>
-                                        包裹验货签收，称重，量体积，入库国内仓库
-                                    </div>
-                                </div>
-                            </div>
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={4}>
-                        <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
-                            <div style={styles.flowOfService}>
-                                <div style={styles.ourServicesImageContainer}>
-                                    <img src={images.shipment} style={styles.ourServicesImage} />
-                                </div>
-                                <div>
-                                    <Typography variant="h5">
-                                        包裹转运马来西亚
-                                    </Typography>
-                                    <div style={styles.flowOfServiceDesc}>
-                                        中国报关，马来西亚清关
-                                    </div>
-                                </div>
-                            </div>
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={4}>
-                        <Grid item xs={12} sm={12} md={12} lg={6} xl={6} />
-                        <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
-                            <div style={styles.flowOfService}>
-                                <div style={styles.ourServicesImageContainer}>
-                                    <img src={images.tracking} style={styles.ourServicesImage} />
-                                </div>
-                                <div>
-                                    <Typography variant="h5">
-                                        包裹追踪
-                                    </Typography>
-                                    <div style={styles.flowOfServiceDesc}>
-                                        查看包裹运输状态
-                                    </div>
-                                </div>
-                            </div>
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={4}>
-                        <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
-                            <div style={styles.flowOfService}>
-                                <div style={styles.ourServicesImageContainer}>
-                                    <img src={images.notification} style={styles.ourServicesImage} />
-                                </div>
-                                <div>
-                                    <Typography variant="h5">
-                                        包裹到仓通知
-                                    </Typography>
-                                    <div style={styles.flowOfServiceDesc}>
-                                        通知取货，付款，确认收货
-                                    </div>
-                                </div>
-                            </div>
-                        </Grid>
-                    </Grid>
+                    <FlowOfDelivery />
                 </div>
 
                 <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} />
@@ -302,25 +115,6 @@ const styles = {
         color: 'black',
         textAlign: 'center',
         marginBottom: '20px'
-    },
-    ourServicesImageContainer: {
-        backgroundColor: '#fff',
-        width: '150px',
-        height: '150px',
-        marginBottom: '30px',
-        borderRadius: '50%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        boxShadow: '0px 30px 45px 0px rgba(22,22,22,0.1)'
-    },
-    ourServicesImage: {
-        width: '100px',
-        height: '100px'
-    },
-    ourServicesDesc: {
-        color: '#7c7c7c',
-        padding: '0 20px',
     },
     flowOfService: {
         display: 'flex',
