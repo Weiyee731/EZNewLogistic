@@ -38,7 +38,7 @@ const Footer = () => {
         color: '#fff',
         cursor: 'pointer',
         '&:hover': {
-            textDecoration: 'underline',
+            // textDecoration: 'underline',
             color: '#f1f1f1',
         },
         fontSize: 16,
@@ -68,7 +68,8 @@ const Footer = () => {
                 break;
 
             case 'Wechat':
-                window.open(`https://facebook.com`, "_target")
+                // window.open(`https://facebook.com`, "_target")
+                window.open(`https://api.whatsapp.com/send/?phone=${phoneNumber}&text&type=phone_number&app_absent=0`, "_target")
                 break;
 
             case 'Gmail':
@@ -76,8 +77,23 @@ const Footer = () => {
                 window.open(`mailto:${mailaddress}`, "_target")
                 break;
 
-            case 'faq':
-                // navigate("/faq", { replace: true })
+            case 'faq-0':
+                navigate("/faq/0", { replace: true })
+                window.scrollTo(0, 0)
+                break;
+
+            case 'faq-1':
+                navigate("/faq/1", { replace: true })
+                window.scrollTo(0, 0)
+                break;
+
+            case 'faq-2':
+                navigate("/faq/2", { replace: true })
+                window.scrollTo(0, 0)
+                break;
+
+            case 'pricing':
+                navigate("/pricing", { replace: true })
                 window.scrollTo(0, 0)
                 break;
 
@@ -113,38 +129,38 @@ const Footer = () => {
                     <Heading>客服服务</Heading>
                     <FooterText>
                         <LocationOnIcon sx={{ my: 'auto' }} />
-                        <Typography variant="subtitle" component="a" sx={{ ...InfoStyle }} >Hongnion Garden, 93150 Kuching, Sarawak</Typography>
+                        <Typography variant="subtitle" sx={{ ...InfoStyle }} >Hongnion Garden, 93150 Kuching, Sarawak</Typography>
                     </FooterText>
                     <FooterText>
                         <CallIcon sx={{ my: 'auto' }} />
-                        <Typography variant="subtitle" component="a" sx={{ ...InfoStyle }} >011 - 5555 2203</Typography>
+                        <Typography variant="subtitle" sx={{ ...InfoStyle }} >011 - 5555 2203</Typography>
                     </FooterText>
                     <FooterText onClick={() => handleClick("Gmail")}>
                         <EmailIcon sx={{ my: 'auto' }} />
-                        <Typography variant="subtitle" component="a" sx={{ ...InfoStyle }} >yawei_helpdesk@gmail.com</Typography>
+                        <Typography variant="subtitle" sx={{ ...InfoStyle }} >yawei_helpdesk@gmail.com</Typography>
                     </FooterText>
                     <FooterText>
                         <AccessTimeIcon sx={{ my: 'auto' }} />
-                        <Typography variant="subtitle" component="a" sx={{ ...InfoStyle }} >Mon - Sat : 9:00am - 6:00pm</Typography>
+                        <Typography variant="subtitle" sx={{ ...InfoStyle }} >Mon - Sat : 9:00am - 6:00pm</Typography>
                     </FooterText>
                     <FooterText>
                         <FacebookIcon sx={{ my: 'auto' }} />
-                        <Typography variant="subtitle" component="a" sx={{ ...InfoStyle }} >Yourway Logistic Sdn Bhd</Typography>
+                        <Typography variant="subtitle" sx={{ ...InfoStyle }} >Yourway Logistic Sdn Bhd</Typography>
                     </FooterText>
                 </Grid>
 
                 <Grid item xs={12} md={4} className="container-item">
                     <Heading>相关资讯</Heading>
-                    <Typography sx={{ ...FooterLinkStyle }} onClick={() => handleClick('faq')}>
+                    <Typography sx={{ ...FooterLinkStyle }} onClick={() => handleClick('faq-0')}>
                         常见问题
                     </Typography>
-                    <Typography sx={{ ...FooterLinkStyle }} onClick={() => handleClick('faq')}>
+                    <Typography sx={{ ...FooterLinkStyle }} onClick={() => handleClick('faq-2')}>
                         如何代运
                     </Typography>
-                    <Typography sx={{ ...FooterLinkStyle }} onClick={() => handleClick('faq')}>
+                    <Typography sx={{ ...FooterLinkStyle }} onClick={() => handleClick('faq-2')}>
                         普货和敏感货
                     </Typography>
-                    <Typography sx={{ ...FooterLinkStyle }} onClick={() => handleClick('faq')}>
+                    <Typography sx={{ ...FooterLinkStyle }} onClick={() => handleClick('pricing')}>
                         海运费用
                     </Typography>
                     <Typography sx={{ ...FooterLinkStyle }} onClick={() => handleClick('profile')}>

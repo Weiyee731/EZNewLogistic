@@ -84,7 +84,7 @@ export default function Homepage() {
                                         id="trackingNumber"
                                         type="text"
                                         color="secondary"
-                                        label="Tracking Number"
+                                        label="快递单号"
                                         onChange={(e) => setTrackingNumber(e.target.value)}
                                         value={trackingNumber}
                                     />

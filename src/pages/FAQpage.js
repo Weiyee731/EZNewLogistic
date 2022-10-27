@@ -8,6 +8,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import { Card, CardContent, Typography, Grid, Tabs, Tab, Box } from '@mui/material';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 
+
 export const FAQpage = () => {
     const FAQItem = [
         {
@@ -161,8 +162,7 @@ export const FAQpage = () => {
                 setParcelValue(parseInt(path))
             }
         }
-    }, [])
-
+    }, [window.location.pathname])
 
     const FAQLayout = (FaqTitleID) => {
         return (
