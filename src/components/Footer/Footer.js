@@ -113,7 +113,7 @@ const Footer = () => {
                     <Heading>客服服务</Heading>
                     <FooterText>
                         <LocationOnIcon sx={{ my: 'auto' }} />
-                        <Typography variant="subtitle" component="a" sx={{ ...InfoStyle }} >Stapok</Typography>
+                        <Typography variant="subtitle" component="a" sx={{ ...InfoStyle }} >Hongnion Garden, 93150 Kuching, Sarawak</Typography>
                     </FooterText>
                     <FooterText>
                         <CallIcon sx={{ my: 'auto' }} />

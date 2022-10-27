@@ -1807,6 +1807,19 @@
   dependencies:
     "@babel/runtime" "^7.6.2"
 
+"@react-thermal-printer/image@^0.9.1":
+  "integrity" "sha512-lmIcEhDu8qo2Bn1f0dDGLHORUtUfnfkYaRv2DiqhLX5jDHWI78JakGYTDNvF0BBxcvr4zJgBMXV7NbYYLH/VpA=="
+  "resolved" "https://registry.npmjs.org/@react-thermal-printer/image/-/image-0.9.1.tgz"
+  "version" "0.9.1"
+
+"@react-thermal-printer/printer@^0.9.1":
+  "integrity" "sha512-/8x1sHMFJLEAsQ4p8J0F+UFX3Skyq6xtMsxKXnfXlrPeh1vQbJG746S0ggybWx/Q/77jzsWvJKqS/fGg58ipTQ=="
+  "resolved" "https://registry.npmjs.org/@react-thermal-printer/printer/-/printer-0.9.1.tgz"
+  "version" "0.9.1"
+  dependencies:
+    "@react-thermal-printer/image" "^0.9.1"
+    "iconv-lite" "^0.6.3"
+
 "@reduxjs/toolkit@^1.8.6":
   "integrity" "sha512-4Ia/Loc6WLmdSOzi7k5ff7dLK8CgG2b8aqpLsCAJhazAzGdp//YBUSaj0ceW6a3kDBDNRrq5CRwyCS0wBiL1ig=="
   "resolved" "https://registry.npmjs.org/@reduxjs/toolkit/-/toolkit-1.8.6.tgz"
@@ -4971,11 +4984,6 @@
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
 
-"fsevents@^2.3.2", "fsevents@~2.3.2":
-  "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
-  "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
-  "version" "2.3.2"
-
 "function-bind@^1.1.1":
   "integrity" "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A=="
   "resolved" "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
@@ -7861,7 +7869,7 @@
     "strip-ansi" "^6.0.1"
     "text-table" "^0.2.0"
 
-"react-dom@^17.0.0 || ^18.0.0", "react-dom@^18.0.0", "react-dom@^18.2.0", "react-dom@>= 16.8.0", "react-dom@>=16", "react-dom@>=16.14.0", "react-dom@>=16.6.0", "react-dom@>=16.8":
+"react-dom@*", "react-dom@^17.0.0 || ^18.0.0", "react-dom@^18.0.0", "react-dom@^18.2.0", "react-dom@>= 16.8.0", "react-dom@>=16", "react-dom@>=16.14.0", "react-dom@>=16.6.0", "react-dom@>=16.8":
   "integrity" "sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-18.2.0.tgz"
   "version" "18.2.0"
@@ -8012,6 +8020,14 @@
   optionalDependencies:
     "fsevents" "^2.3.2"
 
+"react-thermal-printer@^0.10.5":
+  "integrity" "sha512-ECTvZAMERU83TReLDvG9/FKyK5fWXE1KAU6W99zuV+f7iIUPnO82aMHBPIJ8d934CAY5UW/6DMiDcEFzc+ohUw=="
+  "resolved" "https://registry.npmjs.org/react-thermal-printer/-/react-thermal-printer-0.10.5.tgz"
+  "version" "0.10.5"
+  dependencies:
+    "@react-thermal-printer/printer" "^0.9.1"
+    "classnames" "^2.3.1"
+
 "react-thunk@^1.0.0":
   "integrity" "sha512-OhJ0AdnFASwN4qkQ62X2xCkVPPAKM12Ju7H8jxPt6q9gTwhIRlWuzlbg0RZqYPQ88MX/s5VEvYiTImBMJWspPQ=="
   "resolved" "https://registry.npmjs.org/react-thunk/-/react-thunk-1.0.0.tgz"
@@ -8034,7 +8050,7 @@
     "loose-envify" "^1.4.0"
     "prop-types" "^15.6.2"
 
-"react@^16.8.0 || ^17.0.0-rc.1 || ^18.0.0", "react@^16.8.3 || ^17 || ^18", "react@^16.9.0 || ^17.0.0 || ^18", "react@^17.0.0 || ^18.0.0", "react@^18.0.0", "react@^18.2.0", "react@>= 16", "react@>= 16.8.0", "react@>=0.14.0", "react@>=15.0.0", "react@>=16", "react@>=16.14.0", "react@>=16.6.0", "react@>=16.8", "react@>=16.8.0", "react@~0.14.0 || ^15.0.0":
+"react@*", "react@^16.8.0 || ^17.0.0-rc.1 || ^18.0.0", "react@^16.8.3 || ^17 || ^18", "react@^16.9.0 || ^17.0.0 || ^18", "react@^17.0.0 || ^18.0.0", "react@^18.0.0", "react@^18.2.0", "react@>= 16", "react@>= 16.8.0", "react@>=0.14.0", "react@>=15.0.0", "react@>=16", "react@>=16.14.0", "react@>=16.6.0", "react@>=16.8", "react@>=16.8.0", "react@~0.14.0 || ^15.0.0":
   "integrity" "sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ=="
   "resolved" "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   "version" "18.2.0"

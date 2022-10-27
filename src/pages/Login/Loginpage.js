@@ -365,6 +365,7 @@ export const Loginpage = () => {
                                 }
                                 label="Password"
                             />
+                            {loginAccount.PASSWORD !== "" && loginAccount.PASSWORD.length < 8 && <Typography>需要输入至少 8 位数密码</Typography>}
                         </FormControl>
 
                         {

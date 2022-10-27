@@ -287,7 +287,7 @@ export default function Homepage() {
                     </Grid>
                 </div>
 
-                {/* <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} /> */}
+                <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} />
             </div>
         </div>
     );
