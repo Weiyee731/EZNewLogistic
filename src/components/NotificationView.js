@@ -14,8 +14,6 @@ import ReportIcon from '@mui/icons-material/Report';
 import Button from '@mui/material/Button';
 
 export const NotificationView = ({ title, message, type, date }) => {
-
-
     BootstrapDialogTitle.propTypes = {
         children: PropTypes.node,
         onClose: PropTypes.func.isRequired,
@@ -52,8 +50,8 @@ export const NotificationView = ({ title, message, type, date }) => {
         console.log("Dasdadasdd")
         setOpen(!open)
     }
-    return (
 
+    return (
         <div
             style={{
                 borderColor: 'WHITE',
@@ -65,7 +63,7 @@ export const NotificationView = ({ title, message, type, date }) => {
                 padding: '5px',
                 marginTop: "10pt",
             }}
-            onClick={() => setOpen(true)}
+            onClick={() => handleOpenClose()}
         >
             <div
                 style={{
@@ -89,7 +87,6 @@ export const NotificationView = ({ title, message, type, date }) => {
             </div>
 
             <BootstrapDialog
-                // onClose={setOpen(false)}
                 aria-labelledby="customized-dialog-title"
                 open={open}
                 fullWidth
