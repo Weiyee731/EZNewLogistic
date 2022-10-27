@@ -16,8 +16,7 @@ import RequireAuth from './pages/RequireAuth';
 function App() {
   return (
     <Provider store={store}>
-      <main className='App'>
-
+      <main>
         <Routes>
           <Route path="/" element={<Layout />} >
             {/* Public Routes */}

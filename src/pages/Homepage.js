@@ -64,10 +64,9 @@ export default function Homepage() {
             </Carousel>
 
             <div
-                style={{ margin: "40px 40px 0px 40px" }}
+                style={{ marginTop: "20px" }}
+                className="container"
             >
-                {/* notification area */}
-
                 <Grid container spacing={2} style={{ paddingBottom: "20pt" }}>
                     <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
                         <Card style={{ height: "300pt" }}>
@@ -80,7 +79,7 @@ export default function Homepage() {
                                         width: "100%",
                                         backgroundColor: 'white',
                                     }}
-                                    style={{ paddingTop: "10pt", paddingBottom: "10pt" }}
+                                    style={{ marginBottom: '10px' }}
                                     id="trackingNumber"
                                     type="text"
                                     color="secondary"
@@ -89,15 +88,14 @@ export default function Homepage() {
                                     value={trackingNumber}
                                 />
                                 <Button
+                                    color="secondary"
                                     variant="contained"
                                     sx={{
-                                        backgroundColor: "#5A98B7",
-                                        width: '100%',
-                                        height: '100%',
                                         color: 'white',
-                                        fontWeight: "bold",
-                                        fontSize: "11pt",
-                                        letterSpacing: "1pt"
+                                        display: 'block',
+                                        margin: '0 auto',
+                                        width: '100px',
+                                        fontWeight: 'bold',
                                     }}
                                     onClick={() => dispatch(GitAction.CallGetParcelStatus2({ trackingNumber: `and TrackingNumber='${trackingNumber}'` }))}
                                 >
@@ -118,7 +116,7 @@ export default function Homepage() {
                         </Card>
                     </Grid>
                     <Grid item md={6} xs={12} >
-                        <Card style={{ height: "300pt", overflowY: "scroll",flexshrink: 0 }} >
+                        <Card style={{ height: "300pt", overflowY: "scroll", flexshrink: 0 }} >
                             <CardContent>
                                 <Typography variant="h6" style={{ fontWeight: "bold", color: 'black', textAlign: 'center', paddingBottom: "10pt" }}  >
                                     公告处
@@ -133,60 +131,6 @@ export default function Homepage() {
                                                     title={item.NotificationTitle}
                                                     date={item.CreatedDate}
                                                 />
-                                                 <NotificationView
-                                                    key={index}
-                                                    message={item.NotificationDesc}
-                                                    title={item.NotificationTitle}
-                                                    date={item.CreatedDate}
-                                                />
-                                                 <NotificationView
-                                                    key={index}
-                                                    message={item.NotificationDesc}
-                                                    title={item.NotificationTitle}
-                                                    date={item.CreatedDate}
-                                                />
-                                                 <NotificationView
-                                                    key={index}
-                                                    message={item.NotificationDesc}
-                                                    title={item.NotificationTitle}
-                                                    date={item.CreatedDate}
-                                                />
-                                                 <NotificationView
-                                                    key={index}
-                                                    message={item.NotificationDesc}
-                                                    title={item.NotificationTitle}
-                                                    date={item.CreatedDate}
-                                                />
-                                                 <NotificationView
-                                                    key={index}
-                                                    message={item.NotificationDesc}
-                                                    title={item.NotificationTitle}
-                                                    date={item.CreatedDate}
-                                                />
-                                                 <NotificationView
-                                                    key={index}
-                                                    message={item.NotificationDesc}
-                                                    title={item.NotificationTitle}
-                                                    date={item.CreatedDate}
-                                                />
-                                                 <NotificationView
-                                                    key={index}
-                                                    message={item.NotificationDesc}
-                                                    title={item.NotificationTitle}
-                                                    date={item.CreatedDate}
-                                                />
-                                                 <NotificationView
-                                                    key={index}
-                                                    message={item.NotificationDesc}
-                                                    title={item.NotificationTitle}
-                                                    date={item.CreatedDate}
-                                                />
-                                                 <NotificationView
-                                                    key={index}
-                                                    message={item.NotificationDesc}
-                                                    title={item.NotificationTitle}
-                                                    date={item.CreatedDate}
-                                                />
                                             </>
                                         )
                                     })}
@@ -195,152 +139,12 @@ export default function Homepage() {
                         </Card>
                     </Grid>
                 </Grid>
-                {/* <Typography
-                    variant="h4"
-                    style={{ fontWeight: "bold", color: 'black' }}
-                >
-                    通告
-                </Typography>
 
-                {viewNotification && viewNotification.length > 0 ?
-                    <Grid container spacing={2}>
-                        {viewNotification.map((item, index) => {
-                            return (
-                                <Grid item xs={12} sm={12} md={12} lg={3} xl={2}>
-                                    <NotificationView
-                                        key={index}
-                                        message={item.NotificationDesc}
-                                        title={item.NotificationTitle}
-                                        date={item.CreatedDate}
-                                    />
-                                </Grid>
-                            )
-                        })}
-                    </Grid>
-                    :
-                    <div
-                        style={{
-                            textAlign: 'center',
-                            fontWeight: 'bold'
-                        }}
-                    >
-                        目前没有任何通告
-                    </div>
-                } */}
-
-                {/* parcel area */}
-                {/* <div
-                    style={{
-                        marginTop: "80px",
-                        marginBottom: "80px",
-                    }}
-                >
-                    <Typography
-                        variant="h4"
-                        style={{ fontWeight: "bold", color: 'black', textAlign: 'center' }}
-                    >
-                        Check your parcel status
-                    </Typography>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            marginTop: '20px',
-                            justifyContent: 'space-between'
-                        }}
-                    >
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={12} md={12} lg={10} xl={10}>
-                                <TextField
-                                    sx={{
-                                        width: "100%",
-                                        backgroundColor: 'white',
-                                    }}
-                                    id="trackingNumber"
-                                    type="text"
-                                    color="secondary"
-                                    label="Tracking Number"
-                                    onChange={(e) => setTrackingNumber(e.target.value)}
-                                    value={trackingNumber}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={12} lg={2} xl={2}>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    sx={{
-                                        width: '100%',
-                                        height: '100%',
-                                        color: 'white',
-                                    }}
-                                    onClick={() => dispatch(GitAction.CallGetParcelStatus2({ trackingNumber: `and TrackingNumber='${trackingNumber}'` }))}
-                                >
-                                    Search
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </div> */}
-                {/* {parcelStatus && parcelStatus.length > 0 &&
-                        <Card sx={{ marginTop: '40px' }}>
-                            <CardContent>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={12}>
-                                        <Typography variant="h5" fontWeight={'bold'} component="div" sx={{ textAlign: 'center' }}>
-                                            {parcelStatus[0].TrackingNumber}
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                                <Grid container spacing={2}>
-                                    <Grid container spacing={2} lg={3} md={3} sm={12} sx={{ marginTop: '20px' }}>
-                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                                            <Typography variant="h3" fontWeight={'bold'} component="div" sx={{ textAlign: 'center', color: theme.palette.primary.main }}>
-                                                {parcelStatus[0].Status} / N/A
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                                            Current status
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container spacing={2} lg={3} md={3} sm={12} sx={{ marginTop: '20px' }}>
-                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                                            <Typography variant="h3" fontWeight={'bold'} component="div" sx={{ textAlign: 'center', color: theme.palette.primary.main }}>
-                                                {parcelStatus[0].ProductDimensionDeep} * {parcelStatus[0].ProductDimensionHeight} * {parcelStatus[0].ProductDimensionWidth}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                                            Volume
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container spacing={2} lg={3} md={3} sm={12} sx={{ marginTop: '20px' }}>
-                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                                            <Typography variant="h3" fontWeight={'bold'} component="div" sx={{ textAlign: 'center', color: theme.palette.primary.main }}>
-                                                {parcelStatus[0].CourierName}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                                            Courier Name
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container spacing={2} lg={3} md={3} sm={12} sx={{ marginTop: '20px' }}>
-                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                                            <Typography variant="h3" fontWeight={'bold'} component="div" sx={{ textAlign: 'center', color: theme.palette.primary.main }}>
-                                                {parcelStatus[0].Remark}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12} sm={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                                            Remark
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                            </CardContent>
-                        </Card>
-                    } */}
+                <div>
+                    我们的服务
+                </div>
 
                 {/* <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} /> */}
-                {/* {parcelStatus && parcelStatus.length > 0 &&
-                        <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} data={parcelStatus[0]} />
-                    } */}
-                {/* </div> */}
             </div>
         </div >
     );

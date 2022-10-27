@@ -91,7 +91,7 @@ const Footer = () => {
     }
     return (
         <FooterContainer>
-            <Grid className="footer-container-grid" container columnSpacing={10}>
+            <Grid className="footer-container-grid" container columnSpacing={3}>
                 <Grid item xs={12} md={4} className="container-item">
                     <Heading>关于我们</Heading>
                     <FooterText>雅威国际物流提供专业从中国至东马的海运物流服务。初衷以简单，实惠，安心交托为主。</FooterText>
