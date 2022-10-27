@@ -65,7 +65,7 @@ export default function Homepage() {
             </Carousel>
 
             <div
-                style={{ marginTop: "20px", maxWidth: '1200px', marginLeft: 'auto', marginRight: 'auto' }}
+                style={{ height: '100%', maxWidth: '1200px', marginLeft: 'auto', marginRight: 'auto' }}
             >
                 <div style={styles.sectionMargin}>
                     <Grid container spacing={2}>
@@ -140,6 +140,7 @@ export default function Homepage() {
                     </Grid>
                 </div>
 
+                {/* Our services */}
                 <div style={styles.sectionMargin}>
                     <Typography variant="h4" style={styles.header}>
                         我们的服务
@@ -192,6 +193,7 @@ export default function Homepage() {
                     </Grid>
                 </div>
 
+                {/* Flow of service */}
                 <div style={styles.sectionMargin}>
                     <Typography variant="h4" style={styles.header}>
                         代运流程
@@ -200,7 +202,7 @@ export default function Homepage() {
                         <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
                             <div style={styles.flowOfService}>
                                 <div style={styles.ourServicesImageContainer}>
-                                    <img src={images.search} style={styles.ourServicesImage} />
+                                    <img src={images.location} style={styles.ourServicesImage} />
                                 </div>
                                 <div>
                                     <Typography variant="h5">
@@ -218,7 +220,7 @@ export default function Homepage() {
                         <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
                             <div style={styles.flowOfService}>
                                 <div style={styles.ourServicesImageContainer}>
-                                    <img src={images.search} style={styles.ourServicesImage} />
+                                    <img src={images.warehouse} style={styles.ourServicesImage} />
                                 </div>
                                 <div>
                                     <Typography variant="h5">
@@ -235,7 +237,7 @@ export default function Homepage() {
                         <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
                             <div style={styles.flowOfService}>
                                 <div style={styles.ourServicesImageContainer}>
-                                    <img src={images.search} style={styles.ourServicesImage} />
+                                    <img src={images.shipment} style={styles.ourServicesImage} />
                                 </div>
                                 <div>
                                     <Typography variant="h5">
@@ -253,7 +255,7 @@ export default function Homepage() {
                         <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
                             <div style={styles.flowOfService}>
                                 <div style={styles.ourServicesImageContainer}>
-                                    <img src={images.search} style={styles.ourServicesImage} />
+                                    <img src={images.tracking} style={styles.ourServicesImage} />
                                 </div>
                                 <div>
                                     <Typography variant="h5">
@@ -270,7 +272,7 @@ export default function Homepage() {
                         <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
                             <div style={styles.flowOfService}>
                                 <div style={styles.ourServicesImageContainer}>
-                                    <img src={images.search} style={styles.ourServicesImage} />
+                                    <img src={images.notification} style={styles.ourServicesImage} />
                                 </div>
                                 <div>
                                     <Typography variant="h5">
@@ -287,7 +289,7 @@ export default function Homepage() {
 
                 {/* <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} /> */}
             </div>
-        </div >
+        </div>
     );
 }
 
