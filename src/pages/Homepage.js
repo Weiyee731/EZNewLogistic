@@ -30,7 +30,7 @@ export default function Homepage() {
     };
 
     useEffect(() => {
-        dispatch(GitAction.CallGetNotification({ status: 1 }))
+        dispatch(GitAction.CallGetNotification({ status: 2 }))
     }, [])
 
     useEffect(() => {
