@@ -59,7 +59,7 @@ const Footer = () => {
     const handleClick = (feature) => {
         switch (feature) {
             case 'Facebook':
-                window.open(`https://facebook.com`, "_target")
+                window.open("https://www.facebook.com/yourwaylogistic")
                 break;
 
             case 'Whatsapp':
@@ -69,7 +69,7 @@ const Footer = () => {
 
             case 'Wechat':
                 // window.open(`https://facebook.com`, "_target")
-                window.open(`https://api.whatsapp.com/send/?phone=${phoneNumber}&text&type=phone_number&app_absent=0`, "_target")
+                window.open("https://u.wechat.com/IJ3N-SlE7TJbVNdXqF20Ev4")
                 break;
 
             case 'Gmail':
@@ -119,9 +119,9 @@ const Footer = () => {
                         <IconButton sx={{ ...IconButtonStyle }} onClick={() => handleClick('Whatsapp')}>
                             <WhatsAppIcon sx={{ ...IconStyle }} size="large" />
                         </IconButton>
-                        <IconButton sx={{ ...IconButtonStyle }} onClick={() => handleClick('Wechat')}>
+                        {/* <IconButton sx={{ ...IconButtonStyle }} onClick={() => handleClick('Wechat')}>
                             <span class='material-icons' style={{ ...IconStyle }}>wechat</span>
-                        </IconButton>
+                        </IconButton> */}
                     </Stack>
                 </Grid>
 

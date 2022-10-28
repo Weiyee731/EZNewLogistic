@@ -252,9 +252,18 @@ export const Profilepage = () => {
                                     </Grid>
                                     <Grid item xs={12} md={6}>
                                         <Item>
-                                            户口状态: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.UserStatus}</b>
+                                            地区: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.AreaCode}</b>
                                         </Item>
                                     </Grid>
+                                    {/* <Grid item xs={12} md={6}>
+                                        <Item>
+                                            户口状态: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.UserStatus}</b>
+                                        </Item>
+                                    </Grid> */}
+
+
+
+
                                     <Grid item xs={12} md={6}>
                                         <Item>
                                             姓名: <b>{profile.Fullname}</b>
@@ -265,17 +274,11 @@ export const Profilepage = () => {
                                             昵称: <b>{profile.UserNickname}</b>
                                         </Item>
                                     </Grid>
-
-                                    <Grid item xs={12} md={3}>
-                                        <Item>
-                                            地区: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.AreaCode}</b>
-                                        </Item>
-                                    </Grid>
-                                    <Grid item xs={12} md={9}>
+                                    {/* <Grid item xs={12} md={9}>
                                         <Item>
                                             地址: <b>{profile.UserAddress}</b>
                                         </Item>
-                                    </Grid>
+                                    </Grid> */}
 
                                     <Grid item xs={12} md={6} lg={4} >
                                         <Item>
@@ -442,7 +445,6 @@ export const Profilepage = () => {
                         draggable: false,
                         theme: "colored",
                     })
-
                 }
             }
             else {
@@ -500,7 +502,7 @@ export const Profilepage = () => {
                                 size="small"
                                 sx={{ my: 1 }}
                             />
-                            <TextField id="profile--address"
+                            {/* <TextField id="profile--address"
                                 value={accountInfo.USERADDRESS}
                                 onChange={(event) => { handleInputChange("USERADDRESS", event) }}
                                 label="住家地址"
@@ -508,7 +510,7 @@ export const Profilepage = () => {
                                 variant="filled"
                                 size="small"
                                 sx={{ my: 1 }}
-                            />
+                            /> */}
                             <TextField id="profile--contact"
                                 value={accountInfo.CONTACTNO}
                                 onChange={(event) => { handleInputChange("CONTACTNO", event) }}
