@@ -150,30 +150,30 @@ function HamburgerMenu() {
         <List>
           <li>
             <ItemLink onClick={handleClick} to="/">
-              Home
+              首页
             </ItemLink>
           </li>
           <li>
             <ItemLink onClick={handleClick} to="/pricing">
-              Pricing
+              运费查询
             </ItemLink>
           </li>
 
           <li>
             <ItemLink onClick={handleClick} to={auth.UserID !== null ? "/profile" : "/login"}>
-              Profile
+              个人资料
             </ItemLink>
           </li>
           <li>
             <ItemLink onClick={handleClick} to="/faq/0">
-              FAQ
+              常见问题
             </ItemLink>
           </li>
           {
             !isStringNullOrEmpty(auth?.UserID) && !isStringNullOrEmpty(auth?.Username) &&
             <li>
               <ItemLink onClick={handleLogout} to="/">
-                Logout <LogoutIcon size="large" sx={{ fontSize: 30 }} />
+                登出 <LogoutIcon size="large" sx={{ fontSize: 30 }} />
               </ItemLink>
             </li>
           }
