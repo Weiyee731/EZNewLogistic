@@ -83,5 +83,6 @@ const styles = {
     ourServicesDesc: {
         color: '#7c7c7c',
         padding: '0 20px',
+        textAlign: 'center'
     },
 }

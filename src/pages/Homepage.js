@@ -44,7 +44,7 @@ export default function Homepage() {
                 infiniteLoop={true}
                 autoPlay={true}
                 labels={false}
-                showArrows={false}
+                showArrows={true}
             >
                 <div>
                     <img src="https://img.freepik.com/premium-photo/transportation-logistics-container-cargo-ship-cargo-plane-3d-rendering-illustration_37416-487.jpg?w=2000" />
