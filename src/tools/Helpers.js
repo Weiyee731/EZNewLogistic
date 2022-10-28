@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from "react"
+
 const month = ['']
 // validation functions
 export const isStringNullOrEmpty = (value) => { return (typeof value === 'undefined') ? true : (value === null || value == null) ? true : (typeof value === "string" && value.trim() === "") ? true : false }
@@ -175,9 +177,29 @@ export const getFileTypeByExtension = (ext) => {
 }
 
 // screen function
-export function getWindowDimensions() {
-    const { innerWidth: screenWidth, innerHeight: screenHeight } = window;
-    return { screenWidth, screenHeight };
+function getWindowDimensions() {
+    const { innerWidth: width, innerHeight: height } = window;
+    return {
+        width,
+        height
+    };
+}
+
+export const useWindowDimensions = () => {
+    const [windowDimensions, setWindowDimensions] = useState(
+        getWindowDimensions()
+    );
+
+    useEffect(() => {
+        function handleResize() {
+            setWindowDimensions(getWindowDimensions());
+        }
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    return windowDimensions;
 }
 
 // currency / money handler functions
