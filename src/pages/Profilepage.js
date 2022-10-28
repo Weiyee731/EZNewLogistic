@@ -54,13 +54,14 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import useAuth from "../hooks/useAuth";
 import { toast } from 'react-toastify'
-import { isArrayNotEmpty, isObjectUndefinedOrNull, isStringNullOrEmpty, getWindowDimensions } from '../tools/Helpers'
+import { isArrayNotEmpty, isObjectUndefinedOrNull, isStringNullOrEmpty, useWindowDimensions } from '../tools/Helpers'
 import { ParcelPage } from "./ParcelPage";
 import { NotificationView } from "../components/NotificationView";
 
 export const Profilepage = () => {
     const { auth, setAuth } = useAuth()
     const navigate = useNavigate()
+    const { width } = useWindowDimensions()
 
     // dispatch and global props here
     const dispatch = useDispatch();
@@ -912,7 +913,7 @@ export const Profilepage = () => {
                     <SideMenu />
                 </Grid>
 
-                <Grid item xs={12} md={9} sx={(getWindowDimensions().screenWidth >= 768) ? { maxHeight: '70vh', overflowY: 'auto', my: 2 } : {}}>
+                <Grid item xs={12} md={9} sx={(width >= 768) ? { maxHeight: '70vh', overflowY: 'auto', my: 2 } : {}}>
                     <div style={{ paddingLeft: '15px', paddingRight: '15px' }}>
                         {renderPageModule(currentPage)}
                     </div>

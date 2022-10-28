@@ -266,22 +266,22 @@ export const ParcelPage = () => {
                             </div>
                         :
                         <div className="row">
-                            <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}>
+                            <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', }}>
                                 <Box sx={{ borderBottom: 1, borderColor: 'darkgrey' }}>
                                     <Tabs value={parcelValue} onChange={handleParcelStatusChange} aria-label="parcelStatus"
-                                        orientation="vertical" sx={{ borderRight: 1, borderColor: 'divider' }} variant="scrollable">
+                                        orientation="horizontal" sx={{ borderBottom: 1, borderColor: 'divider' }} variant="scrollable">
                                         {
                                             parcelStatus.length > 0 && parcelStatus.map((x, index) => {
                                                 return (<Tab key={"status_" + index} label={x.ContainerStatusCN} {...a11yProps(x.ContainerStatusID)} />)
                                             })
                                         }
                                     </Tabs>
+                                    {
+                                        parcelStatus.length > 0 && parcelStatus.map((x, index) => {
+                                            return (<TabPanel key={"status_" + index} style={{ width: "100%" }} value={parcelValue} index={x.ContainerStatusID}>  {userParcelLayout(x.ContainerStatusID)}  </TabPanel>)
+                                        })
+                                    }
                                 </Box>
-                                {
-                                    parcelStatus.length > 0 && parcelStatus.map((x, index) => {
-                                        return (<TabPanel key={"status_" + index} style={{ width: "100%" }} value={parcelValue} index={x.ContainerStatusID}>  {userParcelLayout(x.ContainerStatusID)}  </TabPanel>)
-                                    })
-                                }
                             </Box>
                         </div>
                 }
@@ -290,7 +290,7 @@ export const ParcelPage = () => {
     }
 
     return (
-        <div className="container" style={{ padding: "15pt" }}>
+        <div className="container">
             {
                 UserCode !== unKnownUserCode &&
                 <SearchBar

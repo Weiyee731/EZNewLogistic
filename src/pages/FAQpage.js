@@ -7,9 +7,10 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import InfoIcon from '@mui/icons-material/Info';
 import { Card, CardContent, Typography, Grid, Tabs, Tab, Box } from '@mui/material';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
-
+import { useWindowDimensions } from "../tools/Helpers";
 
 export const FAQpage = () => {
+    const { width } = useWindowDimensions();
     const FAQItem = [
         {
             FAQID: 1, FAQTitle: "包裹咨询", FAQDetails: [
@@ -173,17 +174,24 @@ export const FAQpage = () => {
                         {
                             data.FAQDetails.length > 0 && data.FAQDetails.map((details, detailIndex) => {
                                 return (
-                                    <div className="row" key={'faq_' + detailIndex}>
+                                    <div className="row my-2" key={'faq_' + detailIndex}>
                                         <Accordion>
                                             <AccordionSummary
                                                 expandIcon={<ExpandMoreIcon />}
                                                 aria-controls="panel1a-content"
                                                 id="panel1a-header"
                                             >
-                                                <Grid container spacing={2}>
-                                                    <Grid item xs={1}><InfoIcon /></Grid>
-                                                    <Grid item xs={11}><Typography>{details.DetailTitle}</Typography></Grid>
-                                                </Grid>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'row',
+                                                        alignItems: 'center',
+                                                        width: '100%',
+                                                    }}
+                                                >
+                                                    <InfoIcon />
+                                                    <Typography style={{ paddingLeft: "15pt" }}>{details.DetailTitle}</Typography>
+                                                </div>
                                             </AccordionSummary>
                                             <AccordionDetails style={{ color: "#686868" }}>
                                                 {
@@ -237,28 +245,28 @@ export const FAQpage = () => {
     }
 
     return (
-        <div className="row" style={{ margin: window.innerWidth < 600 ? "0px 0px" : "20px 16px" }} >
-            <div style={{ padding: window.innerWidth < 600 ? "10pt 5pt 0pt" : "10pt 20pt 0pt" }}>
-                <Typography style={{ fontWeight: "bold", fontSize: "20pt" }}>   常见问题  </Typography>
+        <div className="row" style={{ margin: width < 600 ? "0px 0px" : "20px 16px" }} >
+            <div style={{ padding: width < 600 ? "10pt 5pt 0pt" : "10pt 20pt 0pt" }}>
+                <Typography style={{ fontWeight: "bold", fontSize: "20pt" }}>常见问题</Typography>
                 <hr />
             </div>
-            <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: window.innerWidth < 600 ? "" :  "flex"}}>
+            <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: width < 600 ? "" : "flex" }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'darkgrey' }}>
                     <Tabs value={parcelValue} onChange={handleParcelStatusChange} aria-label="FaqTitleList"
-                        orientation={window.innerWidth < 600 ? "horizontal" :  "vertical"} sx={{ borderRight: 1, borderColor: 'divider' }} variant="scrollable">
-                    {
-                        FaqTitleList.length > 0 && FaqTitleList.map((x, index) => {
-                            return (<Tab key={"status_" + index} style={{ fontWeight: "bold" }} label={x.FaqTitle} {...a11yProps(x.FaqTitleID)} />)
-                        })
-                    }
-                </Tabs>
+                        orientation={width < 600 ? "horizontal" : "vertical"} sx={{ borderRight: 1, borderColor: 'divider' }} variant="scrollable">
+                        {
+                            FaqTitleList.length > 0 && FaqTitleList.map((x, index) => {
+                                return (<Tab key={"status_" + index} style={{ fontWeight: "bold" }} label={x.FaqTitle} {...a11yProps(x.FaqTitleID)} />)
+                            })
+                        }
+                    </Tabs>
+                </Box>
+                {
+                    FaqTitleList.length > 0 && FaqTitleList.map((x, index) => {
+                        return (<TabPanel key={"status_" + index} style={{ width: "100%" }} value={parcelValue} index={x.FaqTitleID}>  {FAQLayout(x.FaqTitleID)}  </TabPanel>)
+                    })
+                }
             </Box>
-            {
-                FaqTitleList.length > 0 && FaqTitleList.map((x, index) => {
-                    return (<TabPanel key={"status_" + index} style={{ width: "100%" }} value={parcelValue} index={x.FaqTitleID}>  {FAQLayout(x.FaqTitleID)}  </TabPanel>)
-                })
-            }
-        </Box>
         </div >
     )
 }

@@ -12,7 +12,7 @@ import { letterSpacing } from "@mui/system";
 import { images } from '../constants'
 import { Tracking } from "../components/Homepage/Tracking";
 import { OurServices } from "../components/Homepage/OurServices";
-import { FlowOfDelivery } from "../components/Homepage/FlowOfDelivery";
+import { ShippingFlow } from "../components/Homepage/ShippingFlow";
 
 export default function Homepage() {
     const { loading, state, viewNotification, parcelStatus } = useSelector(state => ({
@@ -75,12 +75,14 @@ export default function Homepage() {
                                     <div>
                                         {viewNotification.map((item, index) => {
                                             return (
-                                                <NotificationView
-                                                    key={index}
-                                                    message={item.NotificationDesc}
-                                                    title={item.NotificationTitle}
-                                                    date={item.CreatedDate}
-                                                />
+                                                <>
+                                                    <NotificationView
+                                                        key={index}
+                                                        message={item.NotificationDesc}
+                                                        title={item.NotificationTitle}
+                                                        date={item.CreatedDate}
+                                                    />
+                                                </>
                                             )
                                         })}
                                     </div>
@@ -97,7 +99,7 @@ export default function Homepage() {
 
                 {/* Flow of service */}
                 <div style={styles.sectionMargin}>
-                    <FlowOfDelivery />
+                    <ShippingFlow />
                 </div>
                 <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} />
             </div>

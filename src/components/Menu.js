@@ -141,7 +141,7 @@ function HamburgerMenu() {
 
   return (
     <>
-      <MenuLabel htmlFor="navi-toggle" onClick={handleClick} style={{ margin: '10px' }}>
+      <MenuLabel htmlFor="navi-toggle" onClick={handleClick} style={{ marginLeft: '10px' }}>
         <Icon clicked={click}>&nbsp;</Icon>
       </MenuLabel>
       <NavBackground clicked={click}>&nbsp;</NavBackground>

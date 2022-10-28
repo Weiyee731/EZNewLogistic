@@ -48,6 +48,10 @@ display: flex;
 @media (max-width: 768px) {
 	width: 360px;
 }
+
+@media (max-width: 480px) {
+	width: 280px;
+}
 `;
 
 // export const FooterLink = styled.a`
