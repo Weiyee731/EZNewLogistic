@@ -237,28 +237,28 @@ export const FAQpage = () => {
     }
 
     return (
-        <div className="row" style={{ margin: "20px 16px" }} >
-            <div style={{ padding: "10pt 20pt 0pt" }}>
+        <div className="row" style={{ margin: window.innerWidth < 600 ? "0px 0px" : "20px 16px" }} >
+            <div style={{ padding: window.innerWidth < 600 ? "10pt 5pt 0pt" : "10pt 20pt 0pt" }}>
                 <Typography style={{ fontWeight: "bold", fontSize: "20pt" }}>   常见问题  </Typography>
                 <hr />
             </div>
-            <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}>
+            <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: window.innerWidth < 600 ? "" :  "flex"}}>
                 <Box sx={{ borderBottom: 1, borderColor: 'darkgrey' }}>
                     <Tabs value={parcelValue} onChange={handleParcelStatusChange} aria-label="FaqTitleList"
-                        orientation="vertical" sx={{ borderRight: 1, borderColor: 'divider' }} variant="scrollable">
-                        {
-                            FaqTitleList.length > 0 && FaqTitleList.map((x, index) => {
-                                return (<Tab key={"status_" + index} style={{ fontWeight: "bold" }} label={x.FaqTitle} {...a11yProps(x.FaqTitleID)} />)
-                            })
-                        }
-                    </Tabs>
-                </Box>
-                {
-                    FaqTitleList.length > 0 && FaqTitleList.map((x, index) => {
-                        return (<TabPanel key={"status_" + index} style={{ width: "100%" }} value={parcelValue} index={x.FaqTitleID}>  {FAQLayout(x.FaqTitleID)}  </TabPanel>)
-                    })
-                }
+                        orientation={window.innerWidth < 600 ? "horizontal" :  "vertical"} sx={{ borderRight: 1, borderColor: 'divider' }} variant="scrollable">
+                    {
+                        FaqTitleList.length > 0 && FaqTitleList.map((x, index) => {
+                            return (<Tab key={"status_" + index} style={{ fontWeight: "bold" }} label={x.FaqTitle} {...a11yProps(x.FaqTitleID)} />)
+                        })
+                    }
+                </Tabs>
             </Box>
-        </div>
+            {
+                FaqTitleList.length > 0 && FaqTitleList.map((x, index) => {
+                    return (<TabPanel key={"status_" + index} style={{ width: "100%" }} value={parcelValue} index={x.FaqTitleID}>  {FAQLayout(x.FaqTitleID)}  </TabPanel>)
+                })
+            }
+        </Box>
+        </div >
     )
 }

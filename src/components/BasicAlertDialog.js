@@ -52,6 +52,8 @@ BootstrapDialogTitle.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
+
+
 export const BasicAlertDialog = ({ open, handleOpenClose, data }) => {
     console.log(data)
 

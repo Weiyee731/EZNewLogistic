@@ -59,14 +59,14 @@ export default function Homepage() {
             >
                 <div style={styles.sectionMargin}>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
+                        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                             <Card style={{ height: "300pt" }}>
                                 <CardContent>
                                     <Tracking parcelStatus={parcelStatus[0]} />
                                 </CardContent>
                             </Card>
                         </Grid>
-                        <Grid item md={6} xs={12} >
+                        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                             <Card style={{ height: "300pt", overflowY: "scroll", flexshrink: 0 }} >
                                 <CardContent>
                                     <Typography variant="h6" style={{ fontWeight: "bold", color: 'black', textAlign: 'center', paddingBottom: "10pt" }}>
@@ -99,7 +99,6 @@ export default function Homepage() {
                 <div style={styles.sectionMargin}>
                     <FlowOfDelivery />
                 </div>
-
                 <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} />
             </div>
         </div>
