@@ -55,6 +55,27 @@ export class GitEpic {
       }
     }));
 
+    User_ForgetPassword = action$ =>
+    action$.pipe(filter(action => action.type === GitAction.ForgetPassword), map(action => {
+      return dispatch => {
+        console.log(url + "User_ForgetPassword?" +
+        "USEREMAIL=" + action.payload.UserEmail )
+        try {
+          return fetch(url + "User_ForgetPassword?" +
+            "USEREMAIL=" + action.payload.UserEmail 
+          )
+            .then(response => response.json())
+            .then(json => {
+              json = JSON.parse(json)
+              return dispatch({ type: GitAction.ForgotPassword, payload: json });
+            });
+        } catch (error) {
+          toast.error("Error Code: User_ForgetPassword")
+          return dispatch({ type: GitAction.ForgotPassword, payload: [] });
+        }
+      }
+    }));
+
   User_ViewAreaCode = action$ =>
     action$.pipe(filter(action => action.type === GitAction.FetchUserAreaCode), map(action => {
       return dispatch => {

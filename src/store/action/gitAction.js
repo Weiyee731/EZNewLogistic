@@ -111,6 +111,24 @@ export class GitAction {
     };
   }
 
+
+  static ForgetPassword = "ForgetPassword";
+  static ForgotPassword = "ForgotPassword";
+  static CallResetPassword(propsData) {
+    return {
+      type: GitAction.ForgetPassword,
+      payload: propsData
+    };
+  }
+
+
+  static ClearForgetPassword = "ClearForgetPassword";
+  static CallClearForgetPassword() {
+    return {
+      type: GitAction.ClearForgetPassword,
+    };
+  }
+
   static GetParcelStatus2 = "GetParcelStatus2";
   static GotParcelStatus2 = "GotParcelStatus2";
   static CallGetParcelStatus2(propsData) {

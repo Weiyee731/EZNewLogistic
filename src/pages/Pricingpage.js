@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
@@ -7,6 +7,10 @@ import { TempSelfCollect } from "../components/pricing/TempSelfCollect";
 import { SelfCollect } from "../components/pricing/SelfCollect";
 import { SmallParcel } from "../components/pricing/SmallParcel";
 import { LargeParcel } from "../components/pricing/LargeParcel";
+
+import IconButton from "@mui/material/IconButton"
+import PrintIcon from '@mui/icons-material/Print';
+import { useReactToPrint } from 'react-to-print';
 
 
 export const Pricingpage = () => {
@@ -18,6 +22,7 @@ export const Pricingpage = () => {
     }
 
     const [value, setValue] = React.useState(0);
+    const [print, setPrint] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -43,8 +48,25 @@ export const Pricingpage = () => {
         );
     }
 
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+    });
+
+    const renderPrintListing = () => {
+        return (
+            <>
+                <TempSelfCollect />
+                <div className="row" style={{ textAlign: "right", padding: "10pt" }}>
+                    <label style={{ fontWeight: "bold", fontSize: "15pt" }}>雅威国际物流</label>
+                </div>
+            </>
+        )
+    }
+
     return (
         <div>
+
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'darkgrey' }}>
                     <Tabs textColor="secondary" value={value} onChange={handleChange} aria-label="basic tabs example">
@@ -53,8 +75,14 @@ export const Pricingpage = () => {
                         <Tab label="派送收费(海运大貨派送)" {...a11yProps(2)} /> */}
                     </Tabs>
                 </Box>
+                <div style={{ textAlign: "right", paddingRight: "10pt" }}>
+                    <IconButton onClick={handlePrint}>
+                        <PrintIcon />
+                    </IconButton>
+                </div>
                 <TabPanel value={value} index={0}>
                     {/* <SelfCollect /> */}
+
                     <TempSelfCollect />
                 </TabPanel>
                 {/* <TabPanel value={value} index={1}>
@@ -64,6 +92,11 @@ export const Pricingpage = () => {
                     <LargeParcel />
                 </TabPanel> */}
             </Box>
+            <div style={{ display: "none" }} >
+                <div ref={componentRef}>
+                    {renderPrintListing()}
+                </div>
+            </div>
         </div>
     )
 }

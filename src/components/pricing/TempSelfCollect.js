@@ -7,10 +7,10 @@ import TableBody from '@mui/material/TableBody';
 // import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-
+import IconButton from "@mui/material/IconButton"
+import PrintIcon from '@mui/icons-material/Print';
 export const TempSelfCollect = () => {
 
     const header = [
@@ -22,6 +22,15 @@ export const TempSelfCollect = () => {
         { item1: "小于 0.01m³", item2: "单个小包裹计算", item3: "RM4/件" },
     ]
     const layoutStyle = { fontSize: "11pt", letterSpacing: 2 }
+
+    // useEffect(() => {
+    //     if (props.renderPrint === true)
+    //     {
+
+    //     }
+
+    // }, [props.renderPrint])
+
     return (
         <React.Fragment>
             <div

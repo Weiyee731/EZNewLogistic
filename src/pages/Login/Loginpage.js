@@ -27,7 +27,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
-import { isStringNullOrEmpty, isArrayNotEmpty, getWindowDimensions } from "../../Repository/Helper"
+import { isStringNullOrEmpty, isArrayNotEmpty, getWindowDimensions, isEmailValid } from "../../Repository/Helper"
 import LoginWallpaper from "../../assets/login-wallpaper.jpg"
 import './Loginpage.css';
 import Icon from "../../assets/yw_icon.png"
@@ -46,6 +46,7 @@ export const Loginpage = () => {
 
     const isFormSubmitting = useSelector(state => state.counterReducer.loading)
     const logonUser = useSelector(state => state.counterReducer.logonUser)
+    const resetPassword = useSelector(state => state.counterReducer.resetPassword)
     const AreaCodes = useSelector(state => state.counterReducer.areaCodes)
     const registration_returnValue = useSelector(state => state.counterReducer.userUpdateReturnValue)
 
@@ -128,6 +129,28 @@ export const Loginpage = () => {
     }, [logonUser])
     // when user login successfully
 
+    // when user reset password successfully
+    useEffect(() => {
+        if (isArrayNotEmpty(resetPassword)) {
+            try {
+                if (resetPassword[0].ReturnMsg !== "") {
+                    toast.success("更新密码电邮已发去您的邮箱")
+                }
+                else {
+                    if (JSON.parse(resetPassword[0].ReturnData)[0].UserID == 0) {
+                        toast.warning("此账户未注册账号")
+                    }
+                }
+            }
+            catch (Exceptions) {
+                console.log(Exceptions)
+            }
+            dispatch(GitAction.CallClearForgetPassword())
+        }
+
+    }, [resetPassword])
+    // when user reset password successfully
+
     // user registration 
     useEffect(() => {
         if (isArrayNotEmpty(registration_returnValue)) {
@@ -182,6 +205,15 @@ export const Loginpage = () => {
             setIsLoginInvalidInput(true)
         }
 
+    }
+
+    const handleForgetPassword = () => {
+        console.log("handleForgetPasswordhandleForgetPassword")
+        if (isStringNullOrEmpty(recoveryEmail) || !isEmailValid(recoveryEmail))
+            toast.error("需填写正确的邮箱")
+        else {
+            dispatch(GitAction.CallResetPassword({ UserEmail: recoveryEmail }))
+        }
     }
 
     const handleRegistration = () => {
@@ -287,6 +319,10 @@ export const Loginpage = () => {
                 setSignupAccount({ ...ReistrationUserState })
                 break;
 
+            case 'RECOVERY-EMAIL':
+                setRecoveryEmail(event.target.value)
+                break;
+
             default:
                 break;
         }
@@ -365,7 +401,6 @@ export const Loginpage = () => {
                                 }
                                 label="Password"
                             />
-                            {loginAccount.PASSWORD !== "" && loginAccount.PASSWORD.length < 8 && <Typography>需要输入至少 8 位数密码</Typography>}
                         </FormControl>
 
                         {
@@ -385,7 +420,7 @@ export const Loginpage = () => {
                             </p>
                             <p>
                                 <Link href="#" underline="hover" style={{ color: "#323232" }} onClick={() => handleModal(PASSWORD_RECOVERY, true)}>
-                                    亲，忘记了密码了吗?
+                                    亲，忘记密码了吗?
                                 </Link>
                             </p>
                         </div>
@@ -443,8 +478,9 @@ export const Loginpage = () => {
                             label="Password"
                             required
                             error={isStringNullOrEmpty(signupAccount.PASSWORD)}
-                            helpertext={isStringNullOrEmpty(signupAccount.PASSWORD) ? "您必须填写你的密码, 请确保密码是由8个字母与以上所组成" : ''}
+                            helpertext={isStringNullOrEmpty(signupAccount.PASSWORD) || signupAccount.PASSWORD.length < 8 ? "您必须填写你的密码, 请确保密码是由8个字母与以上所组成" : ''}
                         />
+                        {signupAccount.PASSWORD !== "" && signupAccount.PASSWORD.length < 8 && <label style={{ color: "red" }}>您必须填写你的密码, 请确保密码是由8个字母与以上所组成</label>}
                     </FormControl>
 
                     <FormControl sx={{ width: '100%', my: 1 }} variant="filled" size="small" >
@@ -548,7 +584,7 @@ export const Loginpage = () => {
                 <DialogActions>
                     {
                         !isFormSubmitting ?
-                            <Button sx={{ mx: 2, my: 1 }} onClick={handleRegistration} variant="contained" fullWidth> 索取您的账户 </Button>
+                            <Button sx={{ mx: 2, my: 1 }} onClick={handleForgetPassword} variant="contained" fullWidth> 索取您的账户 </Button>
                             :
                             <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mx: 2, my: 1 }}>
                                 请稍等 ...

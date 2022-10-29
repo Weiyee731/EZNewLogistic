@@ -9,6 +9,7 @@ const INITIAL_STATE = {
   parcelStatus: [],
   setting: [],
   userProfile: [],
+  resetPassword:[],
 };
 
 export function counterReducer(state = INITIAL_STATE, action) {
@@ -31,6 +32,20 @@ export function counterReducer(state = INITIAL_STATE, action) {
         loading: false,
         logonUser: action.payload
       });
+
+    case GitAction.ForgetPassword:
+      return Object.assign({}, state, { loading: true });
+    case GitAction.ForgotPassword:
+      return Object.assign({}, state, {
+        loading: false,
+        resetPassword: action.payload
+      });
+
+      case GitAction.ClearForgetPassword:
+        return Object.assign({}, state, {
+          loading: false,
+          resetPassword: []
+        });
 
     case GitAction.ClearLogonUser:
       return Object.assign({}, state, {
