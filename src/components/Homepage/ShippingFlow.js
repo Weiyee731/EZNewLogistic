@@ -11,7 +11,6 @@ import { useWindowDimensions } from "../../tools/Helpers";
 
 export const ShippingFlow = () => {
     const { width } = useWindowDimensions();
-    console.log(width);
     return (
         <React.Fragment>
             <Typography variant="h4" style={styles.header}>

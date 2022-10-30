@@ -83,7 +83,7 @@ export const Profilepage = () => {
 
     // USE EFFECT
     useEffect(() => {
-        dispatch(GitAction.CallGetNotification({ status: 1 }));
+        dispatch(GitAction.CallGetNotification({ status: 2 }));
 
         if (!isObjectUndefinedOrNull(auth) && !isStringNullOrEmpty(auth.UserID)) {
             dispatch(GitAction.CallFetchUserProfileByID({ UserID: auth.UserID }));
@@ -200,6 +200,7 @@ export const Profilepage = () => {
     const UserProfile = () => {
         const [isEditMode, setEditMode] = useState(false)
         const [expanded, setExpanded] = useState(true)
+        const [userExpanded, setUserExpanded] = useState(false)
 
         const Item = styled(Paper)(({ theme }) => ({
             backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#F4F5F5',
@@ -231,80 +232,9 @@ export const Profilepage = () => {
                     </AccordionSummary>
                     <AccordionDetails>
                         <AddressManager />
-                        {
-                            !isObjectUndefinedOrNull(profile) ?
-                                <Grid container rowSpacing={2} columnSpacing={3} >
-                                    <Grid item xs={12}>
-                                        <Stack direction={"row"} justifyContent="space-between">
-                                            <Typography variant="subtitle" component="p" sx={{ fontWeight: 600, my: 'auto' }}>
-                                                您的个人资料
-                                            </Typography>
-                                            <IconButton aria-label="edit-profile" onClick={() => setEditMode(true)}>
-                                                <EditIcon />
-                                            </IconButton>
-                                        </Stack>
-                                    </Grid>
-
-                                    <Grid item xs={12} md={6}>
-                                        <Item>
-                                            户口: <b style={{ fontSize: 16, color: '#0073DF' }}>{profile.Username}</b>
-                                        </Item>
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <Item>
-                                            地区: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.AreaCode}</b>
-                                        </Item>
-                                    </Grid>
-                                    {/* <Grid item xs={12} md={6}>
-                                        <Item>
-                                            户口状态: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.UserStatus}</b>
-                                        </Item>
-                                    </Grid> */}
-
-
-
-
-                                    <Grid item xs={12} md={6}>
-                                        <Item>
-                                            姓名: <b>{profile.Fullname}</b>
-                                        </Item>
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <Item>
-                                            昵称: <b>{profile.UserNickname}</b>
-                                        </Item>
-                                    </Grid>
-                                    {/* <Grid item xs={12} md={9}>
-                                        <Item>
-                                            地址: <b>{profile.UserAddress}</b>
-                                        </Item>
-                                    </Grid> */}
-
-                                    <Grid item xs={12} md={6} lg={4} >
-                                        <Item>
-                                            电话: <b>{profile.UserContactNo}</b>
-                                        </Item>
-                                    </Grid>
-                                    <Grid item xs={12} md={6} lg={4}>
-                                        <Item>
-                                            邮件: <b>{profile.UserEmailAddress}</b>
-                                        </Item>
-                                    </Grid>
-                                    <Grid item xs={12} lg={4}>
-                                        <Item>
-                                            微信: <b>{profile.UserWechatID}</b>
-                                        </Item>
-                                    </Grid>
-                                </Grid>
-                                :
-                                <Typography variant="subtitle1" component="p">没有个人资料</Typography>
-                        }
-
                     </AccordionDetails>
                 </Accordion>
-                {
-                    !isObjectUndefinedOrNull(userProfile) && <UpdateProfileForm open={isEditMode} setOpenModal={setEditMode} profile={{ ...profile }} isUserProfileUpdate={isUserProfileUpdate} />
-                }
+
             </>
 
         )
@@ -602,6 +532,84 @@ export const Profilepage = () => {
 
     }
 
+    const PersonalProfile = () => {
+        const [isEditMode, setEditMode] = useState(false)
+        const [expanded, setExpanded] = useState(true)
+
+        const Item = styled(Paper)(({ theme }) => ({
+            backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#F4F5F5',
+            ...theme.typography.body2,
+            padding: theme.spacing(1),
+            textAlign: 'left',
+            color: theme.palette.text.secondary,
+        }));
+
+        return (
+
+            !isObjectUndefinedOrNull(profile) ?
+                <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} sx={{ my: 2 }}>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="user-content"
+                        id="user-summary"
+                    >
+                        <Stack direction={"row"} justifyContent="space-between">
+                            <Typography sx={{ flexShrink: 0, fontWeight: 600, my: 'auto', mr: 2 }}>
+                                您的个人资料
+                            </Typography>
+                            <IconButton aria-label="edit-profile" onClick={() => setEditMode(true)}>
+                                <EditIcon />
+                            </IconButton>
+                        </Stack>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Grid container rowSpacing={2} columnSpacing={3} >
+                            <Grid item xs={12} md={6}>
+                                <Item>
+                                    户口: <b style={{ fontSize: 16, color: '#0073DF' }}>{profile.Username}</b>
+                                </Item>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Item>
+                                    地区: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.AreaCode}</b>
+                                </Item>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Item>
+                                    姓名: <b>{profile.Fullname}</b>
+                                </Item>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Item>
+                                    昵称: <b>{profile.UserNickname}</b>
+                                </Item>
+                            </Grid>
+                            <Grid item xs={12} md={6} lg={4} >
+                                <Item>
+                                    电话: <b>{profile.UserContactNo}</b>
+                                </Item>
+                            </Grid>
+                            <Grid item xs={12} md={6} lg={4}>
+                                <Item>
+                                    邮件: <b>{profile.UserEmailAddress}</b>
+                                </Item>
+                            </Grid>
+                            <Grid item xs={12} lg={4}>
+                                <Item>
+                                    微信: <b>{profile.UserWechatID}</b>
+                                </Item>
+                            </Grid>
+                        </Grid>
+                        {
+                            !isObjectUndefinedOrNull(userProfile) && <UpdateProfileForm open={isEditMode} setOpenModal={setEditMode} profile={{ ...profile }} isUserProfileUpdate={isUserProfileUpdate} />
+                        }
+                    </AccordionDetails>
+                </Accordion >
+                :
+                <Typography variant="subtitle1" component="p">没有个人资料</Typography>
+        )
+    }
+
     const AddressManager = () => {
         const [isCopyText, setIsCopyText] = useState("拷贝")
 
@@ -891,6 +899,7 @@ export const Profilepage = () => {
                     <>
                         {/* <AddressManager /> */}
                         <UserProfile />
+                        <PersonalProfile />
                         <NotificationAccordion />
                     </>
                 )

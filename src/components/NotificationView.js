@@ -47,7 +47,6 @@ export const NotificationView = ({ title, message, type, date }) => {
     const [open, setOpen] = React.useState(false);
 
     const handleOpenClose = () => {
-        console.log("Dasdadasdd")
         setOpen(!open)
     }
 

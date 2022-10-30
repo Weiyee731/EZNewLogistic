@@ -58,8 +58,6 @@ export class GitEpic {
     User_ForgetPassword = action$ =>
     action$.pipe(filter(action => action.type === GitAction.ForgetPassword), map(action => {
       return dispatch => {
-        console.log(url + "User_ForgetPassword?" +
-        "USEREMAIL=" + action.payload.UserEmail )
         try {
           return fetch(url + "User_ForgetPassword?" +
             "USEREMAIL=" + action.payload.UserEmail 

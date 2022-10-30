@@ -81,8 +81,6 @@ export const Pricingpage = () => {
                     </IconButton>
                 </div>
                 <TabPanel value={value} index={0}>
-                    {/* <SelfCollect /> */}
-
                     <TempSelfCollect />
                 </TabPanel>
                 {/* <TabPanel value={value} index={1}>
