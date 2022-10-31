@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { isStringNullOrEmpty } from "../Repository/Helper";
+import { isStringNullOrEmpty } from "../tools/Helpers";
 
 const RequireAuth = () => {
     const { auth, setAuth } = useAuth();

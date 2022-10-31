@@ -27,7 +27,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
-import { isStringNullOrEmpty, isArrayNotEmpty, getWindowDimensions, isEmailValid } from "../../Repository/Helper"
+import { isStringNullOrEmpty, isArrayNotEmpty, useWindowDimensions, isEmailValid } from "../../tools/Helpers";
 import LoginWallpaper from "../../assets/login-wallpaper.jpg"
 import './Loginpage.css';
 import Icon from "../../assets/yw_icon.png"
@@ -35,6 +35,7 @@ import Icon from "../../assets/yw_icon.png"
 export const Loginpage = () => {
     const REGISTRATION = 'registration'
     const PASSWORD_RECOVERY = 'password-recovery'
+    const { width } = useWindowDimensions()
 
     const { setAuth } = useAuth();
     const navigate = useNavigate()
@@ -349,7 +350,7 @@ export const Loginpage = () => {
         <div className="container">
             <Grid container spacing={2}>
                 {
-                    getWindowDimensions().screenWidth >= 768 &&
+                    width >= 768 &&
                     <Grid item md={6} xs={12}>
                         <div className="login-wallpaper" style={{ backgroundImage: `url(${LoginWallpaper})`, }}>
                             {/* <img src={LoginWallpaper} alt='loginpage--wallpaper' width={'100%'} height={'100%'} /> */}
