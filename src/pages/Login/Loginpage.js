@@ -221,7 +221,7 @@ export const Loginpage = () => {
         const isValidate = (
             (!isStringNullOrEmpty(signupAccount.USERAREAID) && signupAccount.USERAREAID > 0) &&
             !isStringNullOrEmpty(signupAccount.USERNAME) &&
-            (!isStringNullOrEmpty(signupAccount.PASSWORD) && signupAccount.PASSWORD.length >= 8) &&
+            (!isStringNullOrEmpty(signupAccount.PASSWORD) && signupAccount.PASSWORD.length >= 6) &&
             !isStringNullOrEmpty(signupAccount.FULLNAME) &&
             !isStringNullOrEmpty(signupAccount.CONTACTNO) &&
             !isStringNullOrEmpty(signupAccount.USEREMAIL)
@@ -360,8 +360,8 @@ export const Loginpage = () => {
 
                 <Grid item md={6} xs={12} sx={{ display: 'flex', p: 1, }}>
                     <div className="login-panel">
-                        <div className="logo-container">
-                            <img src={Icon} alt="logo" width="100%" height="100%" />
+                        <div style={{ textAlign: "center", padding:"10pt" }}>
+                            <img src={Icon} alt="logo" width="60%" />
                         </div>
 
                         {
@@ -370,7 +370,7 @@ export const Loginpage = () => {
                                 你所使用的户口或密码错误哟，请重新尝试登入
                             </Typography>
                         }
-                        <Typography variant="h4" component="h4" sx={{ textAlign: 'center', mb: 2 }}>雅威国际物流</Typography>
+                        {/* <Typography variant="h4" component="h4" sx={{ textAlign: 'center', mb: 2 }}>雅威国际物流</Typography> */}
                         <TextField
                             id="login-user--username"
                             label="用户户口"
@@ -479,9 +479,9 @@ export const Loginpage = () => {
                             label="Password"
                             required
                             error={isStringNullOrEmpty(signupAccount.PASSWORD)}
-                            helpertext={isStringNullOrEmpty(signupAccount.PASSWORD) || signupAccount.PASSWORD.length < 8 ? "您必须填写你的密码, 请确保密码是由8个字母与以上所组成" : ''}
+                            helpertext={isStringNullOrEmpty(signupAccount.PASSWORD) || signupAccount.PASSWORD.length < 6 ? "您必须填写你的密码, 请确保密码是由6个字母与以上所组成" : ''}
                         />
-                        {signupAccount.PASSWORD !== "" && signupAccount.PASSWORD.length < 8 && <label style={{ color: "red" }}>您必须填写你的密码, 请确保密码是由8个字母与以上所组成</label>}
+                        {signupAccount.PASSWORD !== "" && signupAccount.PASSWORD.length < 6 && <label style={{ color: "red" }}>您必须填写你的密码, 请确保密码是由6个字母与以上所组成</label>}
                     </FormControl>
 
                     <FormControl sx={{ width: '100%', my: 1 }} variant="filled" size="small" >

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import useAuth from "../hooks/useAuth";
 import { isStringNullOrEmpty } from "../tools/Helpers";
 import LogoutIcon from '@mui/icons-material/Logout';
+import Icon2 from "../assets/yw_icon.png"
 const COLORS = {
   primaryDark: "#023047",
   primaryLight: "#8ECAE6",
@@ -145,9 +146,11 @@ function HamburgerMenu() {
         <Icon clicked={click}>&nbsp;</Icon>
       </MenuLabel>
       <NavBackground clicked={click}>&nbsp;</NavBackground>
-
       <Navigation clicked={click}>
         <List>
+          <li>
+            <img src={Icon2} alt="logo" width="30%"  />
+          </li>
           <li>
             <ItemLink onClick={handleClick} to="/">
               首页
