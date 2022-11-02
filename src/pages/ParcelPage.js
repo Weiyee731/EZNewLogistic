@@ -148,9 +148,6 @@ export const ParcelPage = () => {
             else {
                 let minStatus = 0
                 let maxStatus = 0
-                console.log("dsdasdda parcelValue", parcelValue)
-                console.log("dsdasdda", statusID)
-                console.log("listing dsdasdda listing", listing)
 
                 switch (statusID) {
                     // case 1:
@@ -209,7 +206,6 @@ export const ParcelPage = () => {
                                                     <Typography style={layoutStyle}>包裹名称：{data.Item}</Typography>
                                                     <Typography style={layoutStyle}>包裹状态：{data.ContainerRemark !== null ? data.ContainerRemark : statusID === 1 ? "抵达中国仓库" : "-"}</Typography>
                                                 </Grid>
-                                                {console.log("data.ContainerRemark", data.ContainerRemark)}
                                                 <Grid item md={6} xs={12} sm={6}>
                                                     <Typography style={layoutStyle}>包裹尺寸：{data.ProductDimensionDeep + "cm x " + data.ProductDimensionHeight + "cm x " + data.ProductDimensionWidth + "cm"}</Typography>
                                                     <Typography style={layoutStyle}>包裹重量：{data.ProductWeight + "kg"}</Typography>

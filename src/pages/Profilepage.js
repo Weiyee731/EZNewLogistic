@@ -696,7 +696,7 @@ export const Profilepage = () => {
                                     </Tooltip>
                                     <TableRow key={"Address"}>
                                         <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 收货时间: </TableCell>
-                                        <TableCell align="left" sx={{ ...NormalStyle }}>星期日 - 星期五 8.30 - 17.30</TableCell>
+                                        <TableCell align="left" sx={{ ...NormalStyle }}>星期一 - 星期日 9.00 - 18.00</TableCell>
                                     </TableRow>
                                     <Tooltip title={isCopyText} placement="top" arrow>
                                         <TableRow key={"Collection Time"} onClick={() => handleCopyToClipboard('广东省东莞市虎门镇赤岗村赤岗路69号新艺工业园1号90雅威国际物流' + profile.UserCode + profile.AreaCode)}>

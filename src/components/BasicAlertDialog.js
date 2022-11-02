@@ -55,7 +55,6 @@ BootstrapDialogTitle.propTypes = {
 
 
 export const BasicAlertDialog = ({ open, handleOpenClose, data }) => {
-    console.log(data)
 
     return (
         <BootstrapDialog
