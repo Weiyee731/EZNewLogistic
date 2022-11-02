@@ -149,7 +149,7 @@ function HamburgerMenu() {
       <Navigation clicked={click}>
         <List>
           <li>
-            <img src={Icon2} alt="logo" width="30%"  />
+            <img src={Icon2} alt="logo" width="150px"  />
           </li>
           <li>
             <ItemLink onClick={handleClick} to="/">

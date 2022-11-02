@@ -59,7 +59,7 @@ export const Loginpage = () => {
     })
 
     const [signupAccount, setSignupAccount] = useState({
-        USERAREAID: 0,
+        USERAREAID: 1,
         USERNAME: '',
         PASSWORD: '',
         FULLNAME: '',
@@ -136,6 +136,7 @@ export const Loginpage = () => {
             try {
                 if (resetPassword[0].ReturnMsg !== "") {
                     toast.success("更新密码电邮已发去您的邮箱")
+                    setOpenPasswordRecoveryModal(false)
                 }
                 else {
                     if (JSON.parse(resetPassword[0].ReturnData)[0].UserID == 0) {
@@ -360,7 +361,7 @@ export const Loginpage = () => {
 
                 <Grid item md={6} xs={12} sx={{ display: 'flex', p: 1, }}>
                     <div className="login-panel">
-                        <div style={{ textAlign: "center", padding:"10pt" }}>
+                        <div style={{ textAlign: "center", padding: "10pt" }}>
                             <img src={Icon} alt="logo" width="60%" />
                         </div>
 
@@ -491,6 +492,7 @@ export const Loginpage = () => {
                             id="area-code--select--dropdown"
                             value={signupAccount.USERAREAID}
                             label="住址地区"
+                            required
                             onChange={(event) => { handleInputChange("REGISTRATION-AREACODE", event) }}
                         >
                             {
