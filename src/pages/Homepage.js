@@ -13,6 +13,7 @@ import { images } from '../constants'
 import { Tracking } from "../components/Homepage/Tracking";
 import { OurServices } from "../components/Homepage/OurServices";
 import { ShippingFlow } from "../components/Homepage/ShippingFlow";
+import Register from "../assets/Slide/Register.png"
 
 export default function Homepage() {
     const { loading, state, viewNotification, parcelStatus } = useSelector(state => ({
@@ -47,11 +48,12 @@ export default function Homepage() {
                 showArrows={true}
             >
                 <div>
-                    <img src="https://pic.52112.com/180705/JPG-180705_428/xtHosKp6oG_small.jpg" />
+                    <img src={Register} alt="Yourway Register"/>
+                    {/* <img src="https://pic.52112.com/180705/JPG-180705_428/xtHosKp6oG_small.jpg" /> */}
                 </div>
-                <div>
+                {/* <div>
                     <img src="https://blog.solistica.com/hubfs/Fotos%20e%20infograf%C3%ADa%20Blogs%20Q4/Fotos%20Q4%20Noviembre%202020/Fotos%20Diciembre%20Q4%2020202/SOL-S13-B1-Blog%20Image%2002-1.jpg" />
-                </div>
+                </div> */}
             </Carousel>
 
             <div

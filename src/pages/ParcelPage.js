@@ -218,7 +218,7 @@ export const ParcelPage = () => {
                         })
                         :
                         <div style={{ textAlign: "center" }}>
-                            <img src={EmptyBox} style={{ height: "100pt" }}></img>
+                            <img src={EmptyBox} style={{ height: "100pt" }}  alt="Yourway Parcel"></img>
                             <Typography style={{ fontWeight: "600", fontSize: "15pt", color: "#253949", letterSpacing: 1 }}>暂无此状态包裹</Typography>
                         </div>
                 }
@@ -259,12 +259,12 @@ export const ParcelPage = () => {
                                 </>
                                 :
                                 <div style={{ textAlign: "center" }}>
-                                    <img src={EmptyBox} style={{ height: "150pt" }}></img>
+                                    <img src={EmptyBox} style={{ height: "150pt" }}  alt="Yourway Unknown Parcel"></img>
                                     <Typography style={{ fontWeight: "600", fontSize: "15pt", color: "#253949", letterSpacing: 1 }}>暂无待认领包裹</Typography>
                                 </div>
                             :
                             <div style={{ textAlign: "center" }}>
-                                <img src={EmptyBox} style={{ height: "150pt" }}></img>
+                                <img src={EmptyBox} style={{ height: "150pt" }}  alt="Yourway Parcel"></img>
                                 <Typography style={{ fontWeight: "600", fontSize: "15pt", color: "#253949", letterSpacing: 1 }}>暂无待认领包裹</Typography>
                             </div>
                         :

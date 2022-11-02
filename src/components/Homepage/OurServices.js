@@ -11,7 +11,7 @@ export const OurServices = () => {
             <Grid container spacing={4}>
                 <Grid item xs={12} sm={12} md={12} lg={3} xl={3} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <div style={styles.ourServicesImageContainer}>
-                        <img src={images.delivery} style={styles.ourServicesImage} />
+                        <img src={images.delivery} style={styles.ourServicesImage} alt="Yourway Delivery"/>
                     </div>
                     <Typography variant="h5">
                         代运
@@ -22,7 +22,7 @@ export const OurServices = () => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12} lg={3} xl={3} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <div style={styles.ourServicesImageContainer}>
-                        <img src={images.purchase} style={styles.ourServicesImage} />
+                        <img src={images.purchase} style={styles.ourServicesImage} alt="Yourway Tracking" />
                     </div>
                     <Typography variant="h5">
                         代购
@@ -33,7 +33,7 @@ export const OurServices = () => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12} lg={3} xl={3} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <div style={styles.ourServicesImageContainer}>
-                        <img src={images.pay} style={styles.ourServicesImage} />
+                        <img src={images.pay} style={styles.ourServicesImage}  alt="Yourway Service" />
                     </div>
                     <Typography variant="h5">
                         代付
@@ -44,7 +44,7 @@ export const OurServices = () => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12} lg={3} xl={3} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <div style={styles.ourServicesImageContainer}>
-                        <img src={images.search} style={styles.ourServicesImage} />
+                        <img src={images.search} style={styles.ourServicesImage}  alt="Yourway Service"/>
                     </div>
                     <Typography variant="h5">
                         木架与验货

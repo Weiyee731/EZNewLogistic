@@ -362,7 +362,7 @@ export const Loginpage = () => {
                 <Grid item md={6} xs={12} sx={{ display: 'flex', p: 1, }}>
                     <div className="login-panel">
                         <div style={{ textAlign: "center", padding: "10pt" }}>
-                            <img src={Icon} alt="logo" width="60%" />
+                            <img src={Icon} alt="Yourway logo" width="60%" />
                         </div>
 
                         {

@@ -39,7 +39,7 @@ export const ShippingFlow = () => {
                                     height: width >= 768 ? "150px" : "80px"
                                 }}
                             >
-                                <img src={images.location} style={width >= 768 ? styles.ourServicesImage : styles.ourServicesImage768} />
+                                <img src={images.location} style={width >= 768 ? styles.ourServicesImage : styles.ourServicesImage768}  alt="Yourway Location"/>
                             </div>
                             <div>
                                 <Typography variant="h5" sx={{ maxWidth: width >= 768 ? '200px' : '150px' }}>
@@ -66,7 +66,7 @@ export const ShippingFlow = () => {
                                     height: width >= 768 ? "150px" : "80px"
                                 }}
                             >
-                                <img src={images.warehouse} style={width >= 768 ? styles.ourServicesImage : styles.ourServicesImage768} />
+                                <img src={images.warehouse} style={width >= 768 ? styles.ourServicesImage : styles.ourServicesImage768}  alt="Yourway Warehouse"/>
                             </div>
                             <div>
                                 <Typography variant="h5" sx={{ maxWidth: width >= 768 ? '200px' : '150px' }}>
@@ -93,7 +93,7 @@ export const ShippingFlow = () => {
                                     height: width >= 768 ? "150px" : "80px"
                                 }}
                             >
-                                <img src={images.shipment} style={width >= 768 ? styles.ourServicesImage : styles.ourServicesImage768} />
+                                <img src={images.shipment} style={width >= 768 ? styles.ourServicesImage : styles.ourServicesImage768}  alt="Yourway Shipment"/>
                             </div>
                             <div>
                                 <Typography variant="h5" sx={{ maxWidth: width >= 768 ? '200px' : '150px' }}>
@@ -120,7 +120,7 @@ export const ShippingFlow = () => {
                                     height: width >= 768 ? "150px" : "80px"
                                 }}
                             >
-                                <img src={images.tracking} style={width >= 768 ? styles.ourServicesImage : styles.ourServicesImage768} />
+                                <img src={images.tracking} style={width >= 768 ? styles.ourServicesImage : styles.ourServicesImage768}  alt="Yourway Tracking"/>
                             </div>
                             <div>
                                 <Typography variant="h5" sx={{ maxWidth: width >= 768 ? '200px' : '150px' }}>
@@ -146,7 +146,7 @@ export const ShippingFlow = () => {
                                     height: width >= 768 ? "150px" : "80px"
                                 }}
                             >
-                                <img src={images.notification} style={width >= 768 ? styles.ourServicesImage : styles.ourServicesImage768} />
+                                <img src={images.notification} style={width >= 768 ? styles.ourServicesImage : styles.ourServicesImage768}  alt="Yourway Notification"/>
                             </div>
                             <div>
                                 <Typography variant="h5" sx={{ maxWidth: width >= 768 ? '200px' : '150px' }}>

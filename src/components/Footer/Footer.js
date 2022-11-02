@@ -63,7 +63,7 @@ const Footer = () => {
                 break;
 
             case 'Whatsapp':
-                const phoneNumber = '601155552203'
+                const phoneNumber = '601155842203'
                 window.open(`https://api.whatsapp.com/send/?phone=${phoneNumber}&text&type=phone_number&app_absent=0`, "_target")
                 break;
 
@@ -133,7 +133,7 @@ const Footer = () => {
                     </FooterText>
                     <FooterText>
                         <CallIcon sx={{ my: 'auto' }} />
-                        <Typography variant="subtitle" sx={{ ...InfoStyle }} >011 - 5555 2203</Typography>
+                        <Typography variant="subtitle" sx={{ ...InfoStyle }} >011 - 5584 2203</Typography>
                     </FooterText>
                     <FooterText onClick={() => handleClick("Gmail")}>
                         <EmailIcon sx={{ my: 'auto' }} />
