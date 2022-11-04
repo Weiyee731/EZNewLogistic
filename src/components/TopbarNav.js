@@ -23,14 +23,17 @@ export const TopbarNav = () => {
                 paddingBottom: "10px",
             }}
         >
-            <div>
+            <div className="col-3">
                 <HamburgerMenu></HamburgerMenu>
             </div>
-            <div style={{ textAlign: 'center', width: '100%' }}>
+            <div className="col-8" style={{ textAlign: 'center' }}>
                 <h2>
                     雅威国际物流
                 </h2>
+                
             </div>
+            
+            <Button className="col-1" style={{marginRight: '10px', width: '100px'}} variant="contained">点击注册</Button>
         </div>
     )
 }
