@@ -2,10 +2,14 @@ import React from "react";
 import HamburgerMenu from "./Menu";
 import useAuth from "../hooks/useAuth";
 import PersonIcon from '@mui/icons-material/Person';
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useWindowDimensions } from "../tools/Helpers";
+import { NavLink } from "react-router-dom";
 
 export const TopbarNav = () => {
     const { auth } = useAuth()
+    const { width } = useWindowDimensions();
 
     return (
         <div
@@ -21,19 +25,29 @@ export const TopbarNav = () => {
                 alignContent: 'space-between',
                 paddingTop: "10px",
                 paddingBottom: "10px",
+                width: "100%",
             }}
         >
-            <div className="col-3">
-                <HamburgerMenu></HamburgerMenu>
-            </div>
-            <div className="col-8" style={{ textAlign: 'center' }}>
+            <HamburgerMenu />
+            <div className="col" />
+            <div className="col align-self-center text-center">
                 <h2>
                     雅威国际物流
                 </h2>
-                
             </div>
-            
-            <Button className="col-1" style={{marginRight: '10px', width: '100px'}} variant="contained">点击注册</Button>
+            <div className="col align-self-center d-flex flex-row-reverse">
+                {
+                    width > 768 ? (
+                        <Button style={{ marginRight: '10px', width: '100px', backgroundColor: 'white' }} variant="contained">{auth.UserID !== undefined ? '我的账号' : '点击注册'}</Button>
+                    ) : (
+                        <NavLink to={auth.UserID !== null ? "/profile" : "/login"}>
+                            <IconButton sx={{ color: 'white' }}>
+                                <AccountCircleIcon />
+                            </IconButton>
+                        </NavLink>
+                    )
+                }
+            </div>
         </div>
     )
 }
