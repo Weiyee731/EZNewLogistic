@@ -38,10 +38,12 @@ export const TopbarNav = () => {
             <div className="col align-self-center d-flex flex-row-reverse">
                 {
                     width > 768 ? (
-                        <Button style={{ marginRight: '10px', width: '100px', backgroundColor: 'white' }} variant="contained">{auth.UserID !== undefined ? '我的账号' : '点击注册'}</Button>
+                        <NavLink to={auth.UserID !== null ? "/profile" : "/login"} style={{ textDecoration: 'none' }}>
+                            <Button style={{ marginRight: '10px', width: '100px', backgroundColor: 'white' }} variant="contained">{auth.UserID !== undefined ? '我的账号' : '点击注册'}</Button>
+                        </NavLink>
                     ) : (
                         <NavLink to={auth.UserID !== null ? "/profile" : "/login"}>
-                            <IconButton sx={{ color: 'white' }}>
+                            <IconButton sx={{ color: 'white' }} onClick={() => console.log('hello')}>
                                 <AccountCircleIcon />
                             </IconButton>
                         </NavLink>
