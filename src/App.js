@@ -13,6 +13,10 @@ import Layout from './Layout';
 import Error404 from './pages/Error404';
 import RequireAuth from './pages/RequireAuth';
 
+
+// refer to this for more information on requireauth based on roles
+// https://github.com/gitdagray/react_protected_routes/blob/main/src/App.js
+
 function App() {
   return (
     <Provider store={store}>
