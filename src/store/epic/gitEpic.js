@@ -242,6 +242,7 @@ export class GitEpic {
             "&USERCODE=" + action.payload.USERCODE +
             "&USERAREAID=" + action.payload.USERAREAID +
             "&USERWECHATID=" + action.payload.WECHATID +
+            "&USERNAME=" + action.payload.USERNAME +
             "&USERNICKNAME=" + action.payload.USERNICKNAME +
             "&FULLNAME=" + action.payload.FULLNAME +
             "&CONTACTNO=" + action.payload.CONTACTNO +

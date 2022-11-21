@@ -258,6 +258,7 @@ export const Profilepage = () => {
                         USERCODE: profile.UserCode,
                         USERAREAID: profile.UserAreaID,
                         FULLNAME: profile.Fullname,
+                        USERNAME: profile.Username,
                         USERNICKNAME: isStringNullOrEmpty(profile.UserNickname) ? "-" : profile.UserNickname,
                         CONTACTNO: profile.UserContactNo,
                         USEREMAIL: isStringNullOrEmpty(profile.UserEmailAddress) ? "-" : profile.UserEmailAddress,
@@ -320,6 +321,11 @@ export const Profilepage = () => {
                     setAccountInfo({ ...info })
                     break;
 
+                case 'USERNAME':
+                    info.USERNAME = event.target.value
+                    setAccountInfo({ ...info })
+                    break;
+
                 case 'USERNICKNAME':
                     info.USERNICKNAME = event.target.value
                     setAccountInfo({ ...info })
@@ -355,6 +361,7 @@ export const Profilepage = () => {
             if (!isObjectUndefinedOrNull(submittingProps)) {
                 let isvalid = (
                     !isStringNullOrEmpty(submittingProps.FULLNAME) &&
+                    !isStringNullOrEmpty(submittingProps.USERNAME) &&
                     !isStringNullOrEmpty(submittingProps.CONTACTNO) &&
                     !isStringNullOrEmpty(submittingProps.USEREMAIL)
                 )
@@ -422,6 +429,18 @@ export const Profilepage = () => {
                                 sx={{ my: 1 }}
                                 error={isStringNullOrEmpty(accountInfo.FULLNAME)}
                                 helperText={isStringNullOrEmpty(accountInfo.FULLNAME) ? "您必须填写你的名字" : ''}
+                            />
+                             <TextField id="profile--username"
+                                value={accountInfo.USERNAME}
+                                onChange={(event) => { handleInputChange("USERNAME", event) }}
+                                label="账号"
+                                fullWidth
+                                variant="filled"
+                                required
+                                size="small"
+                                sx={{ my: 1 }}
+                                error={isStringNullOrEmpty(accountInfo.USERNAME)}
+                                helperText={isStringNullOrEmpty(accountInfo.USERNAME) ? "您必须填写你的账号" : ''}
                             />
                             <TextField id="profile--nickname"
                                 value={accountInfo.USERNICKNAME}
@@ -577,6 +596,11 @@ export const Profilepage = () => {
                             <Grid item xs={12} md={6}>
                                 <Item>
                                     姓名: <b>{profile.Fullname}</b>
+                                </Item>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Item>
+                                    账号: <b>{profile.Username}</b>
                                 </Item>
                             </Grid>
                             <Grid item xs={12} md={6}>
