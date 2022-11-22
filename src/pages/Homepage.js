@@ -15,6 +15,12 @@ import { OurServices } from "../components/Homepage/OurServices";
 import { ShippingFlow } from "../components/Homepage/ShippingFlow";
 import Register from "../assets/Slide/Register.png"
 import double11 from "../assets/Slide/1111.png"
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 
 export default function Homepage() {
     const { loading, state, viewNotification, parcelStatus } = useSelector(state => ({
@@ -23,13 +29,49 @@ export default function Homepage() {
         viewNotification: state.counterReducer.viewNotification,
         parcelStatus: state.counterReducer.parcelStatus,
     }));
+    BootstrapDialogTitle.propTypes = {
+        children: PropTypes.node,
+        onClose: PropTypes.func.isRequired,
+    };
 
     const dispatch = useDispatch()
     const [open, setOpen] = useState(true);
+    const [NotificationOpen, setNotificationOpen] = useState(false);
 
     const handleOpenClose = () => {
         setOpen(!open);
+        setNotificationOpen(!NotificationOpen);
     };
+
+    const handleNotificationClose = () => {
+        setNotificationOpen(!NotificationOpen);
+    }
+
+    const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+        '& .MuiDialogContent-root': {
+            padding: theme.spacing(3),
+        },
+        '& .MuiDialogActions-root': {
+            padding: theme.spacing(1),
+        },
+    }));
+
+    function BootstrapDialogTitle(props) {
+        const theme = useTheme();
+        const { children, onClose, ...other } = props;
+
+        return (
+            <DialogTitle sx={{ m: 0, p: 2, backgroundColor: "#5A98B7", color: 'white' }} {...other}>
+                {children}
+            </DialogTitle>
+        );
+    }
+
+    BootstrapDialogTitle.propTypes = {
+        children: PropTypes.node,
+        onClose: PropTypes.func.isRequired,
+    };
+
 
     useEffect(() => {
         dispatch(GitAction.CallGetNotification({ status: 2 }))
@@ -49,11 +91,11 @@ export default function Homepage() {
                 showArrows={true}
             >
                 <div>
-                    <img src={Register} alt="Yourway Register"/>
+                    <img src={Register} alt="Yourway Register" />
                     {/* <img src="https://pic.52112.com/180705/JPG-180705_428/xtHosKp6oG_small.jpg" /> */}
                 </div>
                 <div>
-                    <img src={double11} alt="Yourway 1111"/>
+                    <img src={double11} alt="Yourway 1111" />
                 </div>
                 {/* <div>
                     <img src="https://blog.solistica.com/hubfs/Fotos%20e%20infograf%C3%ADa%20Blogs%20Q4/Fotos%20Q4%20Noviembre%202020/Fotos%20Diciembre%20Q4%2020202/SOL-S13-B1-Blog%20Image%2002-1.jpg" />
@@ -108,6 +150,46 @@ export default function Homepage() {
                     <ShippingFlow />
                 </div>
                 <BasicAlertDialog open={open} handleOpenClose={handleOpenClose} />
+                {
+                    viewNotification.length > 0 && viewNotification.map((item, index) => {
+                        return (
+                            <BootstrapDialog
+                                aria-labelledby="customized-dialog-title"
+                                open={NotificationOpen}
+                                fullWidth
+                                maxWidth="md"
+                            >
+                                <BootstrapDialogTitle id="customized-dialog-title" >
+                                    {item.NotificationTitle}
+                                </BootstrapDialogTitle>
+                                <DialogContent dividers>
+                                    <Typography gutterBottom>
+                                        <div dangerouslySetInnerHTML={{ __html: item.NotificationDesc }} />
+                                    </Typography>
+                                    <br />
+                                    <br />
+                                    <Grid container>
+                                        <Grid item xs={10} sm={10} md={10} style={{ alignItems: "center", display: "flex" }}>
+                                        </Grid>
+                                        <Grid item xs={2} sm={2} md={2} >
+                                            <Typography style={{ fontWeight: "bold", color: 'black', fontSize: "11pt", letterSpacing: 2 }}  >
+                                                雅威国际物流
+                                            </Typography>
+                                            <Typography style={{ color: 'gray', fontSize: "10pt" }}  >
+                                                {item.CreatedDate}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button color='secondary' autoFocus onClick={() => handleNotificationClose()}>
+                                        了解
+                                    </Button>
+                                </DialogActions>
+                            </BootstrapDialog>
+                        )
+                    })
+                }
             </div>
         </div>
     );
