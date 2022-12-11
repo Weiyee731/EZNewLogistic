@@ -713,7 +713,7 @@ export const Profilepage = () => {
                             <Table size="small" aria-label="addresses table">
                                 <TableBody>
                                     <Tooltip title={isCopyText} placement="top" arrow>
-                                        <TableRow key={"Contact Person"} onClick={() => handleCopyToClipboard('雅威(10001KCH)')}>
+                                        <TableRow key={"Contact Person"} onClick={() => handleCopyToClipboard('雅威(' + profile.UserCode + " " + profile.AreaCode + ')')}>
                                             <TableCell component="th" scope="row" sx={{ ...TitleStyle }} > 收货人: </TableCell>
                                             <TableCell align="left" sx={{ ...CopyableStyle }}>雅威({profile.UserCode} {profile.AreaCode})</TableCell>
                                         </TableRow>
@@ -729,7 +729,7 @@ export const Profilepage = () => {
                                         </TableRow>
                                     </Tooltip>
                                     <Tooltip title={isCopyText} placement="top" arrow>
-                                        <TableRow key={"Contact Number"} onClick={() => handleCopyToClipboard('13532819695')}>
+                                        <TableRow key={"Contact Number"} onClick={() => handleCopyToClipboard('13553858834')}>
                                             <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 电话号码: </TableCell>
                                             <TableCell align="left" sx={{ ...CopyableStyle }}>13553858834</TableCell>
                                         </TableRow>
