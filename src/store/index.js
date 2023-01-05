@@ -18,6 +18,8 @@ const rootEpic = combineEpics(
   gitEpic.User_ViewGeneralSetting,
   gitEpic.User_UpdateUserProfile,
   gitEpic.User_ProfileByID,
+  gitEpic.User_ViewCommissionList,
+  gitEpic.User_Register_WithReferal,
 );
 
 const epicMiddleware = createEpicMiddleware();

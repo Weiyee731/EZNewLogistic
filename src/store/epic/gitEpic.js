@@ -32,7 +32,9 @@ export class GitEpic {
     action$.pipe(filter(action => action.type === GitAction.RegisterUser), map(action => {
       return dispatch => {
         try {
-          return fetch(url + "User_Register?" +
+          // return fetch(url + "User_Register?" +
+          return fetch(url + "User_Register_WithReferal?" +
+
             "USERAREAID=" + action.payload.USERAREAID +
             "&USERNAME=" + action.payload.USERNAME +
             "&FULLNAME=" + action.payload.FULLNAME +
@@ -40,7 +42,8 @@ export class GitEpic {
             "&CONTACTNO=" + action.payload.CONTACTNO +
             "&USEREMAIL=" + action.payload.USEREMAIL +
             "&USERNICKNAME=" + action.payload.USERNICKNAME +
-            "&USERWECHATID=" + action.payload.USERWECHATID
+            "&USERWECHATID=" + action.payload.USERWECHATID +
+            "&REFERALCODE=" + action.payload.REFERALCODE
           )
             .then(response => response.json())
             .then(json => {
@@ -55,12 +58,40 @@ export class GitEpic {
       }
     }));
 
-    User_ForgetPassword = action$ =>
+  User_Register_WithReferal = action$ =>
+    action$.pipe(filter(action => action.type === GitAction.RegisterUser), map(action => {
+      return dispatch => {
+        try {
+          return fetch(url + "User_Register_WithReferal?" +
+            "USERAREAID=" + action.payload.USERAREAID +
+            "&USERNAME=" + action.payload.USERNAME +
+            "&FULLNAME=" + action.payload.FULLNAME +
+            "&PASSWORD=" + action.payload.PASSWORD +
+            "&CONTACTNO=" + action.payload.CONTACTNO +
+            "&USEREMAIL=" + action.payload.USEREMAIL +
+            "&USERNICKNAME=" + action.payload.USERNICKNAME +
+            "&USERWECHATID=" + action.payload.USERWECHATID +
+            "&REFERALCODE=" + action.payload.REFERALCODE
+          )
+            .then(response => response.json())
+            .then(json => {
+              json = JSON.parse(json)
+              return dispatch({ type: GitAction.UserRegistered, payload: json });
+
+            });
+        } catch (error) {
+          toast.error("Error Code: User_Register_WithReferal")
+          return dispatch({ type: GitAction.UserRegistered_WithReferal, payload: [] });
+        }
+      }
+    }));
+
+  User_ForgetPassword = action$ =>
     action$.pipe(filter(action => action.type === GitAction.ForgetPassword), map(action => {
       return dispatch => {
         try {
           return fetch(url + "User_ForgetPassword?" +
-            "USEREMAIL=" + action.payload.UserEmail 
+            "USEREMAIL=" + action.payload.UserEmail
           )
             .then(response => response.json())
             .then(json => {
@@ -266,6 +297,27 @@ export class GitEpic {
         }
       }
     }));
+
+    
+    User_ViewCommissionList = action$ =>
+  action$.pipe(filter(action => action.type === GitAction.User_ViewCommissionList), map(action => {
+    return dispatch => {
+      try {
+        return fetch(url +
+          "User_ViewCommissionList?" +
+          "USERCODE=" + action.payload.UserCode
+        )
+          .then(response => response.json())
+          .then(json => {
+            json = JSON.parse(json)
+            return dispatch({ type: GitAction.User_ViewedCommissionList, payload: json });
+          });
+      } catch (error) {
+        toast.error("Error Code: User_ViewedCommissionList")
+        return dispatch({ type: GitAction.User_ViewedCommissionList, payload: [] });
+      }
+    }
+  }));
 
 }
 

@@ -64,6 +64,7 @@ export const Loginpage = () => {
         PASSWORD: '',
         FULLNAME: '',
         CONTACTNO: '',
+        REFERALCODE: '',
         USEREMAIL: '',
         USERNICKNAME: '',
         USERWECHATID: '',
@@ -164,6 +165,7 @@ export const Loginpage = () => {
                         PASSWORD: '',
                         FULLNAME: '',
                         CONTACTNO: '',
+                        REFERALCODE: '',
                         USEREMAIL: '',
                         USERNICKNAME: '',
                         USERWECHATID: '',
@@ -231,8 +233,10 @@ export const Loginpage = () => {
         if (isValidate) {
             signupAccount.USERNICKNAME = isStringNullOrEmpty(signupAccount.USERNICKNAME) ? "-" : signupAccount.USERNICKNAME
             signupAccount.USERWECHATID = isStringNullOrEmpty(signupAccount.USERWECHATID) ? "-" : signupAccount.USERWECHATID
+            signupAccount.REFERALCODE = isStringNullOrEmpty(signupAccount.REFERALCODE) ? "-" : signupAccount.REFERALCODE
 
             dispatch(GitAction.CallRegisterUser(signupAccount))
+            // dispatch(GitAction.CallRegisterUser_WithReferal(signupAccount))
         }
         else {
             toast.error('Your inputs are invalid. Please check with require (*) fields', {
@@ -272,7 +276,8 @@ export const Loginpage = () => {
     const handleInputChange = (inputProps, event) => {
         let LoginUserState = loginAccount
         let ReistrationUserState = signupAccount
-
+console.log("asdaddada",inputProps )
+console.log("asdaddada",inputProps )
         switch (inputProps) {
             case 'USERNAME':
                 LoginUserState.USERNAME = event.target.value
@@ -281,6 +286,7 @@ export const Loginpage = () => {
             case 'PASSWORD':
                 LoginUserState.PASSWORD = event.target.value
                 setLoginAccount({ ...LoginUserState })
+                break;
                 break;
             case 'SET-REMEMBER':
                 LoginUserState.REMEMBER = event.target.value
@@ -320,6 +326,10 @@ export const Loginpage = () => {
                 ReistrationUserState.USERWECHATID = event.target.value
                 setSignupAccount({ ...ReistrationUserState })
                 break;
+                
+            case 'REGISTRATION-REFERALCODE':
+                ReistrationUserState.REFERALCODE = event.target.value
+                setLoginAccount({ ...ReistrationUserState })
 
             case 'RECOVERY-EMAIL':
                 setRecoveryEmail(event.target.value)
@@ -541,6 +551,18 @@ export const Loginpage = () => {
                         size="small"
                         sx={{ my: 1 }}
                     />
+                    {console.log("dasdasdas", signupAccount)}
+                    <TextField
+                        id="registration--referalcode"
+                        value={signupAccount.REFERALCODE}
+                        onChange={(event) => { handleInputChange("REGISTRATION-REFERALCODE", event) }}
+                        label="推荐人会员号"
+                        fullWidth
+                        variant="filled"
+                        size="small"
+                        sx={{ my: 1 }}
+                    />
+
                 </DialogContent>
                 <DialogActions>
                     {

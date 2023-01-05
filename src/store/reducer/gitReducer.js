@@ -9,7 +9,8 @@ const INITIAL_STATE = {
   parcelStatus: [],
   setting: [],
   userProfile: [],
-  resetPassword:[],
+  resetPassword: [],
+  commission: []
 };
 
 export function counterReducer(state = INITIAL_STATE, action) {
@@ -41,11 +42,11 @@ export function counterReducer(state = INITIAL_STATE, action) {
         resetPassword: action.payload
       });
 
-      case GitAction.ClearForgetPassword:
-        return Object.assign({}, state, {
-          loading: false,
-          resetPassword: []
-        });
+    case GitAction.ClearForgetPassword:
+      return Object.assign({}, state, {
+        loading: false,
+        resetPassword: []
+      });
 
     case GitAction.ClearLogonUser:
       return Object.assign({}, state, {
@@ -68,6 +69,7 @@ export function counterReducer(state = INITIAL_STATE, action) {
         loading: false,
         userUpdateReturnValue: action.payload
       });
+
 
     case GitAction.UpdatePassword:
       return Object.assign({}, state, { loading: true });
@@ -142,6 +144,14 @@ export function counterReducer(state = INITIAL_STATE, action) {
       return Object.assign({}, state, {
         loading: false,
         userProfile: []
+      });
+
+    case GitAction.User_ViewCommissionList:
+      return Object.assign({}, state, { loading: true });
+    case GitAction.User_ViewedCommissionList:
+      return Object.assign({}, state, {
+        loading: false,
+        commission: action.payload
       });
 
 

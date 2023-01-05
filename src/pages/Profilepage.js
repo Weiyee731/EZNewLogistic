@@ -57,6 +57,7 @@ import { toast } from 'react-toastify'
 import { isArrayNotEmpty, isObjectUndefinedOrNull, isStringNullOrEmpty, useWindowDimensions } from '../tools/Helpers'
 import { ParcelPage } from "./ParcelPage";
 import { NotificationView } from "../components/NotificationView";
+import { TableHead } from "@mui/material";
 
 export const Profilepage = () => {
     const { auth, setAuth } = useAuth()
@@ -69,13 +70,13 @@ export const Profilepage = () => {
     const userProfile = useSelector(state => state.counterReducer.userProfile)
     const isUserProfileUpdate = useSelector(state => state.counterReducer.userUpdateReturnValue)
     const viewNotification = useSelector(state => state.counterReducer.viewNotification)
+    const commission = useSelector(state => state.counterReducer.commission)
 
     // CONSTANT OR STYLE HERE
     const USER_PROFILE_PAGE = 'User Profile'
     const ALL_ORDERS_PAGE = 'All Orders'
     const CLAIM_CARGO_PAGE = 'Claim Cargo'
     const PASSWORD_MANAGER_PAGE = 'Password Manager'
-
 
     // HOOKS HERE
     const [currentPage, setCurrentPage] = useState(USER_PROFILE_PAGE)
@@ -84,9 +85,9 @@ export const Profilepage = () => {
     // USE EFFECT
     useEffect(() => {
         dispatch(GitAction.CallGetNotification({ status: 2 }));
-
-        if (!isObjectUndefinedOrNull(auth) && !isStringNullOrEmpty(auth.UserID)) {
+        if (!isObjectUndefinedOrNull(auth) && !isStringNullOrEmpty(auth.UserID) && !isStringNullOrEmpty(auth.UserCode)) {
             dispatch(GitAction.CallFetchUserProfileByID({ UserID: auth.UserID }));
+            dispatch(GitAction.CallViewCommissionByUserCode({ UserCode: auth.UserCode }));
         }
     }, [])
 
@@ -112,7 +113,6 @@ export const Profilepage = () => {
                 color: '#F5F5F5',
             }
         }
-
 
         return (
             <div style={{ marginTop: '16px' }}>
@@ -201,6 +201,7 @@ export const Profilepage = () => {
         const [isEditMode, setEditMode] = useState(false)
         const [expanded, setExpanded] = useState(true)
         const [userExpanded, setUserExpanded] = useState(false)
+        const [referalModal, setReferalModal] = useState(false)
 
         const Item = styled(Paper)(({ theme }) => ({
             backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#F4F5F5',
@@ -223,9 +224,22 @@ export const Profilepage = () => {
                                     {profile && profile.Fullname}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={12} lg={3}>
+                            <Grid item xs={12} lg={9}>
                                 <Typography variant="h6" component="p" sx={{ fontWeight: 600, color: '#0073DF' }}>
                                     ( 会员号:{profile && profile.UserCode} )[{profile && profile.AreaCode}]
+                                </Typography>
+
+                            </Grid>
+                        </Grid>
+                        <Grid container onClick={() => setReferalModal(true)}>
+                            <Grid item xs={12} lg={6} >
+                                <Typography component="p" sx={{ fontWeight: 600, mr: 2 }}>
+                                    推荐人数 ：<label style={{ fontWeight: 600, color: '#0073DF' }}>{profile && profile.TotalReferee}</label>
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} lg={6} >
+                                <Typography component="p" sx={{ fontWeight: 600, mr: 2 }}>
+                                    可用推荐金额 ： <label style={{ fontWeight: 600, color: '#0073DF' }}>{profile && profile.RemainingCommission != null ? parseFloat(profile.RemainingCommission).toFixed(2) : 0}</label>
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -235,6 +249,52 @@ export const Profilepage = () => {
                     </AccordionDetails>
                 </Accordion>
 
+                <Dialog scroll="paper"  maxWidth="lg" open={referalModal} onClose={() => setReferalModal(false)} aria-labelledby="referal-modal" aria-describedby="referal-modal-description" >
+                    <DialogTitle id="referal-modal">
+                        <Typography variant="h5" component="p" sx={{ fontWeight: 600 }}>
+                            已推荐会员资料
+                        </Typography>
+                        <IconButton
+                            aria-label="close"
+                            onClick={() => setReferalModal(false)}
+                            sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500], }}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </DialogTitle>
+                    <DialogContent>
+                        <TableContainer component={Paper}>
+                            <Table size="medium" aria-label="referal table">
+                                <TableHead>
+                                    <TableRow style={{ backgroundColor: "#adb5bd" }}>
+                                        <TableCell>会员号</TableCell>
+                                        <TableCell>会员名字</TableCell>
+                                        <TableCell>推荐金额</TableCell>
+                                        <TableCell>可用推荐金额</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        isArrayNotEmpty(commission) && commission[0].ReturnVal != 0 ?
+                                            commission.map((data) => {
+                                                return (
+                                                    <TableRow key={"Contact Person"}>
+                                                        <TableCell > {data.UserCode}</TableCell>
+                                                        <TableCell  > {data.Fullname}</TableCell>
+                                                        <TableCell> {data.TotalCommission !== null && parseFloat(data.TotalCommission).toFixed(2)}</TableCell>
+                                                        <TableCell > {data.BalancedAmount !== null && parseFloat(data.BalancedAmount).toFixed(2)}</TableCell>
+                                                    </TableRow>
+                                                )
+                                            })
+                                            :
+                                            <Typography style={{ padding: "10px", textAlign: "center" }}>暂还没亲的推荐资料</Typography>
+                                    }
+
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </DialogContent>
+                </Dialog>
             </>
 
         )
@@ -430,7 +490,7 @@ export const Profilepage = () => {
                                 error={isStringNullOrEmpty(accountInfo.FULLNAME)}
                                 helperText={isStringNullOrEmpty(accountInfo.FULLNAME) ? "您必须填写你的名字" : ''}
                             />
-                             <TextField id="profile--username"
+                            <TextField id="profile--username"
                                 value={accountInfo.USERNAME}
                                 onChange={(event) => { handleInputChange("USERNAME", event) }}
                                 label="账号"
@@ -608,19 +668,24 @@ export const Profilepage = () => {
                                     昵称: <b>{profile.UserNickname}</b>
                                 </Item>
                             </Grid>
-                            <Grid item xs={12} md={6} lg={4} >
+                            <Grid item xs={12} md={6} >
                                 <Item>
                                     电话: <b>{profile.UserContactNo}</b>
                                 </Item>
                             </Grid>
-                            <Grid item xs={12} md={6} lg={4}>
+                            <Grid item xs={12} md={6} >
                                 <Item>
                                     邮件: <b>{profile.UserEmailAddress}</b>
                                 </Item>
                             </Grid>
-                            <Grid item xs={12} lg={4}>
+                            <Grid item xs={12} md={6} >
                                 <Item>
                                     微信: <b>{profile.UserWechatID}</b>
+                                </Item>
+                            </Grid>
+                            <Grid item xs={12} md={6} >
+                                <Item>
+                                    推荐人: <b>{profile.ReferalCode != null ? profile.ReferalCode : "-"}</b>
                                 </Item>
                             </Grid>
                         </Grid>

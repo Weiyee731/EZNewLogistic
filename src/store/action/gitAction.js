@@ -49,6 +49,15 @@ export class GitAction {
     };
   }
 
+  static RegisterUser_WithReferal = "REGISTER_USER_WITHREFERAL";
+  static UserRegistered_WithReferal = "USER_REGISTERED_WITHREFERAL";
+  static CallRegisterUser_WithReferal(propsData) {
+    return {
+      type: GitAction.RegisterUser_WithReferal,
+      payload: propsData
+    };
+  }
+
   static FetchUserAreaCode = "FETCH_USER_AREA_CODE";
   static UserAreaCodeFetched = "USER_AREA_CODE_FETCHED";
   static CallFetchUserAreaCode() {
@@ -146,6 +155,16 @@ export class GitAction {
       payload: propsData
     };
   }
+
+  static User_ViewCommissionList = "User_ViewCommissionList";
+  static User_ViewedCommissionList = "User_ViewedCommissionList";
+  static CallViewCommissionByUserCode(propsData) {
+    return {
+      type: GitAction.User_ViewCommissionList,
+      payload: propsData
+    };
+  }
+
 
 }
 
