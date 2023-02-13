@@ -249,7 +249,7 @@ export const Profilepage = () => {
                     </AccordionDetails>
                 </Accordion>
 
-                <Dialog scroll="paper"  maxWidth="lg" open={referalModal} onClose={() => setReferalModal(false)} aria-labelledby="referal-modal" aria-describedby="referal-modal-description" >
+                <Dialog scroll="paper" maxWidth="lg" open={referalModal} onClose={() => setReferalModal(false)} aria-labelledby="referal-modal" aria-describedby="referal-modal-description" >
                     <DialogTitle id="referal-modal">
                         <Typography variant="h5" component="p" sx={{ fontWeight: 600 }}>
                             已推荐会员资料
@@ -281,8 +281,8 @@ export const Profilepage = () => {
                                                     <TableRow key={"Contact Person"}>
                                                         <TableCell > {data.UserCode}</TableCell>
                                                         <TableCell  > {data.Fullname}</TableCell>
-                                                        <TableCell> {data.TotalCommission !== null && parseFloat(data.TotalCommission).toFixed(2)}</TableCell>
-                                                        <TableCell > {data.BalancedAmount !== null && parseFloat(data.BalancedAmount).toFixed(2)}</TableCell>
+                                                        <TableCell> {data.TotalCommission !== null ? parseFloat(data.TotalCommission).toFixed(2) : 0}</TableCell>
+                                                        <TableCell > {data.BalancedAmount !== null ? parseFloat(data.BalancedAmount).toFixed(2) : 0}</TableCell>
                                                     </TableRow>
                                                 )
                                             })
