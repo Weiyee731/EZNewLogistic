@@ -276,8 +276,6 @@ export const Loginpage = () => {
     const handleInputChange = (inputProps, event) => {
         let LoginUserState = loginAccount
         let ReistrationUserState = signupAccount
-console.log("asdaddada",inputProps )
-console.log("asdaddada",inputProps )
         switch (inputProps) {
             case 'USERNAME':
                 LoginUserState.USERNAME = event.target.value
@@ -326,7 +324,7 @@ console.log("asdaddada",inputProps )
                 ReistrationUserState.USERWECHATID = event.target.value
                 setSignupAccount({ ...ReistrationUserState })
                 break;
-                
+
             case 'REGISTRATION-REFERALCODE':
                 ReistrationUserState.REFERALCODE = event.target.value
                 setLoginAccount({ ...ReistrationUserState })

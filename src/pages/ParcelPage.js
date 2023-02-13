@@ -133,7 +133,7 @@ export const ParcelPage = () => {
         setFilteredParcel(filteredListing)
     }
 
-    const checkUserParcel = (statusID) => {
+    const checkUserParcel = (statusID, type) => {
         let listing = []
 
         if (isFiltered === true)
@@ -143,7 +143,7 @@ export const ParcelPage = () => {
 
         let dataListing = []
         if (listing.length > 0) {
-            if (parcelValue === 0)
+            if (parcelValue === 0 && type === "Filtering")
                 dataListing = listing
             else {
                 let minStatus = 0
@@ -181,6 +181,17 @@ export const ParcelPage = () => {
         setPage(page)
     }
 
+    const checkTotalStatusNo = (index, statusID) => {
+        let parcelAmount = 0
+
+        if (index === 0)
+            parcelAmount = userParcel.length
+        else
+            parcelAmount = checkUserParcel(statusID, "Overall").length
+
+        return parcelAmount
+    }
+
     if (setting.length > 0 && isSetUnknown === false) {
         setUnknownUserCode(setting[2].Column1)
         setUnknown(true)
@@ -190,11 +201,11 @@ export const ParcelPage = () => {
         return (
             <div className="row" style={{ paddingRight: "5pt" }}>
                 <Grid container style={{ paddingBottom: "10pt", textAlign: "right", flexFlow: "row-reverse" }}>
-                    <Pagination count={Math.ceil(checkUserParcel(statusID).length / pageSize)} page={page} onChange={handlePageChange} />
+                    <Pagination count={Math.ceil(checkUserParcel(statusID, "Filtering").length / pageSize)} page={page} onChange={handlePageChange} />
                 </Grid>
                 {
-                    checkUserParcel(statusID).length > 0 ?
-                        checkUserParcel(statusID).map((data, index) => {
+                    checkUserParcel(statusID, "Filtering").length > 0 ?
+                        checkUserParcel(statusID, "Filtering").map((data, index) => {
                             return (
                                 index > ((page - 1) * pageSize) - 1 && index < (page * pageSize) &&
                                 <div className="row" style={{ paddingTop: "10pt" }} key={"parcellayout_" + index}>
@@ -218,7 +229,7 @@ export const ParcelPage = () => {
                         })
                         :
                         <div style={{ textAlign: "center" }}>
-                            <img src={EmptyBox} style={{ height: "100pt" }}  alt="Yourway Parcel"></img>
+                            <img src={EmptyBox} style={{ height: "100pt" }} alt="Yourway Parcel"></img>
                             <Typography style={{ fontWeight: "600", fontSize: "15pt", color: "#253949", letterSpacing: 1 }}>暂无此状态包裹</Typography>
                         </div>
                 }
@@ -259,12 +270,12 @@ export const ParcelPage = () => {
                                 </>
                                 :
                                 <div style={{ textAlign: "center" }}>
-                                    <img src={EmptyBox} style={{ height: "150pt" }}  alt="Yourway Unknown Parcel"></img>
+                                    <img src={EmptyBox} style={{ height: "150pt" }} alt="Yourway Unknown Parcel"></img>
                                     <Typography style={{ fontWeight: "600", fontSize: "15pt", color: "#253949", letterSpacing: 1 }}>暂无待认领包裹</Typography>
                                 </div>
                             :
                             <div style={{ textAlign: "center" }}>
-                                <img src={EmptyBox} style={{ height: "150pt" }}  alt="Yourway Parcel"></img>
+                                <img src={EmptyBox} style={{ height: "150pt" }} alt="Yourway Parcel"></img>
                                 <Typography style={{ fontWeight: "600", fontSize: "15pt", color: "#253949", letterSpacing: 1 }}>暂无待认领包裹</Typography>
                             </div>
                         :
@@ -275,7 +286,8 @@ export const ParcelPage = () => {
                                         orientation="horizontal" sx={{ borderBottom: 1, borderColor: 'divider' }} variant="scrollable">
                                         {
                                             parcelStatus.length > 0 && parcelStatus.map((x, index) => {
-                                                return (<Tab key={"status_" + index} label={x.ContainerStatusCN} {...a11yProps(x.ContainerStatusID)} />)
+
+                                                return (<Tab key={"status_" + index} label={x.ContainerStatusCN + " (" + checkTotalStatusNo(index, x.ContainerStatusID) + ")"} {...a11yProps(x.ContainerStatusID)} />)
                                             })
                                         }
                                     </Tabs>
