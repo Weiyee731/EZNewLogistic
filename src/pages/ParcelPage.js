@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch, Provider } from 'react-redux'
 import { GitAction } from "../store/action/gitAction";
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import { Card, CardContent, Typography, Grid, TableCell } from '@mui/material';
-import Pagination from '@mui/material/Pagination';
+import {  Typography, TableCell } from '@mui/material';
 import SearchBar from "../components/SearchBar/SearchBar";
 import LoadingPanel from "../components/LoadingPanel/LoadingPanel";
 import EmptyParcel from "../assets/empty-parcel.png"
-import { isArrayNotEmpty, isStringNullOrEmpty } from "../tools/Helpers";
+import { isArrayNotEmpty } from "../tools/Helpers";
 import useAuth from "../hooks/useAuth";
-import { toast, Flip } from "react-toastify";
 
 import TableComponents from "../components/TableComponents/TableComponents";
 export const ParcelPage = (props) => {
@@ -22,14 +18,6 @@ export const ParcelPage = (props) => {
     }));
     const { auth } = useAuth()
     const dispatch = useDispatch()
-
-    function a11yProps(index) {
-        return {
-            id: `simple-tab-${index}`,
-            'aria-controls': `simple-tabpanel-${index}`,
-        };
-    }
-    console.log("Dsada", props)
 
     useEffect(() => {
         let LogonUser = localStorage.getItem("user")
@@ -51,9 +39,6 @@ export const ParcelPage = (props) => {
         }
     }, [])
 
-    const layoutStyle = { fontWeight: "600", fontSize: "10pt", color: "#253949", letterSpacing: 1 }
-    const [value, setValue] = React.useState(0);
-    const [parcelValue, setParcelValue] = React.useState(0);
     const [UserCode, setUserCode] = React.useState("");
     const [UserID, setUserID] = React.useState("");
     const [searchKeywords, setSearchKeywords] = React.useState("");
@@ -63,34 +48,6 @@ export const ParcelPage = (props) => {
     const pageSize = 10;
     const [isSetUnknown, setUnknown] = React.useState(false);
     const [unKnownUserCode, setUnknownUserCode] = React.useState(3);
-    const parcelStatus = [
-        { ContainerStatusID: 0, ContainerStatus: "All", ContainerStatusCN: "全部包裹" },
-        { ContainerStatusID: 1, ContainerStatus: "China Warehouse", ContainerStatusCN: "抵达中国仓库" },
-        { ContainerStatusID: 2, ContainerStatus: "Leave Port", ContainerStatusCN: "运输途中" },
-        { ContainerStatusID: 3, ContainerStatus: "Reach Kuching Warehouse", ContainerStatusCN: "抵达东马仓库" },
-    ];
-
-
-    const handleChange = (event, newValue) => {
-        let LogonUser = localStorage.getItem("user")
-        let LogonUserCode = ""
-        if (LogonUser !== undefined) {
-            LogonUserCode = JSON.parse(LogonUser).UserCode
-            LogonUser = JSON.parse(LogonUser).UserID
-        }
-
-        if (newValue === 0) {
-            if (LogonUser !== undefined) {
-                dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + LogonUser }))
-                setUserCode(LogonUserCode)
-            }
-        }
-        else {
-            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserCode=(SELECT [SettingValue] FROM.[dbo].[T_General_Setting] WHERE  [SettingID] = 1)" }))
-            setUserCode(unKnownUserCode)
-        }
-        setValue(newValue);
-    };
 
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
@@ -202,63 +159,6 @@ export const ParcelPage = (props) => {
         },
     ];
 
-    // const tableAgentHeadCells = [
-    //     {
-    //         id: "CourierName",
-    //         align: 'left',
-    //         disablePadding: false,
-    //         label: "快递公司",
-    //     },
-    //     {
-    //         id: "TrackingNumber",
-    //         align: 'left',
-    //         disablePadding: false,
-    //         label: "快递单号 ",
-    //     },
-    //     {
-    //         id: "Item",
-    //         align: 'left',
-    //         disablePadding: false,
-    //         label: "包裹名称",
-    //     },
-    //     {
-    //         id: "UserCode",
-    //         align: 'left',
-    //         disablePadding: false,
-    //         label: "会员号",
-    //     },
-    //     {
-    //         id: "ProductWeight",
-    //         align: 'left',
-    //         disablePadding: false,
-    //         label: "重量",
-    //     },
-    //     {
-    //         id: "ProductDimensionDeep",
-    //         align: 'left',
-    //         disablePadding: false,
-    //         label: "尺寸",
-    //     },
-    //     {
-    //         id: "ProductDimensionHeight",
-    //         align: 'left',
-    //         disablePadding: false,
-    //         label: "体积",
-    //     },
-    //     {
-    //         id: "Price",
-    //         align: 'left',
-    //         disablePadding: false,
-    //         label: "价格",
-    //     },
-    //     {
-    //         id: "parcelStatus",
-    //         align: 'left',
-    //         disablePadding: false,
-    //         label: "包裹状态",
-    //     },
-    // ];
-
     const CheckUser = (Code) => {
         let listing = []
         if (userParcel.length > 0) {
@@ -368,7 +268,7 @@ export const ParcelPage = (props) => {
                 </>
         )
     }
-    console.log("userParcel", userParcel)
+
     return (
         <div className="row" style={{ position: "absolute", top: "120px", width: "100%", paddingRight: "20px", paddingBottom: "50px" }}>
             {
@@ -377,7 +277,6 @@ export const ParcelPage = (props) => {
                     <Typography style={{ paddingLeft: "10px" }}>如以下是您的货物，请截图物流信息发进群，如货物超过<strong> 90 天</strong>无人认领，会由本司自行处理货物</Typography>
                 </div>
             }
-            {console.log("Dasdasdad", props.type)}
             {
                 isArrayNotEmpty(userParcel) && userParcel[0].ReturnVal === undefined ?
                     <TableComponents

@@ -17,9 +17,9 @@ export const TempSelfCollect = () => {
         "", "单个货物体制", "计算方式", "古晋自提运费",
     ]
     const data = [
-        { item1: "大于 0.01m³", item2: "单个包裹立方体积计算", item3: "RM380/立方 (m³)" },
-        { item1: "大于 500kg", item2: "单个包裹实重体积计算", item3: "RM380/立方 (m³)" },
-        { item1: "小于 0.01m³", item2: "单个小包裹计算", item3: "RM4/件" },
+        { item1: "大于 0.01m³", item2: "单个包裹立方体积计算", item3: "RM480/立方 (m³)" },
+        { item1: "大于 500kg", item2: "单个包裹实重体积计算", item3: "RM480/立方 (m³)" },
+        { item1: "小于 0.01m³", item2: "单个小包裹计算", item3: "RM5/件" },
     ]
     const layoutStyle = { fontSize: "11pt", letterSpacing: 2 }
 

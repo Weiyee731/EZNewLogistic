@@ -1,24 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch, Provider } from 'react-redux'
 import { GitAction } from "../store/action/gitAction";
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import { Card, CardContent, Typography, Grid, TableCell } from '@mui/material';
-import Pagination from '@mui/material/Pagination';
-import SearchBar from "../components/SearchBar/SearchBar";
-import LoadingPanel from "../components/LoadingPanel/LoadingPanel";
-import EmptyBox from "../assets/empty-box.png"
-import { isArrayNotEmpty, isStringNullOrEmpty } from "../tools/Helpers";
-import useAuth from "../hooks/useAuth";
-import { toast, Flip } from "react-toastify";
-
+import { Card, Typography, Grid } from '@mui/material';
 import { Tracking } from "../components/Homepage/Tracking";
 import { ParcelCalculation } from "../components/Homepage/ParcelCalculation";
 export const ParcelTrackingPage = (props) => {
-    const { userParcel, setting, parcelStatus, areaCodes, parcelPrice } = useSelector(state => ({
-        userParcel: state.counterReducer.parcelStatus,
-        setting: state.counterReducer.setting,
+    const { parcelStatus, areaCodes, parcelPrice } = useSelector(state => ({
         parcelStatus: state.counterReducer.parcelStatus,
         areaCodes: state.counterReducer.areaCodes,
         parcelPrice: state.counterReducer.parcelPrice

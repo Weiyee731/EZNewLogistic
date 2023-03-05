@@ -4,9 +4,6 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { TempSelfCollect } from "../components/pricing/TempSelfCollect";
-import { SelfCollect } from "../components/pricing/SelfCollect";
-import { SmallParcel } from "../components/pricing/SmallParcel";
-import { LargeParcel } from "../components/pricing/LargeParcel";
 
 import IconButton from "@mui/material/IconButton"
 import PrintIcon from '@mui/icons-material/Print';
