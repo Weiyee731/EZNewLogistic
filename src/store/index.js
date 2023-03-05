@@ -12,6 +12,7 @@ const rootEpic = combineEpics(
   gitEpic.Notification_ViewNotification,
   gitEpic.Inventory_ViewStockByFilter,
   // gitEpic.User_ViewProfileByID,
+  gitEpic.User_CalculateParcelPrice,
   gitEpic.User_ForgetPassword,
   gitEpic.User_UpdateUserPassword,
   gitEpic.Inventory_ViewStockByFilter2,

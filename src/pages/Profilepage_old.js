@@ -52,13 +52,9 @@ import KeyIcon from '@mui/icons-material/Key';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
-
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
 import useAuth from "../hooks/useAuth";
 import { toast } from 'react-toastify'
 import { isArrayNotEmpty, isObjectUndefinedOrNull, isStringNullOrEmpty, useWindowDimensions } from '../tools/Helpers'
-import { ParcelTrackingPage } from "./ParcelTrackingPage";
 import { ParcelPage } from "./ParcelPage";
 import { NotificationView } from "../components/NotificationView";
 import { TableHead } from "@mui/material";
@@ -108,7 +104,6 @@ export const Profilepage = () => {
     // CONSTANT OR STYLE HERE
     const USER_PROFILE_PAGE = 'User Profile'
     const ALL_ORDERS_PAGE = 'All Orders'
-    const PARCEL_TRACKING_PAGE = 'Parcel Tracking'
     const CLAIM_CARGO_PAGE = 'Claim Cargo'
     const PASSWORD_MANAGER_PAGE = 'Password Manager'
 
@@ -150,55 +145,102 @@ export const Profilepage = () => {
 
         const handleChange = (event, newValue) => {
             setValue(newValue);
-            switch (newValue) {
-                case 0:
-                    handleSetCurrentPage(USER_PROFILE_PAGE)
-                    break;
-
-                case 1:
-                    let LogonUser = localStorage.getItem("user")
-                    if (LogonUser !== undefined) {
-                        LogonUser = JSON.parse(LogonUser).UserID
-                        dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + LogonUser }))
-                    }
-
-                    handleSetCurrentPage(ALL_ORDERS_PAGE)
-                    break;
-
-                case 2:
-                    handleSetCurrentPage(PARCEL_TRACKING_PAGE)
-                    break;
-
-                case 3:
-                    dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserCode=(SELECT [SettingValue] FROM.[dbo].[T_General_Setting] WHERE  [SettingID] = 1)" }))
-
-                    handleSetCurrentPage(CLAIM_CARGO_PAGE)
-                    break;
-
-                default:
-                    break;
-            }
         };
 
         return (
-            <div >
+            <div style={{ marginTop: '16px' }}>
                 <Box sx={{ width: '100%' }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'darkgrey' }}>
-                        <Tabs value={value} onChange={handleChange} aria-label="parcelType" variant="scrollable" scrollButtons
-                            allowScrollButtonsMobile>
-                            <Tab label="会员明细" {...a11yProps(0)} />
-                            <Tab label="货物明细" {...a11yProps(1)} />
-                            <Tab label="包裹查询" {...a11yProps(2)} />
-                            <Tab label="待认领包裹" {...a11yProps(3)} />
+                        <Tabs value={value} onChange={handleChange} aria-label="parcelType" variant="fullWidth">
+                            <Tab label="我的包裹资料" {...a11yProps(0)} />
+                            <Tab label="待认领包裹资料" {...a11yProps(1)} />
                         </Tabs>
                     </Box>
+                    <TabPanel value={value} index={0}>
+                        {/* {parcelLayout()} */}
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        {/* {parcelLayout()} */}
+                    </TabPanel>
                 </Box>
+                <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
+                    <AccordionSummary
+                        aria-controls="sidemenu"
+                        id="side-menu"
+                        sx={{ textAlign: 'center' }}
+                    >
+                        <Typography variant="h5" component="p" sx={{ fontWeight: 600, textAlign: 'center', width: '100%' }}>目录</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Box sx={{ width: '100%' }}>
+                            <MenuList>
+                                <Divider />
+                                <MenuItem onClick={() => handleSetCurrentPage(USER_PROFILE_PAGE)} sx={(currentPage === USER_PROFILE_PAGE) ? { ...selectedStyle } : {}}>
+                                    <ListItemIcon>
+                                        <PersonIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText>您的资料</ListItemText>
+                                </MenuItem>
+                                <MenuItem onClick={() => handleSetCurrentPage(PASSWORD_MANAGER_PAGE)} sx={(currentPage === PASSWORD_MANAGER_PAGE) ? { ...selectedStyle } : {}}>
+                                    <ListItemIcon>
+                                        <KeyIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText>更改密码</ListItemText>
+                                </MenuItem>
+                                <Divider />
+                                <MenuItem onClick={() => handleSetCurrentPage(ALL_ORDERS_PAGE)} sx={(currentPage === ALL_ORDERS_PAGE) ? { ...selectedStyle } : {}}>
+                                    <ListItemIcon>
+                                        <FactCheckIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText>您的订单</ListItemText>
+                                </MenuItem>
+                                <MenuItem disabled onClick={() => handleSetCurrentPage(CLAIM_CARGO_PAGE)} sx={(currentPage === CLAIM_CARGO_PAGE) ? { ...selectedStyle } : {}}>
+                                    <ListItemIcon>
+                                        <InventoryIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText>货物认领</ListItemText>
+                                </MenuItem>
+                                <Divider />
+                                <MenuItem onClick={() => { navigate("/", { replace: true }) }}>
+                                    <ListItemIcon>
+                                        <HomeIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText>返回页面</ListItemText>
+                                </MenuItem>
+                                <MenuItem onClick={handleLogout}>
+                                    <ListItemIcon>
+                                        <LogoutIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText>退出</ListItemText>
+                                </MenuItem>
+                            </MenuList>
+                        </Box>
+
+                    </AccordionDetails>
+                </Accordion>
             </div>
         )
     }
 
     const handleSetCurrentPage = (pageType) => {
         setCurrentPage(pageType)
+
+        // switch (pageType) {
+        //     case sidebarItems[0]:
+        //         setCurrentPage(sidebarItems[0])
+        //         break;
+
+        //     case sidebarItems[1]:
+        //         setCurrentPage(sidebarItems[1])
+        //         break;
+
+        //     case sidebarItems[2]:
+        //         setCurrentPage(sidebarItems[2])
+        //         break;
+
+        //     default: break;
+
+        // }
     }
 
 
@@ -211,37 +253,95 @@ export const Profilepage = () => {
         const Item = styled(Paper)(({ theme }) => ({
             backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#F4F5F5',
             ...theme.typography.body2,
-            // padding: theme.spacing(1),
+            padding: theme.spacing(1),
             textAlign: 'left',
             color: theme.palette.text.secondary,
         }));
         return (
             <>
-                <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} style={{ backgroundColor: "#F4F5F5" }} >
-                    {/* <AccordionSummary
+                <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} sx={{ my: 2 }}>
+                    <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="profile-content"
                         id="profile-summary"
-                    > */}
+                    >
+                        <Grid container>
+                            <Grid item xs={12} lg={'auto'}>
+                                <Typography variant="h6" component="p" sx={{ fontWeight: 600, mr: 2 }}>
+                                    {profile && profile.Fullname}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} lg={9}>
+                                <Typography variant="h6" component="p" sx={{ fontWeight: 600, color: '#0073DF' }}>
+                                    ( 会员号:{profile && profile.UserCode} )[{profile && profile.AreaCode}]
+                                </Typography>
 
-                    <Grid container rowSpacing={2} columnSpacing={3} >
-                        <Grid item xs={9} md={6}>
-                            <Typography variant="h6" component="p" sx={{ fontWeight: 600, paddingLeft: "20px" }}>
-                                <AccountCircleIcon />   会员号:{profile && profile.UserCode} ({profile && profile.AreaCode})
-                            </Typography>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={3} md={6} style={{ textAlign: "right", paddingRight: "20px" }}>
-                            <Button variant="contained" onClick={() => setEditMode(true)}> 会员信息 </Button>
+                        <Grid container onClick={() => setReferalModal(true)}>
+                            <Grid item xs={12} lg={6} >
+                                <Typography component="p" sx={{ fontWeight: 600, mr: 2 }}>
+                                    推荐人数 ：<label style={{ fontWeight: 600, color: '#0073DF' }}>{profile && profile.TotalReferee}</label>
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} lg={6} >
+                                <Typography component="p" sx={{ fontWeight: 600, mr: 2 }}>
+                                    可用推荐金额 ： <label style={{ fontWeight: 600, color: '#0073DF' }}>{profile && profile.RemainingCommission != null ? parseFloat(profile.RemainingCommission).toFixed(2) : 0}</label>
+                                </Typography>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    {
-                        !isObjectUndefinedOrNull(userProfile) && <UpdateProfileForm open={isEditMode} setOpenModal={setEditMode} profile={{ ...profile }} isUserProfileUpdate={isUserProfileUpdate} />
-                    }
-                    {/* </AccordionSummary> */}
-                    <AccordionDetails >
+                    </AccordionSummary>
+                    <AccordionDetails>
                         <AddressManager />
                     </AccordionDetails>
                 </Accordion>
+
+                <Dialog scroll="paper" maxWidth="lg" open={referalModal} onClose={() => setReferalModal(false)} aria-labelledby="referal-modal" aria-describedby="referal-modal-description" >
+                    <DialogTitle id="referal-modal">
+                        <Typography variant="h5" component="p" sx={{ fontWeight: 600 }}>
+                            已推荐会员资料
+                        </Typography>
+                        <IconButton
+                            aria-label="close"
+                            onClick={() => setReferalModal(false)}
+                            sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500], }}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </DialogTitle>
+                    <DialogContent>
+                        <TableContainer component={Paper}>
+                            <Table size="medium" aria-label="referal table">
+                                <TableHead>
+                                    <TableRow style={{ backgroundColor: "#adb5bd" }}>
+                                        <TableCell>会员号</TableCell>
+                                        <TableCell>会员名字</TableCell>
+                                        <TableCell>推荐金额</TableCell>
+                                        <TableCell>可用推荐金额</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        isArrayNotEmpty(commission) && commission[0].ReturnVal != 0 ?
+                                            commission.map((data) => {
+                                                return (
+                                                    <TableRow key={"Contact Person"}>
+                                                        <TableCell > {data.UserCode}</TableCell>
+                                                        <TableCell  > {data.Fullname}</TableCell>
+                                                        <TableCell> {data.TotalCommission !== null ? parseFloat(data.TotalCommission).toFixed(2) : 0}</TableCell>
+                                                        <TableCell > {data.BalancedAmount !== null ? parseFloat(data.BalancedAmount).toFixed(2) : 0}</TableCell>
+                                                    </TableRow>
+                                                )
+                                            })
+                                            :
+                                            <Typography style={{ padding: "10px", textAlign: "center" }}>暂还没亲的推荐资料</Typography>
+                                    }
+
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </DialogContent>
+                </Dialog>
             </>
 
         )
@@ -407,7 +507,7 @@ export const Profilepage = () => {
             <Dialog scroll="paper" open={openRegistrationModal} onClose={handleCloseModal} aria-labelledby="update-profile-title" aria-describedby="update-profile-description" >
                 <DialogTitle id="update-profile-title">
                     <Typography variant="h5" component="p" sx={{ fontWeight: 600 }}>
-                        个人资料
+                        更改个人资料
                     </Typography>
                     <IconButton
                         aria-label="close"
@@ -422,19 +522,22 @@ export const Profilepage = () => {
                         <DialogContent>Relogin</DialogContent>
                         :
                         <DialogContent>
+                            <DialogContentText>
+                                您可以随意的更改您的个人资料
+                            </DialogContentText>
                             <TextField id="profile--fullname"
                                 value={accountInfo.FULLNAME}
                                 onChange={(event) => { handleInputChange("FULLNAME", event) }}
-                                label="姓名"
+                                label="全名"
                                 fullWidth
                                 variant="filled"
                                 required
                                 size="small"
                                 sx={{ my: 1 }}
                                 error={isStringNullOrEmpty(accountInfo.FULLNAME)}
-                                helperText={isStringNullOrEmpty(accountInfo.FULLNAME) ? "须填写您的姓名" : ''}
+                                helperText={isStringNullOrEmpty(accountInfo.FULLNAME) ? "您必须填写你的名字" : ''}
                             />
-                            {/* <TextField id="profile--username"
+                            <TextField id="profile--username"
                                 value={accountInfo.USERNAME}
                                 onChange={(event) => { handleInputChange("USERNAME", event) }}
                                 label="账号"
@@ -454,7 +557,7 @@ export const Profilepage = () => {
                                 variant="filled"
                                 size="small"
                                 sx={{ my: 1 }}
-                            /> */}
+                            />
                             {/* <TextField id="profile--address"
                                 value={accountInfo.USERADDRESS}
                                 onChange={(event) => { handleInputChange("USERADDRESS", event) }}
@@ -467,26 +570,26 @@ export const Profilepage = () => {
                             <TextField id="profile--contact"
                                 value={accountInfo.CONTACTNO}
                                 onChange={(event) => { handleInputChange("CONTACTNO", event) }}
-                                label="电话"
+                                label="电话号码"
                                 fullWidth
                                 variant="filled"
                                 size="small"
                                 sx={{ my: 1 }}
                                 required
                                 error={isStringNullOrEmpty(accountInfo.CONTACTNO)}
-                                helperText={isStringNullOrEmpty(accountInfo.CONTACTNO) ? "须填写您的电话号码" : ''}
+                                helperText={isStringNullOrEmpty(accountInfo.CONTACTNO) ? "您必须填写你的电话号码" : ''}
                             />
                             <TextField id="profile--email"
                                 value={accountInfo.USEREMAIL}
                                 onChange={(event) => { handleInputChange("USEREMAIL", event) }}
-                                label="邮件"
+                                label="电子邮件"
                                 fullWidth
                                 variant="filled"
                                 size="small"
                                 sx={{ my: 1 }}
                                 required
                                 error={isStringNullOrEmpty(accountInfo.USEREMAIL)}
-                                helperText={isStringNullOrEmpty(accountInfo.USEREMAIL) ? "须填写您的电子邮件" : ''}
+                                helperText={isStringNullOrEmpty(accountInfo.USEREMAIL) ? "您必须填写你的电子邮件" : ''}
                             />
                             <TextField id="profile--wechat"
                                 value={accountInfo.WECHATID}
@@ -518,7 +621,7 @@ export const Profilepage = () => {
         const [expanded, setExpanded] = useState(false)
 
         return (
-            <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} sx={{ my: 2, }} style={{ backgroundColor: "#F4F5F5" }}>
+            <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} sx={{ my: 2, }}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="notification-content"
@@ -527,9 +630,9 @@ export const Profilepage = () => {
                 >
 
                     <Typography sx={{ flexShrink: 0, fontWeight: 600, my: 'auto', mr: 2 }}>
-                        最新通告
+                        最新资讯
                     </Typography>
-                    {viewNotification && <Chip size="small" color="primary" sx={{ my: 'auto', minWidth: '50px' }} label={viewNotification.length} />}
+                    {viewNotification && <Chip size="small" color="warning" sx={{ my: 'auto', minWidth: '50px' }} label={viewNotification.length} />}
                 </AccordionSummary>
                 <AccordionDetails>
                     {viewNotification && viewNotification.length > 0 ? viewNotification.map((item, index) => {
@@ -544,9 +647,10 @@ export const Profilepage = () => {
                     })
                         :
                         <div style={{ textAlign: 'center', fontWeight: 'bold' }}>
-                            目前无通告
+                            No notification for the moment / 目前没有任何通告
                         </div>
                     }
+
                 </AccordionDetails>
             </Accordion>
 
@@ -559,7 +663,7 @@ export const Profilepage = () => {
         const [expanded, setExpanded] = useState(true)
 
         const Item = styled(Paper)(({ theme }) => ({
-            // backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#F4F5F5',
+            backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#F4F5F5',
             ...theme.typography.body2,
             padding: theme.spacing(1),
             textAlign: 'left',
@@ -569,7 +673,7 @@ export const Profilepage = () => {
         return (
 
             !isObjectUndefinedOrNull(profile) ?
-                <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} sx={{ my: 2 }} style={{ backgroundColor: "#F4F5F5" }}>
+                <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} sx={{ my: 2 }}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="user-content"
@@ -577,7 +681,7 @@ export const Profilepage = () => {
                     >
                         <Stack direction={"row"} justifyContent="space-between">
                             <Typography sx={{ flexShrink: 0, fontWeight: 600, my: 'auto', mr: 2 }}>
-                                会员资料
+                                您的个人资料
                             </Typography>
                             <IconButton aria-label="edit-profile" onClick={() => setEditMode(true)}>
                                 <EditIcon />
@@ -586,31 +690,31 @@ export const Profilepage = () => {
                     </AccordionSummary>
                     <AccordionDetails>
                         <Grid container rowSpacing={2} columnSpacing={3} >
-                            {/* <Grid item xs={12} md={6}>
+                            <Grid item xs={12} md={6}>
                                 <Item>
-                                    会员号: <b>{profile.Username}</b>
+                                    户口: <b style={{ fontSize: 16, color: '#0073DF' }}>{profile.Username}</b>
                                 </Item>
-                            </Grid> */}
-                            {/* <Grid item xs={12} md={6}>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
                                 <Item>
-                                    地区: <b>{profile.AreaCode}</b>
+                                    地区: <b style={{ fontSize: 16, color: '#FF5733' }}>{profile.AreaCode}</b>
                                 </Item>
-                            </Grid> */}
+                            </Grid>
                             <Grid item xs={12} md={6}>
                                 <Item>
                                     姓名: <b>{profile.Fullname}</b>
                                 </Item>
                             </Grid>
-                            {/* <Grid item xs={12} md={6}>
+                            <Grid item xs={12} md={6}>
                                 <Item>
                                     账号: <b>{profile.Username}</b>
                                 </Item>
-                            </Grid> */}
-                            {/* <Grid item xs={12} md={6}>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
                                 <Item>
                                     昵称: <b>{profile.UserNickname}</b>
                                 </Item>
-                            </Grid> */}
+                            </Grid>
                             <Grid item xs={12} md={6} >
                                 <Item>
                                     电话: <b>{profile.UserContactNo}</b>
@@ -626,11 +730,11 @@ export const Profilepage = () => {
                                     微信: <b>{profile.UserWechatID}</b>
                                 </Item>
                             </Grid>
-                            {/* <Grid item xs={12} md={6} >
+                            <Grid item xs={12} md={6} >
                                 <Item>
                                     推荐人: <b>{profile.ReferalCode != null ? profile.ReferalCode : "-"}</b>
                                 </Item>
-                            </Grid> */}
+                            </Grid>
                         </Grid>
                         {
                             !isObjectUndefinedOrNull(userProfile) && <UpdateProfileForm open={isEditMode} setOpenModal={setEditMode} profile={{ ...profile }} isUserProfileUpdate={isUserProfileUpdate} />
@@ -682,7 +786,7 @@ export const Profilepage = () => {
         }
 
         const TitleStyle = {
-            width: '20%',
+            width: '30%',
             fontWeight: 600,
             bgcolor: '#F3F3F3',
             border: '1px solid rgba(77,77,77,.3)'
@@ -705,9 +809,15 @@ export const Profilepage = () => {
         }
 
         return (
-            <Card sx={{ borderTop: '1px solid rgba( 33, 33, 33, 0.3)', backgroundColor: "#F4F5F5" }} elevation={0}>
-                <Typography sx={{ fontWeight: 600 }}> 中国仓库地址资料与信息 </Typography>
-                <Typography sx={{ fontSize: "12px", color: "grey" }}>点击拷贝你所想要的信息</Typography>
+            <Card sx={{ mb: 2, borderTop: '1px solid rgba( 33, 33, 33, 0.3)', borderBottom: '1px solid rgba( 33, 33, 33, 0.3)' }} elevation={0}>
+                <CardHeader
+                    title={
+                        <Typography variant="h6" component="h6" sx={{ fontWeight: 600 }}>
+                            您的地址
+                        </Typography>
+                    }
+                    subheader={"请点击以下的资料，他会自动拷贝你所想要的信息"}
+                />
                 <CardContent>
                     {
                         !isObjectUndefinedOrNull(profile) &&
@@ -715,9 +825,9 @@ export const Profilepage = () => {
                             <Table size="small" aria-label="addresses table">
                                 <TableBody>
                                     <Tooltip title={isCopyText} placement="top" arrow>
-                                        <TableRow key={"Contact Person"} onClick={() => handleCopyToClipboard('(' + profile.UserCode + ') EZ 转运 ' + profile.AreaCode + " 仓")}>
+                                        <TableRow key={"Contact Person"} onClick={() => handleCopyToClipboard('壹智(' + profile.UserCode + " " + profile.AreaCode + ')')}>
                                             <TableCell component="th" scope="row" sx={{ ...TitleStyle }} > 收货人: </TableCell>
-                                            <TableCell align="left" sx={{ ...CopyableStyle }}>({profile.UserCode}) EZ 转运 {profile.AreaCode} 仓</TableCell>
+                                            <TableCell align="left" sx={{ ...CopyableStyle }}>壹智({profile.UserCode} {profile.AreaCode})</TableCell>
                                         </TableRow>
                                     </Tooltip>
                                     <TableRow key={"Address"}>
@@ -725,15 +835,15 @@ export const Profilepage = () => {
                                         <TableCell align="left" sx={{ ...NormalStyle }}>星期一 - 星期日 9.00 - 18.00</TableCell>
                                     </TableRow>
                                     <Tooltip title={isCopyText} placement="top" arrow>
-                                        <TableRow key={"Collection Time"} onClick={() => handleCopyToClipboard('广东省东莞市虎门镇赤岗村赤岗路69号101新艺工业园1号仓' + profile.AreaCode + "仓" + profile.UserCode + "(转会员" + profile.UserCode + ")")}>
+                                        <TableRow key={"Collection Time"} onClick={() => handleCopyToClipboard('广东省东莞市虎门镇赤岗村赤岗路69号新艺工业园1号90壹智国际物流' + profile.UserCode + profile.AreaCode)}>
                                             <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 仓库地址: </TableCell>
-                                            <TableCell align="left" sx={{ ...CopyableStyle }}>广东省东莞市虎门镇赤岗村赤岗路69号101新艺工业园1号仓{profile.AreaCode} 仓 {profile.UserCode}(转会员{profile.UserCode})</TableCell>
+                                            <TableCell align="left" sx={{ ...CopyableStyle }}>广东省东莞市虎门镇赤岗村赤岗路69号新艺工业园1号90壹智国际物流{profile.UserCode}{profile.AreaCode}</TableCell>
                                         </TableRow>
                                     </Tooltip>
                                     <Tooltip title={isCopyText} placement="top" arrow>
-                                        <TableRow key={"Contact Number"} onClick={() => handleCopyToClipboard('13532819696')}>
+                                        <TableRow key={"Contact Number"} onClick={() => handleCopyToClipboard('13553858834')}>
                                             <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 电话号码: </TableCell>
-                                            <TableCell align="left" sx={{ ...CopyableStyle }}>13532819696</TableCell>
+                                            <TableCell align="left" sx={{ ...CopyableStyle }}>13553858834</TableCell>
                                         </TableRow>
                                     </Tooltip>
                                     <Tooltip title={isCopyText} placement="top" arrow>
@@ -742,10 +852,17 @@ export const Profilepage = () => {
                                             <TableCell align="left" sx={{ ...CopyableStyle }}>523900</TableCell>
                                         </TableRow>
                                     </Tooltip>
+                                    <Tooltip title={isCopyText} placement="top" arrow>
+                                        <TableRow key={"RefNo"} onClick={() => handleCopyToClipboard(profile.UserCode + profile.AreaCode)}>
+                                            <TableCell component="th" scope="row" sx={{ ...TitleStyle }}> 代号: </TableCell>
+                                            <TableCell align="left" sx={{ ...CopyableStyle }}>({profile.UserCode + profile.AreaCode})</TableCell>
+                                        </TableRow>
+                                    </Tooltip>
                                 </TableBody>
                             </Table>
                         </TableContainer>
                     }
+
                 </CardContent>
             </Card>
         )
@@ -916,20 +1033,18 @@ export const Profilepage = () => {
             case USER_PROFILE_PAGE:
                 return (
                     <>
+                        {/* <AddressManager /> */}
                         <UserProfile />
+                        <PersonalProfile />
                         <NotificationAccordion />
-                        {/* <PersonalProfile /> */}
                     </>
                 )
 
             case ALL_ORDERS_PAGE:
-                return <ParcelPage type="selfparcel" />
-
-            case PARCEL_TRACKING_PAGE:
-                return <ParcelTrackingPage />
+                return <ParcelPage />
 
             case CLAIM_CARGO_PAGE:
-                return <ParcelPage type="claim" />
+                break;
 
             case PASSWORD_MANAGER_PAGE:
                 return <PasswordManager />
@@ -939,18 +1054,19 @@ export const Profilepage = () => {
     }
 
     return (
-        <div className="user-profile--container thin-scrollbar" style={{ minHeight: '70vh', padding: '1rem 0rem', maxWidth: '1600px', display: 'flex', marginLeft: 'auto', marginRight: 'auto' }}>
+        <div className="user-profile--container thin-scrollbar" style={{ minHeight: '70vh', padding: '1rem 0rem', maxWidth: '1200px', display: 'flex', marginLeft: 'auto', marginRight: 'auto' }}>
             <Grid container spacing={1}>
-                <Grid item xs={12} md={12} >
+                <Grid item xs={12} md={3} >
                     <SideMenu />
                 </Grid>
 
-                <Grid item xs={12} md={12} sx={(width >= 768) ? { overflowY: 'auto', my: 2 } : {}}>
+                <Grid item xs={12} md={9} sx={(width >= 768) ? { maxHeight: '70vh', overflowY: 'auto', my: 2 } : {}}>
                     <div style={{ paddingLeft: '15px', paddingRight: '15px' }}>
                         {renderPageModule(currentPage)}
                     </div>
                 </Grid>
             </Grid>
+
         </div>
     )
 }

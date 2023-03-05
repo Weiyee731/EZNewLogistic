@@ -10,7 +10,8 @@ const INITIAL_STATE = {
   setting: [],
   userProfile: [],
   resetPassword: [],
-  commission: []
+  commission: [],
+  parcelPrice: []
 };
 
 export function counterReducer(state = INITIAL_STATE, action) {
@@ -109,6 +110,20 @@ export function counterReducer(state = INITIAL_STATE, action) {
         parcelStatus: action.payload
       });
 
+    case GitAction.GetParcelPrice:
+      return Object.assign({}, state, { loading: true });
+    case GitAction.GotParcelPrice:
+      return Object.assign({}, state, {
+        loading: false,
+        parcelPrice: action.payload
+      });
+
+    case GitAction.ResetParcelPrice:
+      return Object.assign({}, state, {
+        loading: false,
+        parcelPrice: []
+      });
+
     case GitAction.FetchUserProfileByID:
       return Object.assign({}, state, { loading: true });
     case GitAction.UserProfileByIDFetched:
@@ -123,6 +138,12 @@ export function counterReducer(state = INITIAL_STATE, action) {
       return Object.assign({}, state, {
         loading: false,
         parcelStatus: action.payload
+      });
+
+    case GitAction.ClearParcelStatus2:
+      return Object.assign({}, state, {
+        loading: false,
+        parcelStatus: []
       });
 
     case GitAction.GetGeneralSetting:

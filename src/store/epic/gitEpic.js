@@ -124,6 +124,30 @@ export class GitEpic {
       }
     }));
 
+  User_CalculateParcelPrice = action$ =>
+    action$.pipe(filter(action => action.type === GitAction.GetParcelPrice), map(action => {
+      return dispatch => {
+        try {
+          return fetch(
+            url + "User_CalculateParcelPrice?SELECTEDAREAID=" + action.payload.selectedAreaID +
+            "&USERID=" + action.payload.UserID +
+            "&PARCELWEIGHT=" + action.payload.parcelWeight +
+            "&PARCELHEIGHT=" + action.payload.parcelHeight +
+            "&PARCELWIDTH=" + action.payload.parcelWidth +
+            "&PARCELLENGTH=" + action.payload.parcelLength
+          )
+            .then(response => response.json())
+            .then(json => {
+              json = JSON.parse(json)
+              return dispatch({ type: GitAction.GotParcelPrice, payload: json[0].ReturnVal === 1 ? JSON.parse(json[0].ReturnData) : [] });
+            });
+        } catch (error) {
+          toast.error("Unable to get parcelPrice")
+          return dispatch({ type: GitAction.GotParcelPrice, payload: [] });
+        }
+      }
+    }));
+
   Notification_ViewNotification = action$ =>
     action$.pipe(filter(action => action.type === GitAction.GetNotification), map(action => {
       return dispatch => {
@@ -159,7 +183,7 @@ export class GitEpic {
               return dispatch({ type: GitAction.GotParcelStatus, payload: json[0].ReturnVal === 1 ? [] : json });
             });
         } catch (error) {
-          toast.error("Unable to get the status of your parcel")
+          toast.error("无此物流快递信息")
           return dispatch({ type: GitAction.GotParcelStatus, payload: [] });
         }
       }
@@ -175,13 +199,13 @@ export class GitEpic {
             .then(response => response.json())
             .then(json => {
               json = JSON.parse(json)
-              if (json[0].ReturnVal === 0) {
-                toast.error("Invalid tracking number")
-              }
-              return dispatch({ type: GitAction.GotParcelStatus2, payload: json[0].ReturnVal === 1 ? JSON.parse(json[0].ReturnData) : [] });
+              // if (json[0].ReturnVal === 0) {
+              //   toast.error("无此物流快递信息", json)
+              // }
+              return dispatch({ type: GitAction.GotParcelStatus2, payload: json[0].ReturnVal === 1 ? JSON.parse(json[0].ReturnData) : [{ ReturnVal: 0 }] });
             });
         } catch (error) {
-          toast.error("Unable to get the status of your parcel")
+          toast.error("无此物流快递信息")
           return dispatch({ type: GitAction.GotParcelStatus2, payload: [] });
         }
       }
@@ -298,26 +322,26 @@ export class GitEpic {
       }
     }));
 
-    
-    User_ViewCommissionList = action$ =>
-  action$.pipe(filter(action => action.type === GitAction.User_ViewCommissionList), map(action => {
-    return dispatch => {
-      try {
-        return fetch(url +
-          "User_ViewCommissionList?" +
-          "USERCODE=" + action.payload.UserCode
-        )
-          .then(response => response.json())
-          .then(json => {
-            json = JSON.parse(json)
-            return dispatch({ type: GitAction.User_ViewedCommissionList, payload: json });
-          });
-      } catch (error) {
-        toast.error("Error Code: User_ViewedCommissionList")
-        return dispatch({ type: GitAction.User_ViewedCommissionList, payload: [] });
+
+  User_ViewCommissionList = action$ =>
+    action$.pipe(filter(action => action.type === GitAction.User_ViewCommissionList), map(action => {
+      return dispatch => {
+        try {
+          return fetch(url +
+            "User_ViewCommissionList?" +
+            "USERCODE=" + action.payload.UserCode
+          )
+            .then(response => response.json())
+            .then(json => {
+              json = JSON.parse(json)
+              return dispatch({ type: GitAction.User_ViewedCommissionList, payload: json });
+            });
+        } catch (error) {
+          toast.error("Error Code: User_ViewedCommissionList")
+          return dispatch({ type: GitAction.User_ViewedCommissionList, payload: [] });
+        }
       }
-    }
-  }));
+    }));
 
 }
 

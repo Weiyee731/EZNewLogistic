@@ -105,7 +105,7 @@ export const NotificationView = ({ title, message, type, date }) => {
                         </Grid>
                         <Grid item xs={2} sm={2} md={2} >
                             <Typography style={{ fontWeight: "bold", color: 'black', fontSize: "11pt", letterSpacing: 2 }}  >
-                                雅威国际物流
+                                壹智国际物流
                             </Typography>
                             <Typography style={{ color: 'gray', fontSize: "10pt" }}  >
                                 {date}

@@ -4,17 +4,16 @@ import { GitAction } from "../store/action/gitAction";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import { Card, CardContent, Typography, Grid, TableCell } from '@mui/material';
+import { Card, CardContent, Typography, Grid } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import SearchBar from "../components/SearchBar/SearchBar";
 import LoadingPanel from "../components/LoadingPanel/LoadingPanel";
 import EmptyBox from "../assets/empty-box.png"
-import { isArrayNotEmpty, isStringNullOrEmpty } from "../tools/Helpers";
+import { isStringNullOrEmpty } from "../tools/Helpers";
 import useAuth from "../hooks/useAuth";
 import { toast, Flip } from "react-toastify";
 
-import TableComponents from "../components/TableComponents/TableComponents";
-export const ParcelPage = (props) => {
+export const ParcelPage = () => {
     const { userParcel, setting } = useSelector(state => ({
         userParcel: state.counterReducer.parcelStatus,
         setting: state.counterReducer.setting,
@@ -28,7 +27,6 @@ export const ParcelPage = (props) => {
             'aria-controls': `simple-tabpanel-${index}`,
         };
     }
-    console.log("Dsada", props)
 
     useEffect(() => {
         let LogonUser = localStorage.getItem("user")
@@ -41,7 +39,6 @@ export const ParcelPage = (props) => {
             dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + LogonUser }))
             dispatch(GitAction.CallGetGeneralSetting({ UserID: LogonUser }))
             setUserCode(LogonUserCode)
-            setUserID(LogonUser)
         }
     }, [])
 
@@ -49,7 +46,6 @@ export const ParcelPage = (props) => {
     const [value, setValue] = React.useState(0);
     const [parcelValue, setParcelValue] = React.useState(0);
     const [UserCode, setUserCode] = React.useState("");
-    const [UserID, setUserID] = React.useState("");
     const [searchKeywords, setSearchKeywords] = React.useState("");
     const [isFiltered, setIsFiltered] = React.useState(false);
     const [filteredParcel, setFilteredParcel] = React.useState([]);
@@ -62,6 +58,8 @@ export const ParcelPage = (props) => {
         { ContainerStatusID: 1, ContainerStatus: "China Warehouse", ContainerStatusCN: "抵达中国仓库" },
         { ContainerStatusID: 2, ContainerStatus: "Leave Port", ContainerStatusCN: "运输途中" },
         { ContainerStatusID: 3, ContainerStatus: "Reach Kuching Warehouse", ContainerStatusCN: "抵达东马仓库" },
+        // { ContainerStatusID: 5, ContainerStatus: "Pending Pick Up", ContainerStatusCN: "待取货包裹" },
+        // { ContainerStatusID: 6, ContainerStatus: "Done Pick Up", ContainerStatusCN: "已取货" },
     ];
 
 
@@ -108,154 +106,6 @@ export const ParcelPage = (props) => {
             </div>
         );
     }
-
-    const tableHeadCells = [
-        {
-            id: "CourierName",
-            align: 'left',
-            disablePadding: false,
-            label: "快递公司",
-        },
-        {
-            id: "TrackingNumber",
-            align: 'left',
-            disablePadding: false,
-            label: "快递单号 ",
-        },
-        {
-            id: "Item",
-            align: 'left',
-            disablePadding: false,
-            label: "包裹名称",
-        },
-        {
-            id: "ProductWeight",
-            align: 'left',
-            disablePadding: false,
-            label: "重量",
-        },
-        {
-            id: "ProductDimensionDeep",
-            align: 'left',
-            disablePadding: false,
-            label: "尺寸",
-        },
-        {
-            id: "ProductDimensionDeep",
-            align: 'left',
-            disablePadding: false,
-            label: "体积",
-        },
-        {
-            id: "Price",
-            align: 'left',
-            disablePadding: false,
-            label: "价格",
-        },
-        {
-            id: "parcelStatus",
-            align: 'left',
-            disablePadding: false,
-            label: "包裹状态",
-        },
-    ];
-
-
-    const claimTableHeadCells = [
-        {
-            id: "CourierName",
-            align: 'left',
-            disablePadding: false,
-            label: "快递公司",
-        },
-        {
-            id: "TrackingNumber",
-            align: 'left',
-            disablePadding: false,
-            label: "快递单号 ",
-        },
-        {
-            id: "ProductWeight",
-            align: 'left',
-            disablePadding: false,
-            label: "重量",
-        },
-        {
-            id: "ProductDimensionDeep",
-            align: 'left',
-            disablePadding: false,
-            label: "尺寸",
-        },
-        {
-            id: "ProductDimensionDeep",
-            align: 'left',
-            disablePadding: false,
-            label: "体积",
-        },
-        {
-            id: "parcelStatus",
-            align: 'left',
-            disablePadding: false,
-            label: "包裹状态",
-        },
-    ];
-
-    const tableAgentHeadCells = [
-        {
-            id: "CourierName",
-            align: 'left',
-            disablePadding: false,
-            label: "快递公司",
-        },
-        {
-            id: "TrackingNumber",
-            align: 'left',
-            disablePadding: false,
-            label: "快递单号 ",
-        },
-        {
-            id: "Item",
-            align: 'left',
-            disablePadding: false,
-            label: "包裹名称",
-        },
-        {
-            id: "UserCode",
-            align: 'left',
-            disablePadding: false,
-            label: "会员号",
-        },
-        {
-            id: "ProductWeight",
-            align: 'left',
-            disablePadding: false,
-            label: "重量",
-        },
-        {
-            id: "ProductDimensionDeep",
-            align: 'left',
-            disablePadding: false,
-            label: "尺寸",
-        },
-        {
-            id: "ProductDimensionDeep",
-            align: 'left',
-            disablePadding: false,
-            label: "体积",
-        },
-        {
-            id: "Price",
-            align: 'left',
-            disablePadding: false,
-            label: "价格",
-        },
-        {
-            id: "parcelStatus",
-            align: 'left',
-            disablePadding: false,
-            label: "包裹状态",
-        },
-    ];
 
     const CheckUser = (Code) => {
         let listing = []
@@ -386,7 +236,6 @@ export const ParcelPage = (props) => {
             </div >
         )
     }
-    { console.log("unKnownUserCode", unKnownUserCode) }
 
     const parcelLayout = () => {
         return (
@@ -455,90 +304,34 @@ export const ParcelPage = (props) => {
         )
     }
 
-    const renderTableRows = (data, index) => {
-        return (
-            data.UserID !== UserID ?
-                <LoadingPanel />
-                :
-                <>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.CourierName}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.TrackingNumber}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.Item}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductWeight} kg</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductDimensionDeep + "cm x " + data.ProductDimensionHeight + "cm x " + data.ProductDimensionWidth + "cm"}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{parseFloat((data.ProductDimensionDeep * data.ProductDimensionHeight * data.ProductDimensionWidth) / 1000000).toFixed(3)}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.CourierName}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.ContainerID === 0 ? "已入库" : data.StockStatusID === 3 ? data.ContainerRemark : "抵达古晋仓库"}</TableCell>
-                </>
-        )
-    }
-
-    const renderClaimTableRows = (data, index) => {
-        return (
-            data.UserID === UserID ?
-                <LoadingPanel />
-                :
-                <>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.CourierName}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.TrackingNumber}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductWeight} kg</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductDimensionDeep + "cm x " + data.ProductDimensionHeight + "cm x " + data.ProductDimensionWidth + "cm"}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{parseFloat((data.ProductDimensionDeep * data.ProductDimensionHeight * data.ProductDimensionWidth) / 1000000).toFixed(3)}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.ContainerID === 0 ? "已入库" : data.StockStatusID === 3 ? data.ContainerRemark : "抵达古晋仓库"}</TableCell>
-                </>
-        )
-    }
-    console.log("userParcel", userParcel)
     return (
-        <div className="row" style={{ position: "absolute", top: "120px", width: "95%", paddingRight: "20px", paddingBottom: "50px" }}>
+        <div className="container">
             {
-                props.type === "claim" &&
-                <div className="row" style={{ paddingBottom: "10px" }}>
-                    <Typography>如以下是您的货物，请截图物流信息发进群，如货物超过<strong> 90 天</strong>无人认领，会由本司自行处理货物</Typography>
-                </div>
+                UserCode !== unKnownUserCode &&
+                <SearchBar
+                    id=""
+                    placeholder="快递单号"
+                    label="快递单号"
+                    onChange={(e) => handleSearchInput(e.target.value)}
+                    className="searchbar-input mb-auto"
+                    tooltipText="Search with current data"
+                    value={searchKeywords}
+                />
             }
-            {
-                isArrayNotEmpty(userParcel) && userParcel[0].ReturnVal === undefined ?
-                    <TableComponents
-                        tableTopLeft={
-                            <>
-                                <SearchBar
-                                    id=""
-                                    placeholder="快递单号"
-                                    label="快递单号"
-                                    onChange={(e) => handleSearchInput(e.target.value)}
-                                    // className="searchbar-input mb-auto"
-                                    tooltipText="Search with current data"
-                                    value={searchKeywords}
-                                />
-                            </>
-                        }
-                        tableOptions={{
-                            dense: true,
-                            tableOrderBy: 'asc',
-                            sortingIndex: "StockDate",
-                            stickyTableHeader: true,
-                        }}
-                        paginationOptions={[20, 25, 30, { label: 'All', value: -1 }]}
-                        tableHeaders={props.type === "claim" ? claimTableHeadCells : tableHeadCells}
-                        tableRows={{
-                            renderTableRows: props.type === "claim" ? renderClaimTableRows : renderTableRows,
-                            checkbox: false,
-                            checkboxColor: "primary",
-                            onRowClickSelect: false
-                        }}
-                        selectedIndexKey={"StockID"}
-
-                        Data={
-                            isFiltered ?
-                                isArrayNotEmpty(filteredParcel) ? filteredParcel : []
-                                :
-                                isArrayNotEmpty(userParcel) && userParcel[0].ReturnVal === undefined ? userParcel : []}
-                    />
-                    :
-                    <LoadingPanel />
-            }
-
+            <Box sx={{ width: '100%' }}>
+                <Box sx={{ borderBottom: 1, borderColor: 'darkgrey' }}>
+                    <Tabs value={value} onChange={handleChange} aria-label="parcelType" variant="fullWidth">
+                        <Tab label="我的包裹资料" {...a11yProps(0)} />
+                        <Tab label="待认领包裹资料" {...a11yProps(1)} />
+                    </Tabs>
+                </Box>
+                <TabPanel value={value} index={0}>
+                    {parcelLayout()}
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                    {parcelLayout()}
+                </TabPanel>
+            </Box>
         </div>
     )
 }

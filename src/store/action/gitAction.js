@@ -91,6 +91,8 @@ export class GitAction {
     };
   }
 
+
+
   ///////////////////////////////////////////////////  sidebar configuration  ///////////////////////////////////////////////////
 
   static GetNotification = "GetNotification";
@@ -108,6 +110,22 @@ export class GitAction {
     return {
       type: GitAction.GetParcelStatus,
       payload: propsData
+    };
+  }
+
+  static GetParcelPrice = "USER_GET_PARCELPRICE";
+  static GotParcelPrice = "USER_GOT_PARCELPRICE";
+  static CallCalculateParcelPrice(propsData) {
+    return {
+      type: GitAction.GetParcelPrice,
+      payload: propsData
+    };
+  }
+
+  static ResetParcelPrice = "ResetParcelPrice";
+  static CallResetParcelPrice() {
+    return {
+      type: GitAction.ResetParcelPrice
     };
   }
 
@@ -144,6 +162,13 @@ export class GitAction {
     return {
       type: GitAction.GetParcelStatus2,
       payload: propsData
+    };
+  }
+
+  static ClearParcelStatus2 = "ClearParcelStatus2";
+  static CallClearParcelStatus2() {
+    return {
+      type: GitAction.ClearParcelStatus2,
     };
   }
 

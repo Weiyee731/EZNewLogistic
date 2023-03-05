@@ -58,7 +58,7 @@ export const Pricingpage = () => {
             <>
                 <TempSelfCollect />
                 <div className="row" style={{ textAlign: "right", padding: "10pt" }}>
-                    <label style={{ fontWeight: "bold", fontSize: "15pt" }}>雅威国际物流</label>
+                    <label style={{ fontWeight: "bold", fontSize: "15pt" }}>壹智国际物流</label>
                 </div>
             </>
         )

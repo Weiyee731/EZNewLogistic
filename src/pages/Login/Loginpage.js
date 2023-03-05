@@ -379,7 +379,7 @@ export const Loginpage = () => {
                                 你所使用的户口或密码错误哟，请重新尝试登入
                             </Typography>
                         }
-                        {/* <Typography variant="h4" component="h4" sx={{ textAlign: 'center', mb: 2 }}>雅威国际物流</Typography> */}
+                        {/* <Typography variant="h4" component="h4" sx={{ textAlign: 'center', mb: 2 }}>壹智国际物流</Typography> */}
                         <TextField
                             id="login-user--username"
                             label="用户户口"

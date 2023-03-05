@@ -9,7 +9,9 @@ padding: 120px 0px;
 	padding: 30px;
 }
 
+
 `;
+
 
 // export const Container = styled.div`
 // 	display: flex;

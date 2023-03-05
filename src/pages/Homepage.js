@@ -81,7 +81,7 @@ export default function Homepage() {
     return (
         <div>
             {/* swipeable images */}
-            <Carousel
+            {/* <Carousel
                 showThumbs={false}
                 swipeable={true}
                 axis="horizontal"
@@ -90,21 +90,21 @@ export default function Homepage() {
                 autoPlay={true}
                 labels={false}
                 showArrows={true}
-            >
-                <div>
+            > */}
+                {/* <div>
                     <img src={Register} alt="Yourway Register" />
-                    {/* <img src="https://pic.52112.com/180705/JPG-180705_428/xtHosKp6oG_small.jpg" /> */}
+                    <img src="https://pic.52112.com/180705/JPG-180705_428/xtHosKp6oG_small.jpg" />
                 </div>
                 <div>
                     <img src={sharing} alt="Yourway Referal" />
-                </div>
+                </div> */}
                 {/* <div>
                     <img src={double11} alt="Yourway 1111" />
                 </div> */}
                 {/* <div>
                     <img src="https://blog.solistica.com/hubfs/Fotos%20e%20infograf%C3%ADa%20Blogs%20Q4/Fotos%20Q4%20Noviembre%202020/Fotos%20Diciembre%20Q4%2020202/SOL-S13-B1-Blog%20Image%2002-1.jpg" />
                 </div> */}
-            </Carousel>
+            {/* </Carousel> */}
 
             <div
                 style={{ height: '100%', maxWidth: '1200px', marginLeft: 'auto', marginRight: 'auto' }}
@@ -177,7 +177,7 @@ export default function Homepage() {
                                         </Grid>
                                         <Grid item xs={2} sm={2} md={2} >
                                             <Typography style={{ fontWeight: "bold", color: 'black', fontSize: "11pt", letterSpacing: 2 }}  >
-                                                雅威国际物流
+                                                壹智国际物流
                                             </Typography>
                                             <Typography style={{ color: 'gray', fontSize: "10pt" }}  >
                                                 {item.CreatedDate}
