@@ -35,7 +35,7 @@ export const ParcelCalculation = ({ areaCodes, title, parcelPrice }) => {
                 }))
             }
             else
-                toast.warning("请填写所有把包裹资料")
+                toast.warning("请填写所需包裹资料")
 
         } else {
             toast.warning("请登录户口查询")
@@ -186,12 +186,12 @@ export const ParcelCalculation = ({ areaCodes, title, parcelPrice }) => {
                 </Button>
             </div>
 
-            {parcelPrice.length > 0 && parcelDimension.weight !== "" && parcelDimension.height !== "" && parcelDimension.length !== "" && parcelDimension.width !== "" && deliveryArea !== ""
+            {parcelPrice !== undefined && parcelPrice.length > 0 && parcelDimension.weight !== "" && parcelDimension.height !== "" && parcelDimension.length !== "" && parcelDimension.width !== "" && deliveryArea !== ""
                 ?
                 <div style={{ padding: "10pt" }}>
-                    <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}> <strong>预测运费：</strong> {parcelPrice[0].Price !== null && parseFloat(parcelPrice[0].Price).toFixed(2)}</Typography>
-                    <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}> <strong>货物实重：</strong> {parcelPrice[0].ParcelWeight}kg</Typography>
-                    <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}> <strong>货物体积重：</strong> {parcelPrice[0].ParcelVolumeWeight}kg</Typography>
+                    <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}> <strong>预测运费：</strong> RM {parcelPrice[0].Price !== null && parseFloat(parcelPrice[0].Price).toFixed(2)}</Typography>
+                    <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}> <strong>货物实重：</strong> {parcelPrice[0].ParcelWeight} kg</Typography>
+                    <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}> <strong>货物体积重：</strong> {parcelPrice[0].ParcelVolumeWeight} kg</Typography>
                     <Typography style={{ paddingTop: "5pt", letterSpacing: 1 }}> <strong>货物体积：</strong> {parcelPrice[0].ParcelVolume} m³</Typography>
                 </div>
                 :

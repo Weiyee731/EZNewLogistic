@@ -15,8 +15,6 @@ import { toast, Flip } from "react-toastify";
 
 import { Tracking } from "../components/Homepage/Tracking";
 import { ParcelCalculation } from "../components/Homepage/ParcelCalculation";
-
-import TableComponents from "../components/TableComponents/TableComponents";
 export const ParcelTrackingPage = (props) => {
     const { userParcel, setting, parcelStatus, areaCodes, parcelPrice } = useSelector(state => ({
         userParcel: state.counterReducer.parcelStatus,
@@ -37,21 +35,19 @@ export const ParcelTrackingPage = (props) => {
 
     return (
         <div className="row" style={{ position: "absolute", top: "120px", width: "100%", padding: "20px", paddingBottom: "50px" }}>
-            <Grid container rowSpacing={2} columnSpacing={3} >
-                <Grid item xs={12} md={6}>
-                    <Card style={{ padding: "10px" }}>
+            <Card style={{ padding: "10px" }}>
+                <Grid container rowSpacing={2} columnSpacing={3} >
+                    <Grid item xs={12} md={6}>
                         <Typography style={titleStyle}>货物查询</Typography>
                         <Tracking parcelStatus={parcelStatus} />
-                    </Card>
-                </Grid>
-                <Grid item xs={12} md={6} >
-                    <Card style={{ padding: "10px" }}>
+                    </Grid>
+                    <Grid item xs={12} md={6} >
                         <Typography style={titleStyle}>运费计算</Typography>
                         <ParcelCalculation areaCodes={areaCodes} parcelPrice={parcelPrice} />
-
-                    </Card>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Card>
+
         </div>
     )
 }

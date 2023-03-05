@@ -8,16 +8,17 @@ import { Card, CardContent, Typography, Grid, TableCell } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import SearchBar from "../components/SearchBar/SearchBar";
 import LoadingPanel from "../components/LoadingPanel/LoadingPanel";
-import EmptyBox from "../assets/empty-box.png"
+import EmptyParcel from "../assets/empty-parcel.png"
 import { isArrayNotEmpty, isStringNullOrEmpty } from "../tools/Helpers";
 import useAuth from "../hooks/useAuth";
 import { toast, Flip } from "react-toastify";
 
 import TableComponents from "../components/TableComponents/TableComponents";
 export const ParcelPage = (props) => {
-    const { userParcel, setting } = useSelector(state => ({
+    const { userParcel, setting, userProfile } = useSelector(state => ({
         userParcel: state.counterReducer.parcelStatus,
         setting: state.counterReducer.setting,
+        userProfile: state.counterReducer.userProfile,
     }));
     const { auth } = useAuth()
     const dispatch = useDispatch()
@@ -38,10 +39,15 @@ export const ParcelPage = (props) => {
             LogonUserCode = JSON.parse(LogonUser).UserCode
             LogonUser = JSON.parse(LogonUser).UserID
 
-            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + LogonUser }))
             dispatch(GitAction.CallGetGeneralSetting({ UserID: LogonUser }))
             setUserCode(LogonUserCode)
             setUserID(LogonUser)
+
+            if (props.type === "claim")
+                dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserCode=(SELECT [SettingValue] FROM.[dbo].[T_General_Setting] WHERE  [SettingID] = 1)" }))
+            else
+                dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + LogonUser }))
+
         }
     }, [])
 
@@ -84,10 +90,6 @@ export const ParcelPage = (props) => {
             setUserCode(unKnownUserCode)
         }
         setValue(newValue);
-    };
-
-    const handleParcelStatusChange = (event, newValue) => {
-        setParcelValue(newValue);
     };
 
     function TabPanel(props) {
@@ -141,7 +143,7 @@ export const ParcelPage = (props) => {
             label: "尺寸",
         },
         {
-            id: "ProductDimensionDeep",
+            id: "Volume",
             align: 'left',
             disablePadding: false,
             label: "体积",
@@ -187,7 +189,7 @@ export const ParcelPage = (props) => {
             label: "尺寸",
         },
         {
-            id: "ProductDimensionDeep",
+            id: "Volume",
             align: 'left',
             disablePadding: false,
             label: "体积",
@@ -200,62 +202,62 @@ export const ParcelPage = (props) => {
         },
     ];
 
-    const tableAgentHeadCells = [
-        {
-            id: "CourierName",
-            align: 'left',
-            disablePadding: false,
-            label: "快递公司",
-        },
-        {
-            id: "TrackingNumber",
-            align: 'left',
-            disablePadding: false,
-            label: "快递单号 ",
-        },
-        {
-            id: "Item",
-            align: 'left',
-            disablePadding: false,
-            label: "包裹名称",
-        },
-        {
-            id: "UserCode",
-            align: 'left',
-            disablePadding: false,
-            label: "会员号",
-        },
-        {
-            id: "ProductWeight",
-            align: 'left',
-            disablePadding: false,
-            label: "重量",
-        },
-        {
-            id: "ProductDimensionDeep",
-            align: 'left',
-            disablePadding: false,
-            label: "尺寸",
-        },
-        {
-            id: "ProductDimensionDeep",
-            align: 'left',
-            disablePadding: false,
-            label: "体积",
-        },
-        {
-            id: "Price",
-            align: 'left',
-            disablePadding: false,
-            label: "价格",
-        },
-        {
-            id: "parcelStatus",
-            align: 'left',
-            disablePadding: false,
-            label: "包裹状态",
-        },
-    ];
+    // const tableAgentHeadCells = [
+    //     {
+    //         id: "CourierName",
+    //         align: 'left',
+    //         disablePadding: false,
+    //         label: "快递公司",
+    //     },
+    //     {
+    //         id: "TrackingNumber",
+    //         align: 'left',
+    //         disablePadding: false,
+    //         label: "快递单号 ",
+    //     },
+    //     {
+    //         id: "Item",
+    //         align: 'left',
+    //         disablePadding: false,
+    //         label: "包裹名称",
+    //     },
+    //     {
+    //         id: "UserCode",
+    //         align: 'left',
+    //         disablePadding: false,
+    //         label: "会员号",
+    //     },
+    //     {
+    //         id: "ProductWeight",
+    //         align: 'left',
+    //         disablePadding: false,
+    //         label: "重量",
+    //     },
+    //     {
+    //         id: "ProductDimensionDeep",
+    //         align: 'left',
+    //         disablePadding: false,
+    //         label: "尺寸",
+    //     },
+    //     {
+    //         id: "ProductDimensionHeight",
+    //         align: 'left',
+    //         disablePadding: false,
+    //         label: "体积",
+    //     },
+    //     {
+    //         id: "Price",
+    //         align: 'left',
+    //         disablePadding: false,
+    //         label: "价格",
+    //     },
+    //     {
+    //         id: "parcelStatus",
+    //         align: 'left',
+    //         disablePadding: false,
+    //         label: "包裹状态",
+    //     },
+    // ];
 
     const CheckUser = (Code) => {
         let listing = []
@@ -283,176 +285,54 @@ export const ParcelPage = (props) => {
         setFilteredParcel(filteredListing)
     }
 
-    const checkUserParcel = (statusID, type) => {
-        let listing = []
 
-        if (isFiltered === true)
-            listing = filteredParcel
-        else
-            listing = CheckUser(UserCode)
+    const calculateParcelPrice = (data) => {
+        let parcelPrice = 0
+        if (userProfile !== undefined && isArrayNotEmpty(userProfile) && userProfile.ReturnVal === undefined) {
+            let MinimumPrice = userProfile[0].MinimumPrice
+            let SelfPickOverCubic = userProfile[0].SelfPickOverCubic
+            let ConsolidatedPrice = userProfile[0].ConsolidatedPrice
+            let LargeDeliveryPrice = userProfile[0].LargeDeliveryPrice
+            let SmallDeliveryFirstPrice = userProfile[0].SmallDeliveryFirstPrice
+            let SmallDeliverySubPrice = userProfile[0].SmallDeliverySubPrice
+            let userAreaID = userProfile[0].UserAreaID
 
-        let dataListing = []
-        if (listing.length > 0) {
-            if (parcelValue === 0 && type === "Filtering")
-                dataListing = listing
-            else {
-                let minStatus = 0
-                let maxStatus = 0
-
-                switch (statusID) {
-                    // case 1:
-                    //     minStatus = 0
-                    //     maxStatus = 2
-                    //     break;
-
-                    case 2:
-                        minStatus = 2
-                        maxStatus = 9
-                        break;
-
-                    case 3:
-                        minStatus = 8
-                        maxStatus = 11
-                        break;
-
-                    default:
-                        break;
+            if (userAreaID === 1 || userAreaID === 5) {
+                if (data.Volume < 0.013 && data.ProductWeight < 500)
+                    parcelPrice = MinimumPrice
+                else if (data.Volume >= 0.013 && data.ProductWeight < 500)
+                    parcelPrice = data.Volume * SelfPickOverCubic
+                else {
+                    if (data.Volume < (data.ProductWeight / 500))
+                        parcelPrice = (data.ProductWeight / 500) * SelfPickOverCubic
+                    else
+                        parcelPrice = data.Volume * SelfPickOverCubic
                 }
-                if (statusID === 1)
-                    dataListing = listing.filter((x) => x.StockStatusID == null || x.StockStatusID == 1)
-                else
-                    dataListing = listing.filter((x) => x.StockStatusID < maxStatus && x.StockStatusID > minStatus)
+            } else {
+
+                let volumetricWeight = (data.ProductDimensionDeep * data.ProductDimensionHeight * data.ProductDimensionWidth) / 6000
+                let selectedWeight = Math.ceil(data.ProductWeight)
+                if (Math.ceil(volumetricWeight) > selectedWeight)
+                    selectedWeight = Math.ceil(volumetricWeight)
+
+                if (data.Volume < 0.5 && data.ProductWeight < 500)
+                    parcelPrice = (selectedWeight - 1) * SmallDeliverySubPrice + SmallDeliveryFirstPrice
+                else if (data.Volume >= 0.5 && data.ProductWeight < 500)
+                    parcelPrice = data.Volume * LargeDeliveryPrice
+                else {
+                    if (data.Volume < (data.ProductWeight / 500))
+                        parcelPrice = (data.ProductWeight / 500) * LargeDeliveryPrice
+                    else
+                        parcelPrice = data.Volume * LargeDeliveryPrice
+                }
             }
         }
-        return dataListing
-    }
-
-    const handlePageChange = (event, page) => {
-        setPage(page)
-    }
-
-    const checkTotalStatusNo = (index, statusID) => {
-        let parcelAmount = 0
-
-        if (index === 0)
-            parcelAmount = userParcel.length
-        else
-            parcelAmount = checkUserParcel(statusID, "Overall").length
-
-        return parcelAmount
+        return parcelPrice
     }
 
     if (setting.length > 0 && isSetUnknown === false) {
         setUnknownUserCode(setting[2].Column1)
         setUnknown(true)
-    }
-
-    const userParcelLayout = (statusID) => {
-        return (
-            <div className="row" style={{ paddingRight: "5pt" }}>
-                <Grid container style={{ paddingBottom: "10pt", textAlign: "right", flexFlow: "row-reverse" }}>
-                    <Pagination count={Math.ceil(checkUserParcel(statusID, "Filtering").length / pageSize)} page={page} onChange={handlePageChange} />
-                </Grid>
-                {
-                    checkUserParcel(statusID, "Filtering").length > 0 ?
-                        checkUserParcel(statusID, "Filtering").map((data, index) => {
-                            return (
-                                index > ((page - 1) * pageSize) - 1 && index < (page * pageSize) &&
-                                <div className="row" style={{ paddingTop: "10pt" }} key={"parcellayout_" + index}>
-                                    <Card>
-                                        <CardContent>
-                                            <Grid container spacing={2}>
-                                                <Grid item md={6} xs={12} sm={6}>
-                                                    <Typography style={layoutStyle}>物流信息：{data.CourierName}  {data.TrackingNumber}</Typography>
-                                                    <Typography style={layoutStyle}>包裹名称：{data.Item}</Typography>
-                                                    <Typography style={layoutStyle}>包裹状态：{data.ContainerRemark !== null ? data.ContainerRemark : statusID === 1 ? "抵达中国仓库" : "-"}</Typography>
-                                                </Grid>
-                                                <Grid item md={6} xs={12} sm={6}>
-                                                    <Typography style={layoutStyle}>包裹尺寸：{data.ProductDimensionDeep + "cm x " + data.ProductDimensionHeight + "cm x " + data.ProductDimensionWidth + "cm"}</Typography>
-                                                    <Typography style={layoutStyle}>包裹重量：{data.ProductWeight + "kg"}</Typography>
-                                                </Grid>
-                                            </Grid>
-                                        </CardContent>
-                                    </Card>
-                                </div>
-                            )
-                        })
-                        :
-                        <div style={{ textAlign: "center" }}>
-                            <img src={EmptyBox} style={{ height: "100pt" }} alt="Yourway Parcel"></img>
-                            <Typography style={{ fontWeight: "600", fontSize: "15pt", color: "#253949", letterSpacing: 1 }}>暂无此状态包裹</Typography>
-                        </div>
-                }
-            </div >
-        )
-    }
-    { console.log("unKnownUserCode", unKnownUserCode) }
-
-    const parcelLayout = () => {
-        return (
-            <div className="row">
-                {
-                    UserCode === unKnownUserCode ?
-                        userParcel.length > 0 ?
-                            CheckUser(UserCode).length > 0 ?
-                                <>
-                                    <div className="row">
-                                        <Typography style={{ fontSize: "12pt", color: "#253949", letterSpacing: 1 }}>如有属于您的快递单号包裹可截图快递物流信息联系我们的客服</Typography>
-                                        <Typography style={{ fontWeight: "600", fontSize: "10pt", color: "#253949", letterSpacing: 1, paddingBottom: "10pt" }}>注意： 如包裹超过3个月无人认领，公司会自行处理包裹，不做另行通知</Typography>
-                                    </div>
-                                    <Grid container spacing={2}>
-                                        {
-                                            CheckUser(UserCode).map((data, index) => {
-                                                return (
-                                                    <Grid item md={6} xs={12} sm={6} key={"parcellayout_" + index}>
-                                                        <Card>
-                                                            <CardContent>
-                                                                <Typography style={layoutStyle}># {index + 1}</Typography>
-                                                                <Typography style={layoutStyle}>物流信息：{data.CourierName}  {data.TrackingNumber}</Typography>
-                                                                <Typography style={layoutStyle}>包裹名称：{data.Item}</Typography>
-                                                                <Typography style={layoutStyle}>包裹状态：{parcelStatus.length > 0 && parcelStatus.filter((x) => x.ContainerStatusID === data.StockStatusID).map((y) => { return (y.ContainerStatusCN) })}</Typography>
-                                                            </CardContent>
-                                                        </Card>
-                                                    </Grid>
-                                                )
-                                            })
-                                        }
-                                    </Grid>
-                                </>
-                                :
-                                <div style={{ textAlign: "center" }}>
-                                    <img src={EmptyBox} style={{ height: "150pt" }} alt="Yourway Unknown Parcel"></img>
-                                    <Typography style={{ fontWeight: "600", fontSize: "15pt", color: "#253949", letterSpacing: 1 }}>暂无待认领包裹</Typography>
-                                </div>
-                            :
-                            <div style={{ textAlign: "center" }}>
-                                <img src={EmptyBox} style={{ height: "150pt" }} alt="Yourway Parcel"></img>
-                                <Typography style={{ fontWeight: "600", fontSize: "15pt", color: "#253949", letterSpacing: 1 }}>暂无待认领包裹</Typography>
-                            </div>
-                        :
-                        <div className="row">
-                            <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', }}>
-                                <Box sx={{ borderBottom: 1, borderColor: 'darkgrey' }}>
-                                    <Tabs value={parcelValue} onChange={handleParcelStatusChange} aria-label="parcelStatus"
-                                        orientation="horizontal" sx={{ borderBottom: 1, borderColor: 'divider' }} variant="scrollable">
-                                        {
-                                            parcelStatus.length > 0 && parcelStatus.map((x, index) => {
-
-                                                return (<Tab key={"status_" + index} label={x.ContainerStatusCN + " (" + checkTotalStatusNo(index, x.ContainerStatusID) + ")"} {...a11yProps(x.ContainerStatusID)} />)
-                                            })
-                                        }
-                                    </Tabs>
-                                    {
-                                        parcelStatus.length > 0 && parcelStatus.map((x, index) => {
-                                            return (<TabPanel key={"status_" + index} style={{ width: "100%" }} value={parcelValue} index={x.ContainerStatusID}>  {userParcelLayout(x.ContainerStatusID)}  </TabPanel>)
-                                        })
-                                    }
-                                </Box>
-                            </Box>
-                        </div>
-                }
-            </div>
-        )
     }
 
     const renderTableRows = (data, index) => {
@@ -466,8 +346,8 @@ export const ParcelPage = (props) => {
                     <TableCell align="left" style={{ fontSize: "12px" }}>{data.Item}</TableCell>
                     <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductWeight} kg</TableCell>
                     <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductDimensionDeep + "cm x " + data.ProductDimensionHeight + "cm x " + data.ProductDimensionWidth + "cm"}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{parseFloat((data.ProductDimensionDeep * data.ProductDimensionHeight * data.ProductDimensionWidth) / 1000000).toFixed(3)}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.CourierName}</TableCell>
+                    <TableCell align="left" style={{ fontSize: "12px" }}>{parseFloat(data.Volume).toFixed(3)}</TableCell>
+                    <TableCell align="left" style={{ fontSize: "12px" }}>{calculateParcelPrice(data) !== undefined ? parseFloat(calculateParcelPrice(data)).toFixed(2) : 0}</TableCell>
                     <TableCell align="left" style={{ fontSize: "12px" }}>{data.ContainerID === 0 ? "已入库" : data.StockStatusID === 3 ? data.ContainerRemark : "抵达古晋仓库"}</TableCell>
                 </>
         )
@@ -483,20 +363,21 @@ export const ParcelPage = (props) => {
                     <TableCell align="left" style={{ fontSize: "12px" }}>{data.TrackingNumber}</TableCell>
                     <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductWeight} kg</TableCell>
                     <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductDimensionDeep + "cm x " + data.ProductDimensionHeight + "cm x " + data.ProductDimensionWidth + "cm"}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{parseFloat((data.ProductDimensionDeep * data.ProductDimensionHeight * data.ProductDimensionWidth) / 1000000).toFixed(3)}</TableCell>
+                    <TableCell align="left" style={{ fontSize: "12px" }}>{parseFloat(data.Volume).toFixed(3)}</TableCell>
                     <TableCell align="left" style={{ fontSize: "12px" }}>{data.ContainerID === 0 ? "已入库" : data.StockStatusID === 3 ? data.ContainerRemark : "抵达古晋仓库"}</TableCell>
                 </>
         )
     }
     console.log("userParcel", userParcel)
     return (
-        <div className="row" style={{ position: "absolute", top: "120px", width: "95%", paddingRight: "20px", paddingBottom: "50px" }}>
+        <div className="row" style={{ position: "absolute", top: "120px", width: "100%", paddingRight: "20px", paddingBottom: "50px" }}>
             {
                 props.type === "claim" &&
                 <div className="row" style={{ paddingBottom: "10px" }}>
-                    <Typography>如以下是您的货物，请截图物流信息发进群，如货物超过<strong> 90 天</strong>无人认领，会由本司自行处理货物</Typography>
+                    <Typography style={{ paddingLeft: "10px" }}>如以下是您的货物，请截图物流信息发进群，如货物超过<strong> 90 天</strong>无人认领，会由本司自行处理货物</Typography>
                 </div>
             }
+            {console.log("Dasdasdad", props.type)}
             {
                 isArrayNotEmpty(userParcel) && userParcel[0].ReturnVal === undefined ?
                     <TableComponents
@@ -507,7 +388,6 @@ export const ParcelPage = (props) => {
                                     placeholder="快递单号"
                                     label="快递单号"
                                     onChange={(e) => handleSearchInput(e.target.value)}
-                                    // className="searchbar-input mb-auto"
                                     tooltipText="Search with current data"
                                     value={searchKeywords}
                                 />
@@ -536,7 +416,13 @@ export const ParcelPage = (props) => {
                                 isArrayNotEmpty(userParcel) && userParcel[0].ReturnVal === undefined ? userParcel : []}
                     />
                     :
-                    <LoadingPanel />
+                    isArrayNotEmpty(userParcel) && userParcel[0].ReturnVal === 0 ?
+                        <div style={{ textAlign: "center" }}>
+                            <img src={EmptyParcel} style={{ height: "100pt" }} alt="EZ No Parcel"></img>
+                            <Typography style={{ fontWeight: "600", fontSize: "13pt", color: "#253949", letterSpacing: 1 }}>暂无包裹资料</Typography>
+                        </div>
+                        :
+                        < LoadingPanel />
             }
 
         </div>

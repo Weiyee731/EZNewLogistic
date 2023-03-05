@@ -4,7 +4,7 @@ import styled from "styled-components";
 import useAuth from "../hooks/useAuth";
 import { isStringNullOrEmpty } from "../tools/Helpers";
 import LogoutIcon from '@mui/icons-material/Logout';
-import Icon2 from "../assets/yw_icon.png"
+import Icon2 from "../assets/EZ_logo.png"
 const COLORS = {
   primaryDark: "#023047",
   primaryLight: "#8ECAE6",

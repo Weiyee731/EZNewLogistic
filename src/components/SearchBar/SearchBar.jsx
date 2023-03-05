@@ -17,11 +17,11 @@ const SearchBox = (props) => {
   }, [props.value])
   return (
     <TextField
-      className={
-        isStringNullOrEmpty(props.className)
-          ? "searchbar-input"
-          : props.className
-      }
+      // className={
+      //   isStringNullOrEmpty(props.className)
+      //     ? "searchbar-input"
+      //     : props.className
+      // }
       fullWidth
       label={isStringNullOrEmpty(props.label) ? "" : props.label}
       id="search-bar"

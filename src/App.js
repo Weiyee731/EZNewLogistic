@@ -25,11 +25,11 @@ function App() {
           <Route path="/" element={<Layout />} >
             {/* Public Routes */}
             <Route path="/login" element={<Loginpage />} />
-            <Route path="/" element={<Homepage />} />
-            <Route path="/faq/:StatusId" element={<FAQpage />} />
+            <Route path="/" element={<Loginpage />} />
+            {/* <Route path="/faq/:StatusId" element={<FAQpage />} />
             <Route path="/pricing" element={<Pricingpage />} />
 
-            <Route path="/parcelpage" element={<ParcelPage />} />
+            <Route path="/parcelpage" element={<ParcelPage />} /> */}
 
             {/* Protected Routes for Login */}
             <Route element={<RequireAuth />}>

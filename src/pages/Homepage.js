@@ -92,14 +92,14 @@ export default function Homepage() {
                 showArrows={true}
             > */}
                 {/* <div>
-                    <img src={Register} alt="Yourway Register" />
+                    <img src={Register} alt="EZ Register" />
                     <img src="https://pic.52112.com/180705/JPG-180705_428/xtHosKp6oG_small.jpg" />
                 </div>
                 <div>
-                    <img src={sharing} alt="Yourway Referal" />
+                    <img src={sharing} alt="EZ Referal" />
                 </div> */}
                 {/* <div>
-                    <img src={double11} alt="Yourway 1111" />
+                    <img src={double11} alt="EZ 1111" />
                 </div> */}
                 {/* <div>
                     <img src="https://blog.solistica.com/hubfs/Fotos%20e%20infograf%C3%ADa%20Blogs%20Q4/Fotos%20Q4%20Noviembre%202020/Fotos%20Diciembre%20Q4%2020202/SOL-S13-B1-Blog%20Image%2002-1.jpg" />

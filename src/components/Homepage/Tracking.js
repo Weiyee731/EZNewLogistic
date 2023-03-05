@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, TextField, Typography } from "@mui/material";
 import { GitAction } from "../../store/action/gitAction";
+import { toast } from "react-toastify";
 
 export const Tracking = ({ parcelStatus, title }) => {
     const [trackingNumber, setTrackingNumber] = useState("");
@@ -41,15 +42,19 @@ export const Tracking = ({ parcelStatus, title }) => {
                         fontWeight: 'bold',
                     }}
                     onClick={() => {
-                        dispatch(GitAction.CallClearParcelStatus2())
-                        dispatch(GitAction.CallGetParcelStatus2({ trackingNumber: `and TrackingNumber='${trackingNumber}'` }))
+                        if (trackingNumber === "")
+                            toast.error("请填写中国物流快递单号")
+                        else {
+                            dispatch(GitAction.CallClearParcelStatus2())
+                            dispatch(GitAction.CallGetParcelStatus2({ trackingNumber: `and TrackingNumber='${trackingNumber}'` }))
+                        }
                     }}
                 >
                     查询货物
                 </Button>
             </div>
 
-            {parcelStatus.length > 0 && trackingNumber !== ""
+            {parcelStatus !== undefined && parcelStatus.length > 0 && trackingNumber !== ""
                 ?
                 parcelStatus[0].ReturnVal === 0 ?
                     <div style={{ padding: "20pt" }}>

@@ -60,11 +60,13 @@ import { toast } from 'react-toastify'
 import { isArrayNotEmpty, isObjectUndefinedOrNull, isStringNullOrEmpty, useWindowDimensions } from '../tools/Helpers'
 import { ParcelTrackingPage } from "./ParcelTrackingPage";
 import { ParcelPage } from "./ParcelPage";
+
 import { NotificationView } from "../components/NotificationView";
 import { TableHead } from "@mui/material";
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import LoadingPanel from "../components/LoadingPanel/LoadingPanel";
 
 export const Profilepage = () => {
     const { auth, setAuth } = useAuth()
@@ -237,7 +239,6 @@ export const Profilepage = () => {
                     {
                         !isObjectUndefinedOrNull(userProfile) && <UpdateProfileForm open={isEditMode} setOpenModal={setEditMode} profile={{ ...profile }} isUserProfileUpdate={isUserProfileUpdate} />
                     }
-                    {/* </AccordionSummary> */}
                     <AccordionDetails >
                         <AddressManager />
                     </AccordionDetails>
@@ -381,7 +382,7 @@ export const Profilepage = () => {
                     dispatch(GitAction.CallUpdateUserProfile(submittingProps))
                 }
                 else {
-                    toast.error("请确保您已经填入重要输入 (*), 请重试输入并且提交表格。", {
+                    toast.error("需填写所有资料", {
                         position: "top-center",
                         autoClose: 3000,
                         hideProgressBar: false,
@@ -392,7 +393,7 @@ export const Profilepage = () => {
                 }
             }
             else {
-                toast.error("请确保您已经填入重要输入 (*), 请重试输入并且提交表格。", {
+                toast.error("需填写所有资料", {
                     position: "top-center",
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -427,49 +428,19 @@ export const Profilepage = () => {
                                 onChange={(event) => { handleInputChange("FULLNAME", event) }}
                                 label="姓名"
                                 fullWidth
-                                variant="filled"
+                                variant="standard"
                                 required
                                 size="small"
                                 sx={{ my: 1 }}
                                 error={isStringNullOrEmpty(accountInfo.FULLNAME)}
                                 helperText={isStringNullOrEmpty(accountInfo.FULLNAME) ? "须填写您的姓名" : ''}
                             />
-                            {/* <TextField id="profile--username"
-                                value={accountInfo.USERNAME}
-                                onChange={(event) => { handleInputChange("USERNAME", event) }}
-                                label="账号"
-                                fullWidth
-                                variant="filled"
-                                required
-                                size="small"
-                                sx={{ my: 1 }}
-                                error={isStringNullOrEmpty(accountInfo.USERNAME)}
-                                helperText={isStringNullOrEmpty(accountInfo.USERNAME) ? "您必须填写你的账号" : ''}
-                            />
-                            <TextField id="profile--nickname"
-                                value={accountInfo.USERNICKNAME}
-                                onChange={(event) => { handleInputChange("USERNICKNAME", event) }}
-                                label="昵称"
-                                fullWidth
-                                variant="filled"
-                                size="small"
-                                sx={{ my: 1 }}
-                            /> */}
-                            {/* <TextField id="profile--address"
-                                value={accountInfo.USERADDRESS}
-                                onChange={(event) => { handleInputChange("USERADDRESS", event) }}
-                                label="住家地址"
-                                fullWidth
-                                variant="filled"
-                                size="small"
-                                sx={{ my: 1 }}
-                            /> */}
                             <TextField id="profile--contact"
                                 value={accountInfo.CONTACTNO}
                                 onChange={(event) => { handleInputChange("CONTACTNO", event) }}
                                 label="电话"
                                 fullWidth
-                                variant="filled"
+                                variant="standard"
                                 size="small"
                                 sx={{ my: 1 }}
                                 required
@@ -479,9 +450,9 @@ export const Profilepage = () => {
                             <TextField id="profile--email"
                                 value={accountInfo.USEREMAIL}
                                 onChange={(event) => { handleInputChange("USEREMAIL", event) }}
-                                label="邮件"
+                                label="邮箱"
                                 fullWidth
-                                variant="filled"
+                                variant="standard"
                                 size="small"
                                 sx={{ my: 1 }}
                                 required
@@ -493,7 +464,7 @@ export const Profilepage = () => {
                                 onChange={(event) => { handleInputChange("WECHATID", event) }}
                                 label="微信"
                                 fullWidth
-                                variant="filled"
+                                variant="standard"
                                 size="small"
                                 sx={{ my: 1 }}
                             />
@@ -552,94 +523,6 @@ export const Profilepage = () => {
 
         )
 
-    }
-
-    const PersonalProfile = () => {
-        const [isEditMode, setEditMode] = useState(false)
-        const [expanded, setExpanded] = useState(true)
-
-        const Item = styled(Paper)(({ theme }) => ({
-            // backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#F4F5F5',
-            ...theme.typography.body2,
-            padding: theme.spacing(1),
-            textAlign: 'left',
-            color: theme.palette.text.secondary,
-        }));
-
-        return (
-
-            !isObjectUndefinedOrNull(profile) ?
-                <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} sx={{ my: 2 }} style={{ backgroundColor: "#F4F5F5" }}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="user-content"
-                        id="user-summary"
-                    >
-                        <Stack direction={"row"} justifyContent="space-between">
-                            <Typography sx={{ flexShrink: 0, fontWeight: 600, my: 'auto', mr: 2 }}>
-                                会员资料
-                            </Typography>
-                            <IconButton aria-label="edit-profile" onClick={() => setEditMode(true)}>
-                                <EditIcon />
-                            </IconButton>
-                        </Stack>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Grid container rowSpacing={2} columnSpacing={3} >
-                            {/* <Grid item xs={12} md={6}>
-                                <Item>
-                                    会员号: <b>{profile.Username}</b>
-                                </Item>
-                            </Grid> */}
-                            {/* <Grid item xs={12} md={6}>
-                                <Item>
-                                    地区: <b>{profile.AreaCode}</b>
-                                </Item>
-                            </Grid> */}
-                            <Grid item xs={12} md={6}>
-                                <Item>
-                                    姓名: <b>{profile.Fullname}</b>
-                                </Item>
-                            </Grid>
-                            {/* <Grid item xs={12} md={6}>
-                                <Item>
-                                    账号: <b>{profile.Username}</b>
-                                </Item>
-                            </Grid> */}
-                            {/* <Grid item xs={12} md={6}>
-                                <Item>
-                                    昵称: <b>{profile.UserNickname}</b>
-                                </Item>
-                            </Grid> */}
-                            <Grid item xs={12} md={6} >
-                                <Item>
-                                    电话: <b>{profile.UserContactNo}</b>
-                                </Item>
-                            </Grid>
-                            <Grid item xs={12} md={6} >
-                                <Item>
-                                    邮件: <b>{profile.UserEmailAddress}</b>
-                                </Item>
-                            </Grid>
-                            <Grid item xs={12} md={6} >
-                                <Item>
-                                    微信: <b>{profile.UserWechatID}</b>
-                                </Item>
-                            </Grid>
-                            {/* <Grid item xs={12} md={6} >
-                                <Item>
-                                    推荐人: <b>{profile.ReferalCode != null ? profile.ReferalCode : "-"}</b>
-                                </Item>
-                            </Grid> */}
-                        </Grid>
-                        {
-                            !isObjectUndefinedOrNull(userProfile) && <UpdateProfileForm open={isEditMode} setOpenModal={setEditMode} profile={{ ...profile }} isUserProfileUpdate={isUserProfileUpdate} />
-                        }
-                    </AccordionDetails>
-                </Accordion >
-                :
-                <Typography variant="subtitle1" component="p">没有个人资料</Typography>
-        )
     }
 
     const AddressManager = () => {
@@ -760,7 +643,7 @@ export const Profilepage = () => {
         useEffect(() => {
             if (isArrayNotEmpty(isUserProfileUpdate)) {
                 if (isUserProfileUpdate[0].ReturnVal === 1 || isUserProfileUpdate[0].ReturnVal === '1') {
-                    toast.success('Your password is updated successfully.', {
+                    toast.success('密码更新成功', {
                         position: "top-center",
                         autoClose: 3000,
                         hideProgressBar: false,
@@ -775,7 +658,7 @@ export const Profilepage = () => {
                     dispatch(GitAction.CallResetUserUpdateReturnValue())
                 }
                 else {
-                    toast.error('Error occured when trying to update password. Please try again.', {
+                    toast.error('密码更新失败', {
                         position: "top-center",
                         autoClose: 3000,
                         hideProgressBar: false,
@@ -918,10 +801,8 @@ export const Profilepage = () => {
                     <>
                         <UserProfile />
                         <NotificationAccordion />
-                        {/* <PersonalProfile /> */}
                     </>
                 )
-
             case ALL_ORDERS_PAGE:
                 return <ParcelPage type="selfparcel" />
 
@@ -944,12 +825,16 @@ export const Profilepage = () => {
                 <Grid item xs={12} md={12} >
                     <SideMenu />
                 </Grid>
-
-                <Grid item xs={12} md={12} sx={(width >= 768) ? { overflowY: 'auto', my: 2 } : {}}>
-                    <div style={{ paddingLeft: '15px', paddingRight: '15px' }}>
-                        {renderPageModule(currentPage)}
-                    </div>
-                </Grid>
+                {
+                    profile !== null && profile.UserID !== undefined ?
+                        <Grid item xs={12} md={12} sx={(width >= 768) ? { overflowY: 'auto', my: 2 } : {}}>
+                            <div style={{ paddingLeft: '15px', paddingRight: '15px' }}>
+                                {renderPageModule(currentPage)}
+                            </div>
+                        </Grid>
+                        :
+                        <LoadingPanel />
+                }
             </Grid>
         </div>
     )

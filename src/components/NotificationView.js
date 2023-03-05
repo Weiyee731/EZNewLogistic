@@ -33,7 +33,7 @@ export const NotificationView = ({ title, message, type, date }) => {
         const { children, onClose, ...other } = props;
 
         return (
-            <DialogTitle sx={{ m: 0, p: 2, backgroundColor: "#5A98B7", color: 'white' }} {...other}>
+            <DialogTitle sx={{ m: 0, p: 2, backgroundColor: "#23395d", color: 'white' }} {...other}>
                 {children}
             </DialogTitle>
         );
@@ -52,10 +52,11 @@ export const NotificationView = ({ title, message, type, date }) => {
 
     return (
         <div
+            className="col-md-3 col-xs-12 col-sm-4"
             style={{
-                borderColor: 'WHITE',
+                borderColor: '#23395d',
                 borderStyle: 'solid',
-                borderWidth: '0.5px  0.5px  0.5px 10px',
+                borderWidth: '0px  0px  0px 0px',
                 paddingLeft: '5px',
                 boxShadow: '5px 5px 5px 5px rgba(22,22,22,0.1)',
                 borderRadius: '5px',
@@ -66,16 +67,12 @@ export const NotificationView = ({ title, message, type, date }) => {
         >
             <div
                 style={{
-                    borderColor: '#5A98B7',
-                    borderStyle: 'solid',
-                    borderWidth: '0px  0px  0px 6px',
-                    borderRadius: '3px',
-                    padding: '10px',
+                    padding: '8px',
                 }}
             >
                 <Grid container>
                     <Grid item xs={1} sm={1} md={1} style={{ alignItems: "center", display: "flex" }}>
-                        <AnnouncementIcon style={{ color: "#5A98B7" }} />
+                        <AnnouncementIcon style={{ color: "primary" }} />
                     </Grid>
                     <Grid item xs={11} sm={11} md={11} >
                         <Typography style={{ fontWeight: "bold", color: 'black', fontSize: "11pt" }}  >
@@ -89,12 +86,15 @@ export const NotificationView = ({ title, message, type, date }) => {
                 aria-labelledby="customized-dialog-title"
                 open={open}
                 fullWidth
-                maxWidth="lg"
+                maxWidth="md"
             >
                 <BootstrapDialogTitle id="customized-dialog-title" >
                     {title}
                 </BootstrapDialogTitle>
                 <DialogContent dividers>
+                    <Typography gutterBottom>
+                        亲爱的新老顾客 ：
+                    </Typography>
                     <Typography gutterBottom>
                         <div dangerouslySetInnerHTML={{ __html: message }} />
                     </Typography>
@@ -115,7 +115,7 @@ export const NotificationView = ({ title, message, type, date }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button color='secondary' autoFocus onClick={() => handleOpenClose()}>
-                        了解
+                        知道了
                     </Button>
                 </DialogActions>
             </BootstrapDialog>

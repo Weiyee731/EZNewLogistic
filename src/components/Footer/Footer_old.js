@@ -145,7 +145,7 @@ const Footer = () => {
                     </FooterText>
                     <FooterText>
                         <FacebookIcon sx={{ my: 'auto' }} />
-                        <Typography variant="subtitle" sx={{ ...InfoStyle }} >Yourway Logistic Sdn Bhd</Typography>
+                        <Typography variant="subtitle" sx={{ ...InfoStyle }} >EZ Logistic Sdn Bhd</Typography>
                     </FooterText>
                 </Grid>
 

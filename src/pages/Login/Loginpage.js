@@ -21,7 +21,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 import FormHelperText from '@mui/material/FormHelperText';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Input from '@mui/material/Input';
 
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import { Card } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -30,7 +33,8 @@ import { toast } from 'react-toastify';
 import { isStringNullOrEmpty, isArrayNotEmpty, useWindowDimensions, isEmailValid } from "../../tools/Helpers";
 import LoginWallpaper from "../../assets/login-wallpaper.jpg"
 import './Loginpage.css';
-import Icon from "../../assets/yw_icon.png"
+import Icon from "../../assets/EZ_logo.png"
+import LoadingPanel from "../../components/LoadingPanel/LoadingPanel";
 
 export const Loginpage = () => {
     const REGISTRATION = 'registration'
@@ -356,94 +360,102 @@ export const Loginpage = () => {
     }
 
     return (
-        <div className="container">
-            <Grid container spacing={2}>
-                {
-                    width >= 768 &&
-                    <Grid item md={6} xs={12}>
-                        <div className="login-wallpaper" style={{ backgroundImage: `url(${LoginWallpaper})`, }}>
-                            {/* <img src={LoginWallpaper} alt='loginpage--wallpaper' width={'100%'} height={'100%'} /> */}
-                        </div>
-                    </Grid>
-                }
+        <div className="container" >
+            {
+                localStorage.getItem("user") !== "" ?
+                    <LoadingPanel />
+                    :
+                    <Grid
+                        container
+                        spacing={0}
+                        direction="column"
+                        alignItems="center"
+                        justifyContent="center"
+                        style={{ minHeight: '80vh' }}
+                    >
+                        <Card style={{ borderColor: "1px solid #23395d" }}>
+                            <div className="login-panel">
+                                <div style={{ textAlign: "center" }}>
+                                    <img src={Icon} alt="EZ logo" width="30%" />
+                                    <Typography style={{ fontWeight: "bold", fontSize: "25px" }} variant="body" component="p" gutterBottom>
+                                        壹智国际物流
+                                    </Typography>
+                                </div>
 
-                <Grid item md={6} xs={12} sx={{ display: 'flex', p: 1, }}>
-                    <div className="login-panel">
-                        <div style={{ textAlign: "center", padding: "10pt" }}>
-                            <img src={Icon} alt="Yourway logo" width="60%" />
-                        </div>
-
-                        {
-                            isLoginInvalidInput &&
-                            <Typography sx={{ color: '#FF5733' }} variant="body" component="p" gutterBottom>
-                                你所使用的户口或密码错误哟，请重新尝试登入
-                            </Typography>
-                        }
-                        {/* <Typography variant="h4" component="h4" sx={{ textAlign: 'center', mb: 2 }}>壹智国际物流</Typography> */}
-                        <TextField
-                            id="login-user--username"
-                            label="用户户口"
-                            value={loginAccount.USERNAME}
-                            variant="filled"
-                            sx={{ width: '100%', mb: 2 }}
-                            onChange={(event) => handleInputChange('USERNAME', event)}
-                            onKeyDown={event => handleInputKeydown("LOGIN", event)}
-                        />
-
-                        <FormControl sx={{ width: '100%', mb: 2 }} variant="outlined">
-                            <InputLabel htmlFor="login-user--password">用户密码</InputLabel>
-                            <FilledInput
-                                id="login-user--password"
-                                type={showLoginPassword ? 'text' : 'password'}
-                                value={loginAccount.PASSWORD}
-                                onChange={(event) => handleInputChange('PASSWORD', event)}
-                                onKeyDown={(event) => handleInputKeydown("LOGIN", event)}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={setLoginPasswordVisibility}
-                                            edge="end"
-                                        >
-                                            {showLoginPassword ? <Visibility /> : <VisibilityOff />}
-                                        </IconButton>
-                                    </InputAdornment>
+                                {
+                                    isLoginInvalidInput &&
+                                    <Typography sx={{ color: '#FF5733' }} variant="body" component="p" gutterBottom>
+                                        你所使用的户口或密码错误哟，请重新尝试登入
+                                    </Typography>
                                 }
-                                label="Password"
-                            />
-                        </FormControl>
+                                <FormControl sx={{ width: '100%', mb: 2 }} variant="standard">
+                                    <InputLabel htmlFor="standard-adornment-username">登入账号</InputLabel>
+                                    <Input
+                                        id="login-user--username"
+                                        value={loginAccount.USERNAME}
+                                        onChange={(event) => handleInputChange('USERNAME', event)}
+                                        onKeyDown={event => handleInputKeydown("LOGIN", event)}
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton >
+                                                    <AccountCircle />
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                    />
+                                </FormControl>
 
-                        {
-                            !isFormSubmitting ?
-                                <Button onClick={handleLogin} variant="contained" sx={{ width: '100%', mb: 2 }}>登入</Button>
-                                :
-                                <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mb: 2 }}>
-                                    请稍等 ...
-                                </Button>
-                        }
+                                <FormControl sx={{ width: '100%', mb: 2 }} variant="standard">
+                                    <InputLabel htmlFor="standard-adornment-password">登入密码</InputLabel>
+                                    <Input
+                                        id="standard-adornment-password"
+                                        type={showLoginPassword ? 'text' : 'password'}
+                                        value={loginAccount.PASSWORD}
+                                        onChange={(event) => handleInputChange('PASSWORD', event)}
+                                        onKeyDown={(event) => handleInputKeydown("LOGIN", event)}
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={setLoginPasswordVisibility}
+                                                >
+                                                    {showLoginPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                    />
+                                </FormControl>
+                                <div className="account-manager" style={{ textAlign: "right" }}>
+                                    <Typography style={{ color: "#808080" }} onClick={() => handleModal(PASSWORD_RECOVERY, true)}>
+                                        忘记密码
+                                    </Typography>
+                                </div>
 
-                        <div className="account-manager">
-                            <p>
-                                <Link href="#" underline="always" style={{ color: "#0074D9" }} onClick={() => handleModal(REGISTRATION, true)}>
-                                    新来的? 点这里注册个账号吧!
-                                </Link>
-                            </p>
-                            <p>
-                                <Link href="#" underline="hover" style={{ color: "#323232" }} onClick={() => handleModal(PASSWORD_RECOVERY, true)}>
-                                    亲，忘记密码了吗?
-                                </Link>
-                            </p>
-                        </div>
-                    </div>
-                </Grid>
-            </Grid>
+                                <div style={{ paddingTop: "15px", paddingBottom: "10px" }}>
+                                    {
+                                        !isFormSubmitting ?
+                                            <Button onClick={handleLogin} variant="contained" sx={{ width: '100%', mb: 2 }}>登入</Button>
+                                            :
+                                            <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mb: 2 }}>
+                                                请稍等 ...
+                                            </Button>
+                                    }
+                                </div>
 
+                                <div className="account-manager" style={{ textAlign: "center", paddingBottom: "10px" }}>
+                                    <Typography style={{ color: "#808080" }} onClick={() => handleModal(REGISTRATION, true)}>
+                                        未有代号？注册新会员
+                                    </Typography>
+                                </div>
 
-
+                            </div>
+                        </Card>
+                    </Grid>
+            }
             {/* Registration Form | Modal */}
             <Dialog scroll="paper" open={openRegistrationModal} onClose={() => handleModal(REGISTRATION, false)} aria-labelledby="registration-title" aria-describedby="registration-description" >
                 <DialogTitle id="registration-title">
-                    注册个人账号
+                    注册新会员信息
                     <IconButton
                         aria-label="close"
                         onClick={() => handleModal(REGISTRATION, false)}
@@ -453,27 +465,28 @@ export const Loginpage = () => {
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        我们需要您的个人讯息，以便我们方便联络您
-                    </DialogContentText>
                     <TextField id="registration--fullname"
                         value={signupAccount.FULLNAME}
                         onChange={(event) => { handleInputChange("REGISTRATION-FULLNAME", event) }}
-                        label="您的全名"
+                        label="名字"
                         fullWidth
-                        variant="filled"
+                        variant="standard"
                         size="small"
                         sx={{ my: 1 }}
                         required
                         error={isStringNullOrEmpty(signupAccount.FULLNAME)}
-                        helperText={isStringNullOrEmpty(signupAccount.FULLNAME) ? "您必须填写你的名字" : ''}
+                        helperText={isStringNullOrEmpty(signupAccount.FULLNAME) ? "须填写名字" : ''}
                     />
-                    <TextField id="registration--nickname" value={signupAccount.USERNICKNAME} onChange={(event) => { handleInputChange("REGISTRATION-NICKNAME", event) }} label="昵称" fullWidth variant="filled" size="small" sx={{ my: 1 }} />
+                    {/* <TextField id="registration--nickname" value={signupAccount.USERNICKNAME} onChange={(event) => { handleInputChange("REGISTRATION-NICKNAME", event) }} label="昵称" fullWidth variant="standard" size="small" sx={{ my: 1 }} /> */}
 
-                    <TextField id="registration--username" value={signupAccount.USERNAME} onChange={(event) => { handleInputChange("REGISTRATION-USERNAME", event) }} label="账户户口" fullWidth variant="filled" required size="small" sx={{ my: 1 }} />
+                    <TextField id="registration--username" value={signupAccount.USERNAME} onChange={(event) => {
+                        handleInputChange("REGISTRATION-NICKNAME", event)
+                        handleInputChange("REGISTRATION-USERNAME", event)
+
+                    }} label="账号" fullWidth variant="standard" required size="small" sx={{ my: 1 }} />
                     <FormControl sx={{ width: '100%', my: 1 }} variant="outlined" required size="small" >
-                        <InputLabel htmlFor="registration--password">账户密码</InputLabel>
-                        <FilledInput
+                        <InputLabel htmlFor="registration--password">密码</InputLabel>
+                        <Input
                             id="registration--password"
                             type={showRegistrationPassword ? 'text' : 'password'}
                             value={signupAccount.PASSWORD}
@@ -488,18 +501,18 @@ export const Loginpage = () => {
                             label="Password"
                             required
                             error={isStringNullOrEmpty(signupAccount.PASSWORD)}
-                            helpertext={isStringNullOrEmpty(signupAccount.PASSWORD) || signupAccount.PASSWORD.length < 6 ? "您必须填写你的密码, 请确保密码是由6个字母与以上所组成" : ''}
+                            helpertext={isStringNullOrEmpty(signupAccount.PASSWORD) || signupAccount.PASSWORD.length < 6 ? "须填写密码, 确保密码至少有6个字" : ''}
                         />
-                        {signupAccount.PASSWORD !== "" && signupAccount.PASSWORD.length < 6 && <label style={{ color: "red" }}>您必须填写你的密码, 请确保密码是由6个字母与以上所组成</label>}
+                        {signupAccount.PASSWORD !== "" && signupAccount.PASSWORD.length < 6 && <label style={{ color: "red" }}>须填写密码, 确保密码至少有6个字</label>}
                     </FormControl>
 
-                    <FormControl sx={{ width: '100%', my: 1 }} variant="filled" size="small" >
-                        <InputLabel id="area-code--select">住址地区</InputLabel>
+                    <FormControl sx={{ width: '100%', my: 1 }} variant="standard" size="small" >
+                        <InputLabel id="area-code--select">地区</InputLabel>
                         <Select
                             labelId="area-code--select"
                             id="area-code--select--dropdown"
                             value={signupAccount.USERAREAID}
-                            label="住址地区"
+                            label="地区"
                             required
                             onChange={(event) => { handleInputChange("REGISTRATION-AREACODE", event) }}
                         >
@@ -509,7 +522,7 @@ export const Loginpage = () => {
                                         <MenuItem key={idx + "__" + el.AreaCode} value={el.UserAreaID}>{el.AreaCode + " - " + el.AreaName}</MenuItem>
                                     )
                                     :
-                                    <MenuItem disabled><i>There is no Area Code to Select</i></MenuItem>
+                                    <MenuItem disabled><i>暂无地区可选择</i></MenuItem>
                             }
                         </Select>
                     </FormControl>
@@ -517,27 +530,27 @@ export const Loginpage = () => {
                         id="registration--contact"
                         value={signupAccount.CONTACTNO}
                         onChange={(event) => { handleInputChange("REGISTRATION-CONTACTNO", event) }}
-                        label="电话号码"
+                        label="电话"
                         fullWidth
-                        variant="filled"
+                        variant="standard"
                         size="small"
                         sx={{ width: '100%', my: 1 }}
                         required
                         error={isStringNullOrEmpty(signupAccount.CONTACTNO)}
-                        helperText={isStringNullOrEmpty(signupAccount.CONTACTNO) ? "您必须填写你的电话号码" : ''}
+                        helperText={isStringNullOrEmpty(signupAccount.CONTACTNO) ? "须填写电话号码" : ''}
                     />
                     <TextField
                         id="registration--email"
                         value={signupAccount.USEREMAIL}
                         onChange={(event) => { handleInputChange("REGISTRATION-EMAIL", event) }}
-                        label="电子邮件"
+                        label="邮箱"
                         fullWidth
-                        variant="filled"
+                        variant="standard"
                         size="small"
                         sx={{ my: 1 }}
                         required
                         error={isStringNullOrEmpty(signupAccount.USEREMAIL)}
-                        helperText={isStringNullOrEmpty(signupAccount.USEREMAIL) ? "您必须填写你的电子邮件" : ''}
+                        helperText={isStringNullOrEmpty(signupAccount.USEREMAIL) ? "须填写邮箱" : ''}
                     />
                     <TextField
                         id="registration--wechatid"
@@ -545,27 +558,15 @@ export const Loginpage = () => {
                         onChange={(event) => { handleInputChange("REGISTRATION-WECHATID", event) }}
                         label="微信"
                         fullWidth
-                        variant="filled"
+                        variant="standard"
                         size="small"
                         sx={{ my: 1 }}
                     />
-                    {console.log("dasdasdas", signupAccount)}
-                    <TextField
-                        id="registration--referalcode"
-                        value={signupAccount.REFERALCODE}
-                        onChange={(event) => { handleInputChange("REGISTRATION-REFERALCODE", event) }}
-                        label="推荐人会员号"
-                        fullWidth
-                        variant="filled"
-                        size="small"
-                        sx={{ my: 1 }}
-                    />
-
                 </DialogContent>
                 <DialogActions>
                     {
                         !isFormSubmitting ?
-                            <Button sx={{ mx: 2, my: 1 }} onClick={handleRegistration} variant="contained" fullWidth> 注册账号 </Button>
+                            <Button sx={{ mx: 2, my: 1 }} onClick={handleRegistration} variant="contained" fullWidth> 注册新会员 </Button>
                             :
                             <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mx: 2, my: 1 }}>
                                 请稍等 ...
@@ -573,12 +574,9 @@ export const Loginpage = () => {
                     }
                 </DialogActions>
             </Dialog>
-            {/* Registration Form | Modal */}
-
-            {/* Registration Form | Modal */}
-            <Dialog scroll="paper" open={openPasswordRecoveryModal} onClose={() => handleModal(PASSWORD_RECOVERY, false)} aria-labelledby="password-recovery-title" aria-describedby="password-recovery-description" >
+            <Dialog open={openPasswordRecoveryModal} onClose={() => handleModal(PASSWORD_RECOVERY, false)} aria-labelledby="password-recovery-title" aria-describedby="password-recovery-description" >
                 <DialogTitle id="password-recovery-title">
-                    索回您的账户
+                    忘记密码
                     <IconButton
                         aria-label="close"
                         onClick={() => handleModal(PASSWORD_RECOVERY, false)}
@@ -589,25 +587,25 @@ export const Loginpage = () => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        请输入您的电子邮件来索取您的账户
+                        请输入您的邮箱
                     </DialogContentText>
                     <TextField id="recovery-email"
                         value={recoveryEmail}
                         onChange={(event) => { handleInputChange("RECOVERY-EMAIL", event) }}
-                        label="电子邮件"
+                        label="邮箱"
                         fullWidth
-                        variant="filled"
+                        variant="standard"
                         size="small"
                         sx={{ my: 1 }}
                         required
                         error={isStringNullOrEmpty(recoveryEmail)}
-                        helperText={isStringNullOrEmpty(recoveryEmail) ? "您必须填写你的电子邮件" : ''}
+                        helperText={isStringNullOrEmpty(recoveryEmail) ? "须填写邮箱" : ''}
                     />
                 </DialogContent>
                 <DialogActions>
                     {
                         !isFormSubmitting ?
-                            <Button sx={{ mx: 2, my: 1 }} onClick={handleForgetPassword} variant="contained" fullWidth> 索取您的账户 </Button>
+                            <Button sx={{ mx: 2, my: 1 }} disabled={recoveryEmail === "" ? true : false} onClick={handleForgetPassword} variant="contained" fullWidth> 确认发送 </Button>
                             :
                             <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mx: 2, my: 1 }}>
                                 请稍等 ...
@@ -615,7 +613,6 @@ export const Loginpage = () => {
                     }
                 </DialogActions>
             </Dialog>
-            {/* Registration Form | Modal */}
 
         </div>
     )
