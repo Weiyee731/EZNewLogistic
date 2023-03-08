@@ -103,6 +103,7 @@ export const Profilepage = () => {
     const dispatch = useDispatch();
     const isFormSubmitting = useSelector(state => state.counterReducer.loading)
     const userProfile = useSelector(state => state.counterReducer.userProfile)
+    const userParcel = useSelector(state => state.counterReducer.parcelStatus)
     const isUserProfileUpdate = useSelector(state => state.counterReducer.userUpdateReturnValue)
     const viewNotification = useSelector(state => state.counterReducer.viewNotification)
     const commission = useSelector(state => state.counterReducer.commission)
@@ -122,6 +123,7 @@ export const Profilepage = () => {
     useEffect(() => {
         dispatch(GitAction.CallGetNotification({ status: 2 }));
         if (!isObjectUndefinedOrNull(auth) && !isStringNullOrEmpty(auth.UserID) && !isStringNullOrEmpty(auth.UserCode)) {
+            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + auth.UserID }))
             dispatch(GitAction.CallFetchUserProfileByID({ UserID: auth.UserID }));
             dispatch(GitAction.CallViewCommissionByUserCode({ UserCode: auth.UserCode }));
         }
@@ -155,6 +157,7 @@ export const Profilepage = () => {
             switch (newValue) {
                 case 0:
                     handleSetCurrentPage(USER_PROFILE_PAGE)
+                    dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + auth.UserID }))
                     break;
 
                 case 1:
@@ -205,7 +208,7 @@ export const Profilepage = () => {
 
 
     const UserProfile = () => {
-        const [isEditMode, setEditMode] = useState(false)
+
         const [expanded, setExpanded] = useState(true)
         const [userExpanded, setUserExpanded] = useState(false)
         const [referalModal, setReferalModal] = useState(false)
@@ -219,26 +222,14 @@ export const Profilepage = () => {
         }));
         return (
             <>
-                <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} style={{ backgroundColor: "#F4F5F5" }} >
+                <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}  >
                     {/* <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="profile-content"
                         id="profile-summary"
                     > */}
 
-                    <Grid container rowSpacing={2} columnSpacing={3} >
-                        <Grid item xs={9} md={6}>
-                            <Typography variant="h6" component="p" sx={{ fontWeight: 600, paddingLeft: "20px" }}>
-                                <AccountCircleIcon />   会员号:{profile && profile.UserCode} ({profile && profile.AreaCode})
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={3} md={6} style={{ textAlign: "right", paddingRight: "20px" }}>
-                            <Button variant="contained" onClick={() => setEditMode(true)}> 会员信息 </Button>
-                        </Grid>
-                    </Grid>
-                    {
-                        !isObjectUndefinedOrNull(userProfile) && <UpdateProfileForm open={isEditMode} setOpenModal={setEditMode} profile={{ ...profile }} isUserProfileUpdate={isUserProfileUpdate} />
-                    }
+
                     <AccordionDetails >
                         <AddressManager />
                     </AccordionDetails>
@@ -486,18 +477,21 @@ export const Profilepage = () => {
     }
 
     const NotificationAccordion = () => {
-        const [expanded, setExpanded] = useState(false)
+        const [expanded, setExpanded] = useState(true)
 
         return (
-            <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} sx={{ my: 2, }} style={{ backgroundColor: "#F4F5F5" }}>
+            <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)} style={{
+                minHeight: "270px"
+            }}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="notification-content"
                     id="panel1bh-header"
                     sx={{ display: 'flex' }}
+
                 >
 
-                    <Typography sx={{ flexShrink: 0, fontWeight: 600, my: 'auto', mr: 2 }}>
+                    <Typography sx={{ flexShrink: 0, fontWeight: 600, my: 'auto', mr: 2, color: "#004085" }}>
                         最新通告
                     </Typography>
                     {viewNotification && <Chip size="small" color="primary" sx={{ my: 'auto', minWidth: '50px' }} label={viewNotification.length} />}
@@ -588,7 +582,7 @@ export const Profilepage = () => {
         }
 
         return (
-            <Card sx={{ borderTop: '1px solid rgba( 33, 33, 33, 0.3)', backgroundColor: "#F4F5F5" }} elevation={0}>
+            <Card elevation={0}>
                 <Typography sx={{ fontWeight: 600 }}> 中国仓库地址资料与信息 </Typography>
                 <Typography sx={{ fontSize: "12px", color: "grey" }}>点击拷贝你所想要的信息</Typography>
                 <CardContent>
@@ -794,14 +788,101 @@ export const Profilepage = () => {
         )
     }
 
+
+    const [isEditMode, setEditMode] = React.useState(false)
+
+    console.log("userParcel", userParcel)
+
     const renderPageModule = (page) => {
+
+        const checkParcelStatus = (type) => {
+
+            let data = []
+            switch (type) {
+                case "ChinaWarehouse":
+                    if (isArrayNotEmpty(userParcel))
+                        data = userParcel.filter((x) => x.ContainerID === null || x.ContainerID === "-").length
+                    break;
+
+                case "InShipping":
+                    if (isArrayNotEmpty(userParcel))
+                        data = userParcel.filter((x) => x.ContainerID !== null && x.ContainerID !== "-" && x.StockStatusID < 9).length
+                    break;
+
+                case "KuchingWarehouse":
+                    if (isArrayNotEmpty(userParcel))
+                        data = userParcel.filter((x) => x.ContainerID !== null && x.ContainerID !== "-" && x.StockStatusID >= 9).length
+                    break;
+
+                default:
+                    break;
+            }
+            return data
+        }
+
         switch (page) {
             case USER_PROFILE_PAGE:
                 return (
-                    <>
-                        <UserProfile />
-                        <NotificationAccordion />
-                    </>
+                    <div style={{ top: "10px" }}>
+                        <div className="row">
+                            <div className="col-lg-8 col-md-6 col-sm-12">
+                                <div className="row">
+                                    <div className="col-lg-4 col-md-4 col-sm-4 col-xs-12 " style={{ paddingTop: "10px" }}>
+                                        <Card style={{ backgroundColor: "#fff3cd", color: "#856404" }}>
+                                            <CardContent style={{ padding: "15px", textAlign: "center" }}>
+                                                <Typography style={{ fontWeight: "bold", fontSize: "20px" }}>中国仓库</Typography>
+                                                <Typography style={{ fontWeight: "bold", fontSize: "20px" }}>{checkParcelStatus("ChinaWarehouse")}</Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                    <div className="col-lg-4 col-md-4 col-sm-4 col-xs-12 " style={{ paddingTop: "10px" }}>
+                                        <Card style={{ backgroundColor: "#cce5ff", color: "#004085" }}>
+                                            <CardContent style={{ padding: "15px", textAlign: "center" }}>
+                                                <Typography style={{ fontWeight: "bold", fontSize: "20px" }}>运输途中</Typography>
+                                                <Typography style={{ fontWeight: "bold", fontSize: "20px" }}>{checkParcelStatus("InShipping")}</Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                    <div className="col-lg-4 col-md-4 col-sm-4 col-xs-12 " style={{ paddingTop: "10px" }}>
+                                        <Card style={{ backgroundColor: "#d4edda", color: "#30b54e" }}>
+                                            <CardContent style={{ padding: "15px", textAlign: "center" }}>
+                                                <Typography style={{ fontWeight: "bold", fontSize: "20px" }}>古晋仓库</Typography>
+                                                <Typography style={{ fontWeight: "bold", fontSize: "20px" }}>{checkParcelStatus("KuchingWarehouse")}</Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-4 col-md-6  col-sm-12" style={{ paddingTop: "10px" }}>
+                                <Card style={{ color: "#004085" }}>
+                                    <CardContent style={{ padding: "25px" }}>
+                                        <Grid container rowSpacing={3} columnSpacing={3} >
+                                            <Grid item xs={8} md={8}>
+                                                <Typography variant="h6" component="p" sx={{ fontWeight: 600, paddingLeft: "20px" }}>
+                                                    <AccountCircleIcon />   会员号:{profile && profile.UserCode} ({profile && profile.AreaCode})
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={4} md={4} style={{ textAlign: "right", paddingRight: "20px" }}>
+                                                <Button variant="contained" onClick={() => setEditMode(true)}> 会员信息 </Button>
+                                            </Grid>
+                                        </Grid>
+
+                                        {
+                                            !isObjectUndefinedOrNull(userProfile) && <UpdateProfileForm open={isEditMode} setOpenModal={setEditMode} profile={{ ...profile }} isUserProfileUpdate={isUserProfileUpdate} />
+                                        }
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </div>
+                        <div className="row" style={{ paddingTop: "40px" }}>
+                            <div className="col-lg-8 col-md-6  col-sm-12" style={{ paddingTop: "10px" }}>
+                                <UserProfile />
+                            </div>
+                            <div className="col-lg-4 col-md-6  col-sm-12" style={{ paddingTop: "10px" }}>
+                                <NotificationAccordion />
+                            </div>
+                        </div>
+                    </div>
                 )
             case ALL_ORDERS_PAGE:
                 return <ParcelPage type="selfparcel" />

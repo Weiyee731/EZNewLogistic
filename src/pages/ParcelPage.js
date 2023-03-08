@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch, Provider } from 'react-redux'
 import { GitAction } from "../store/action/gitAction";
 import Box from '@mui/material/Box';
-import {  Typography, TableCell } from '@mui/material';
+import { Typography, TableCell } from '@mui/material';
 import SearchBar from "../components/SearchBar/SearchBar";
 import LoadingPanel from "../components/LoadingPanel/LoadingPanel";
 import EmptyParcel from "../assets/empty-parcel.png"
@@ -248,7 +248,7 @@ export const ParcelPage = (props) => {
                     <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductDimensionDeep + "cm x " + data.ProductDimensionHeight + "cm x " + data.ProductDimensionWidth + "cm"}</TableCell>
                     <TableCell align="left" style={{ fontSize: "12px" }}>{parseFloat(data.Volume).toFixed(3)}</TableCell>
                     <TableCell align="left" style={{ fontSize: "12px" }}>{calculateParcelPrice(data) !== undefined ? parseFloat(calculateParcelPrice(data)).toFixed(2) : 0}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.ContainerID === 0 ? "已入库" : data.StockStatusID === 3 ? data.ContainerRemark : "抵达古晋仓库"}</TableCell>
+                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.ContainerID === 0 ? "已入库" : data.StockStatusID === 9 ? "抵达古晋仓库" : data.ContainerRemark}</TableCell>
                 </>
         )
     }
@@ -264,7 +264,7 @@ export const ParcelPage = (props) => {
                     <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductWeight} kg</TableCell>
                     <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductDimensionDeep + "cm x " + data.ProductDimensionHeight + "cm x " + data.ProductDimensionWidth + "cm"}</TableCell>
                     <TableCell align="left" style={{ fontSize: "12px" }}>{parseFloat(data.Volume).toFixed(3)}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.ContainerID === 0 ? "已入库" : data.StockStatusID === 3 ? data.ContainerRemark : "抵达古晋仓库"}</TableCell>
+                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.ContainerID === 0 ? "已入库" : data.StockStatusID === 9 ? "抵达古晋仓库" : data.ContainerRemark}</TableCell>
                 </>
         )
     }

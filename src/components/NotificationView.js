@@ -52,7 +52,7 @@ export const NotificationView = ({ title, message, type, date }) => {
 
     return (
         <div
-            className="col-md-3 col-xs-12 col-sm-4"
+            className="col-md-12 col-xs-12 col-sm-12"
             style={{
                 borderColor: '#23395d',
                 borderStyle: 'solid',
@@ -62,6 +62,7 @@ export const NotificationView = ({ title, message, type, date }) => {
                 borderRadius: '5px',
                 padding: '5px',
                 marginTop: "10pt",
+                backgroundColor:"#cce5ff"
             }}
             onClick={() => handleOpenClose()}
         >
@@ -72,10 +73,10 @@ export const NotificationView = ({ title, message, type, date }) => {
             >
                 <Grid container>
                     <Grid item xs={1} sm={1} md={1} style={{ alignItems: "center", display: "flex" }}>
-                        <AnnouncementIcon style={{ color: "primary" }} />
+                        <AnnouncementIcon style={{ color: "#004085" }} />
                     </Grid>
                     <Grid item xs={11} sm={11} md={11} >
-                        <Typography style={{ fontWeight: "bold", color: 'black', fontSize: "11pt" }}  >
+                        <Typography style={{ fontWeight: "bold", color: '#004085', fontSize: "11pt" }}  >
                             {title}
                         </Typography>
                     </Grid>
