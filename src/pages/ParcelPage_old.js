@@ -310,8 +310,8 @@ export const ParcelPage = () => {
                 UserCode !== unKnownUserCode &&
                 <SearchBar
                     id=""
-                    placeholder="快递单号"
-                    label="快递单号"
+                    placeholder="中国物流快递单号"
+                    label="中国物流快递单号"
                     onChange={(e) => handleSearchInput(e.target.value)}
                     className="searchbar-input mb-auto"
                     tooltipText="Search with current data"

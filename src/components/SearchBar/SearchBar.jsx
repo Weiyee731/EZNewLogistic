@@ -69,7 +69,7 @@ const SearchBox = (props) => {
                     : false
                 }
               >
-                <SearchIcon />
+                {/* <SearchIcon /> */}
               </IconButton>
             </Tooltip>
           </InputAdornment>

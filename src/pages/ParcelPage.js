@@ -33,8 +33,13 @@ export const ParcelPage = (props) => {
 
             if (props.type === "claim")
                 dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserCode=(SELECT [SettingValue] FROM.[dbo].[T_General_Setting] WHERE  [SettingID] = 1)" }))
-            else
-                dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + LogonUser }))
+            else {
+                if (props.isAgent === true)
+                    dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserAreaID=" + props.agentCode }))
+                else
+                    dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + LogonUser }))
+            }
+
 
         }
     }, [])
@@ -79,7 +84,7 @@ export const ParcelPage = (props) => {
             id: "TrackingNumber",
             align: 'left',
             disablePadding: false,
-            label: "快递单号 ",
+            label: "中国物流快递单号 ",
         },
         {
             id: "Item",
@@ -131,7 +136,7 @@ export const ParcelPage = (props) => {
             id: "TrackingNumber",
             align: 'left',
             disablePadding: false,
-            label: "快递单号 ",
+            label: "中国物流快递单号 ",
         },
         {
             id: "ProductWeight",
@@ -158,6 +163,70 @@ export const ParcelPage = (props) => {
             label: "包裹状态",
         },
     ];
+
+    const agentTableHeadCells = [
+        {
+            id: "CourierName",
+            align: 'left',
+            disablePadding: false,
+            label: "快递公司",
+        },
+        {
+            id: "TrackingNumber",
+            align: 'left',
+            disablePadding: false,
+            label: "中国物流快递单号 ",
+        },
+        {
+            id: "UserCode",
+            align: 'left',
+            disablePadding: false,
+            label: "会员号",
+        },
+        {
+            id: "AreaCode",
+            align: 'left',
+            disablePadding: false,
+            label: "区域",
+        },
+        {
+            id: "Item",
+            align: 'left',
+            disablePadding: false,
+            label: "包裹名称",
+        },
+        {
+            id: "ProductWeight",
+            align: 'left',
+            disablePadding: false,
+            label: "重量",
+        },
+        {
+            id: "ProductDimensionDeep",
+            align: 'left',
+            disablePadding: false,
+            label: "尺寸",
+        },
+        {
+            id: "Volume",
+            align: 'left',
+            disablePadding: false,
+            label: "体积",
+        },
+        {
+            id: "Price",
+            align: 'left',
+            disablePadding: false,
+            label: "价格",
+        },
+        {
+            id: "parcelStatus",
+            align: 'left',
+            disablePadding: false,
+            label: "包裹状态",
+        },
+
+    ]
 
     const CheckUser = (Code) => {
         let listing = []
@@ -248,8 +317,25 @@ export const ParcelPage = (props) => {
                     <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductDimensionDeep + "cm x " + data.ProductDimensionHeight + "cm x " + data.ProductDimensionWidth + "cm"}</TableCell>
                     <TableCell align="left" style={{ fontSize: "12px" }}>{parseFloat(data.Volume).toFixed(3)}</TableCell>
                     <TableCell align="left" style={{ fontSize: "12px" }}>{calculateParcelPrice(data) !== undefined ? parseFloat(calculateParcelPrice(data)).toFixed(2) : 0}</TableCell>
-                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.ContainerID === 0 ? "已入库" : data.StockStatusID === 9 ? "抵达古晋仓库" : data.ContainerRemark}</TableCell>
+                    <TableCell align="left" style={{ fontSize: "12px" }}>{data.ContainerID === 0 || data.ContainerID === null ? "已入库" : data.StockStatusID === 9 ? "抵达古晋仓库" : data.ContainerRemark}</TableCell>
                 </>
+        )
+    }
+
+    const renderAgentTableRows = (data, index) => {
+        return (
+            <>
+                <TableCell align="left" style={{ fontSize: "12px" }}>{data.CourierName}</TableCell>
+                <TableCell align="left" style={{ fontSize: "12px" }}>{data.TrackingNumber}</TableCell>
+                <TableCell align="left" style={{ fontSize: "12px" }}>{data.UserCode}</TableCell>
+                <TableCell align="left" style={{ fontSize: "12px" }}>{data.AreaCode}</TableCell>
+                <TableCell align="left" style={{ fontSize: "12px" }}>{data.Item}</TableCell>
+                <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductWeight} kg</TableCell>
+                <TableCell align="left" style={{ fontSize: "12px" }}>{data.ProductDimensionDeep + "cm x " + data.ProductDimensionHeight + "cm x " + data.ProductDimensionWidth + "cm"}</TableCell>
+                <TableCell align="left" style={{ fontSize: "12px" }}>{parseFloat(data.Volume).toFixed(3)}</TableCell>
+                <TableCell align="left" style={{ fontSize: "12px" }}>{calculateParcelPrice(data) !== undefined ? parseFloat(calculateParcelPrice(data)).toFixed(2) : 0}</TableCell>
+                <TableCell align="left" style={{ fontSize: "12px" }}>{data.ContainerID === 0 || data.ContainerID === null ? "已入库" : data.StockStatusID === 9 ? "抵达古晋仓库" : data.ContainerRemark}</TableCell>
+            </>
         )
     }
 
@@ -270,7 +356,8 @@ export const ParcelPage = (props) => {
     }
 
     return (
-        <div className="row" style={{ position: "absolute", top: "120px", width: "100%", paddingRight: "20px", paddingBottom: "50px" }}>
+        <div className="row" style={{ top: "120px", width: "100%", }}>
+            {/* style={{ position: "absolute", top: "120px", width: "90%", paddingRight: "20px", paddingBottom: "50px" }}> */}
             {
                 props.type === "claim" &&
                 <div className="row" style={{ paddingBottom: "10px" }}>
@@ -284,10 +371,10 @@ export const ParcelPage = (props) => {
                             <>
                                 <SearchBar
                                     id=""
-                                    placeholder="快递单号"
-                                    label="快递单号"
+                                    placeholder="中国物流快递单号"
+                                    label="中国物流快递单号"
                                     onChange={(e) => handleSearchInput(e.target.value)}
-                                    tooltipText="Search with current data"
+                                    tooltipText="查询物流"
                                     value={searchKeywords}
                                 />
                             </>
@@ -299,9 +386,9 @@ export const ParcelPage = (props) => {
                             stickyTableHeader: true,
                         }}
                         paginationOptions={[20, 25, 30, { label: 'All', value: -1 }]}
-                        tableHeaders={props.type === "claim" ? claimTableHeadCells : tableHeadCells}
+                        tableHeaders={props.type === "claim" ? claimTableHeadCells : props.isAgent ? agentTableHeadCells : tableHeadCells}
                         tableRows={{
-                            renderTableRows: props.type === "claim" ? renderClaimTableRows : renderTableRows,
+                            renderTableRows: props.type === "claim" ? renderClaimTableRows : props.isAgent ? renderAgentTableRows : renderTableRows,
                             checkbox: false,
                             checkboxColor: "primary",
                             onRowClickSelect: false
@@ -323,7 +410,6 @@ export const ParcelPage = (props) => {
                         :
                         < LoadingPanel />
             }
-
         </div>
     )
 }

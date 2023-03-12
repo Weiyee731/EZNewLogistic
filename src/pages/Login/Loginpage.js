@@ -176,7 +176,7 @@ export const Loginpage = () => {
                         AGREEMENTCHECKED: '',
                     })
                     setOpenRegistrationModal(false)
-                    toast.success('Your account is registered! Please login with your registered account.', {
+                    toast.success('注册成功，用注册账号登录', {
                         position: "top-center",
                         autoClose: 3000,
                         hideProgressBar: false,
@@ -384,8 +384,8 @@ export const Loginpage = () => {
 
                                 {
                                     isLoginInvalidInput &&
-                                    <Typography sx={{ color: '#FF5733' }} variant="body" component="p" gutterBottom>
-                                        你所使用的户口或密码错误哟，请重新尝试登入
+                                    <Typography sx={{ color: 'red' }} variant="body" component="p" gutterBottom>
+                                        户口或密码错误，请重新尝试登入
                                     </Typography>
                                 }
                                 <FormControl sx={{ width: '100%', mb: 2 }} variant="standard">

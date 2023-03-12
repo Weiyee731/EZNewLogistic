@@ -103,11 +103,16 @@ export const Profilepage = () => {
     const dispatch = useDispatch();
     const isFormSubmitting = useSelector(state => state.counterReducer.loading)
     const userProfile = useSelector(state => state.counterReducer.userProfile)
+    const areaCodes = useSelector(state => state.counterReducer.areaCodes)
     const userParcel = useSelector(state => state.counterReducer.parcelStatus)
     const isUserProfileUpdate = useSelector(state => state.counterReducer.userUpdateReturnValue)
     const viewNotification = useSelector(state => state.counterReducer.viewNotification)
     const commission = useSelector(state => state.counterReducer.commission)
+
+
     const [value, setValue] = React.useState(0);
+    const [isAgent, setIsAgent] = React.useState(false);
+    const [agentCode, setAgentCode] = React.useState(0);
     // CONSTANT OR STYLE HERE
     const USER_PROFILE_PAGE = 'User Profile'
     const ALL_ORDERS_PAGE = 'All Orders'
@@ -122,12 +127,29 @@ export const Profilepage = () => {
     // USE EFFECT
     useEffect(() => {
         dispatch(GitAction.CallGetNotification({ status: 2 }));
+        dispatch(GitAction.CallFetchUserAreaCode());
         if (!isObjectUndefinedOrNull(auth) && !isStringNullOrEmpty(auth.UserID) && !isStringNullOrEmpty(auth.UserCode)) {
-            dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + auth.UserID }))
             dispatch(GitAction.CallFetchUserProfileByID({ UserID: auth.UserID }));
             dispatch(GitAction.CallViewCommissionByUserCode({ UserCode: auth.UserCode }));
         }
     }, [])
+
+    useEffect(() => {
+        if (!isObjectUndefinedOrNull(auth) && !isStringNullOrEmpty(auth.UserID) && !isStringNullOrEmpty(auth.UserCode)) {
+            if (isArrayNotEmpty(areaCodes) && areaCodes.filter((x) => x.UserID == auth.UserID && x.AgentInd === 1).length > 0) {
+                let areaID = ""
+                areaCodes.filter((x) => x.UserID == auth.UserID && x.AgentInd === 1).map((y) => {
+                    areaID = y.UserAreaID
+                })
+                dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserAreaID=" + areaID }))
+                setIsAgent(true)
+                setAgentCode(areaID)
+            } else {
+                dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + auth.UserID }))
+                setIsAgent(false)
+            }
+        }
+    }, [areaCodes])
 
     useEffect(() => {
         if (isArrayNotEmpty(userProfile) && profile !== userProfile[0]) {
@@ -154,17 +176,41 @@ export const Profilepage = () => {
 
         const handleChange = (event, newValue) => {
             setValue(newValue);
+            let LogonUser = localStorage.getItem("user")
+            if (LogonUser !== undefined)
+                LogonUser = JSON.parse(LogonUser).UserID
             switch (newValue) {
                 case 0:
                     handleSetCurrentPage(USER_PROFILE_PAGE)
-                    dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + auth.UserID }))
+                    if (isArrayNotEmpty(areaCodes) && areaCodes.filter((x) => x.UserID == LogonUser && x.AgentInd === 1).length > 0) {
+                        let areaID = ""
+                        areaCodes.filter((x) => x.UserID == LogonUser && x.AgentInd === 1).map((y) => {
+                            areaID = y.UserAreaID
+                        })
+                        dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserAreaID=" + areaID }))
+                        setIsAgent(true)
+                        setAgentCode(areaID)
+                    } else {
+                        dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + LogonUser }))
+                        setIsAgent(false)
+                    }
+
+
+                    // dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + auth.UserID }))
                     break;
 
                 case 1:
-                    let LogonUser = localStorage.getItem("user")
-                    if (LogonUser !== undefined) {
-                        LogonUser = JSON.parse(LogonUser).UserID
+                    if (isArrayNotEmpty(areaCodes) && areaCodes.filter((x) => x.UserID == LogonUser && x.AgentInd === 1).length > 0) {
+                        let areaID = ""
+                        areaCodes.filter((x) => x.UserID == LogonUser && x.AgentInd === 1).map((y) => {
+                            areaID = y.UserAreaID
+                        })
+                        dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserAreaID=" + areaID }))
+                        setIsAgent(true)
+                        setAgentCode(areaID)
+                    } else {
                         dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserID=" + LogonUser }))
+                        setIsAgent(false)
                     }
 
                     handleSetCurrentPage(ALL_ORDERS_PAGE)
@@ -176,7 +222,7 @@ export const Profilepage = () => {
 
                 case 3:
                     dispatch(GitAction.CallGetParcelStatus({ trackingNumber: "and UserCode=(SELECT [SettingValue] FROM.[dbo].[T_General_Setting] WHERE  [SettingID] = 1)" }))
-
+                    setIsAgent(false)
                     handleSetCurrentPage(CLAIM_CARGO_PAGE)
                     break;
 
@@ -465,10 +511,10 @@ export const Profilepage = () => {
                 <DialogActions>
                     {
                         !isFormSubmitting ?
-                            <Button sx={{ mx: 2, my: 1 }} onClick={handleUpdateUserProfile} variant="contained" fullWidth> Submit </Button>
+                            <Button sx={{ mx: 2, my: 1 }} onClick={handleUpdateUserProfile} variant="contained" fullWidth> 更新 </Button>
                             :
                             <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '100%', mx: 2, my: 1 }}>
-                                A Moment ...
+                                更新中 ...
                             </Button>
                     }
                 </DialogActions>
@@ -584,7 +630,7 @@ export const Profilepage = () => {
         return (
             <Card elevation={0}>
                 <Typography sx={{ fontWeight: 600 }}> 中国仓库地址资料与信息 </Typography>
-                <Typography sx={{ fontSize: "12px", color: "grey" }}>点击拷贝你所想要的信息</Typography>
+                {/* <Typography sx={{ fontSize: "12px", color: "grey" }}>点击拷贝你所想要的信息</Typography> */}
                 <CardContent>
                     {
                         !isObjectUndefinedOrNull(profile) &&
@@ -779,7 +825,7 @@ export const Profilepage = () => {
                             <Button disabled={invalidInput} sx={{ my: 1, width: '80%' }} onClick={handleChangePassword} variant="contained"> 确认更改密码 </Button>
                             :
                             <Button disabled variant="contained" size="small" endIcon={<CircularProgress size="small" />} sx={{ width: '50%', my: 1 }}>
-                                请稍等 ...
+                                更新中 ...
                             </Button>
                     }
 
@@ -790,8 +836,6 @@ export const Profilepage = () => {
 
 
     const [isEditMode, setEditMode] = React.useState(false)
-
-    console.log("userParcel", userParcel)
 
     const renderPageModule = (page) => {
 
@@ -875,23 +919,23 @@ export const Profilepage = () => {
                             </div>
                         </div>
                         <div className="row" style={{ paddingTop: "40px" }}>
-                            <div className="col-lg-8 col-md-6  col-sm-12" style={{ paddingTop: "10px" }}>
+                            <div className="col-lg-8 col-md-12 col-sm-12 col-sm-12" style={{ paddingTop: "10px" }}>
                                 <UserProfile />
                             </div>
-                            <div className="col-lg-4 col-md-6  col-sm-12" style={{ paddingTop: "10px" }}>
+                            <div className="col-lg-4 col-md-12 col-sm-12  col-sm-12" style={{ paddingTop: "10px" }}>
                                 <NotificationAccordion />
                             </div>
                         </div>
                     </div>
                 )
             case ALL_ORDERS_PAGE:
-                return <ParcelPage type="selfparcel" />
+                return <ParcelPage type="selfparcel" isAgent={isAgent} areaCodes={areaCodes} agentCode={agentCode} />
 
             case PARCEL_TRACKING_PAGE:
                 return <ParcelTrackingPage />
 
             case CLAIM_CARGO_PAGE:
-                return <ParcelPage type="claim" />
+                return <ParcelPage type="claim" isAgent={isAgent} areaCodes={areaCodes} agentCode={agentCode} />
 
             case PASSWORD_MANAGER_PAGE:
                 return <PasswordManager />
@@ -901,15 +945,15 @@ export const Profilepage = () => {
     }
 
     return (
-        <div className="user-profile--container thin-scrollbar" style={{ minHeight: '70vh', padding: '1rem 0rem', maxWidth: '1600px', display: 'flex', marginLeft: 'auto', marginRight: 'auto' }}>
+        <div className="user-profile--container thin-scrollbar" style={{ padding: '2rem 2rem', display: 'flex', marginLeft: 'auto', marginRight: 'auto' }}>
             <Grid container spacing={1}>
                 <Grid item xs={12} md={12} >
                     <SideMenu />
                 </Grid>
                 {
                     profile !== null && profile.UserID !== undefined ?
-                        <Grid item xs={12} md={12} sx={(width >= 768) ? { overflowY: 'auto', my: 2 } : {}}>
-                            <div style={{ paddingLeft: '15px', paddingRight: '15px' }}>
+                        <Grid item sx={(width >= 768) ? { overflowY: 'auto', width: "100%" } : { width: "100%" }}>
+                            <div style={{ padding: '1rem 1rem' }}>
                                 {renderPageModule(currentPage)}
                             </div>
                         </Grid>

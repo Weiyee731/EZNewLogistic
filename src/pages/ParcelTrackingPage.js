@@ -21,7 +21,7 @@ export const ParcelTrackingPage = (props) => {
     const titleStyle = { fontWeight: "bold", paddingBottom: "10px" }
 
     return (
-        <div className="row" style={{ position: "absolute", top: "120px", width: "100%", padding: "20px", paddingBottom: "50px" }}>
+        <div className="row" style={{ top: "120px", width: "100%" }}>
             <Card style={{ padding: "10px" }}>
                 <Grid container rowSpacing={2} columnSpacing={3} >
                     <Grid item xs={12} md={6}>
